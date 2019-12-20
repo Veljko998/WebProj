@@ -1,5 +1,7 @@
 package model;
 
+import java.util.ArrayList;
+
 import model.enums.Uloga;
 
 public class Korisnik {
@@ -8,5 +10,6 @@ public class Korisnik {
 	private String prezime;
 	private Organizacija organizacija;
 	private Uloga uloga;
+	//private ArrayList<Pair<LocalDateTime, LocalDateTime>> listaAktivnosti;
 	
 }
