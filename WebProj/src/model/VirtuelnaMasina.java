@@ -2,21 +2,36 @@ package model;
 
 import java.util.ArrayList;
 
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
+
 /**
  * 
  * @author Veljko
  * @since 20.12.2019.
  */
 public class VirtuelnaMasina {
+	
+	@NotNull
 	private String ime;
+	
+	@NotNull
 	private VM kategorjia;
+	
+	@NotNull
+	@Min(1)
 	private int brojJezgara;
+	
+	@NotNull
+	@Min(1)
 	private int ram;
+	
 	private int gpu;
+	
 	private ArrayList<Disk> diskovi;
 	
 	/**
-	 * Konstruktor
+	 * Constructor.
 	 * 
 	 * @param ime - unique
 	 * @param kategorjia
