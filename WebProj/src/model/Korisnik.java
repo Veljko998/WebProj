@@ -5,8 +5,11 @@ import java.util.AbstractMap.SimpleEntry;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
+
 import model.enums.Uloga;
 
+@JsonAutoDetect(fieldVisibility= JsonAutoDetect.Visibility.ANY)
 public class Korisnik {
 	private String email; //jedinstveno
 	private String ime;
