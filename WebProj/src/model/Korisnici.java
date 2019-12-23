@@ -49,9 +49,12 @@ public class Korisnici {
 	public boolean UpisiKorisnike(){
 		try{
 			ObjectMapper mapper = new ObjectMapper();
-			String arrayToJson = mapper.writeValueAsString(korisniciLista);
+			//mapper.writeValue(new File(putanja), korisniciLista);
 			
+			
+		}catch(Exception e){
 			
 		}
+		return false;
 	}
 }

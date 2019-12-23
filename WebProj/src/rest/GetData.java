@@ -8,7 +8,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
 import model.Korisnik;
-
+/*
 public class GetData {
 	@GET
 	@Path("/getallusers")
@@ -16,4 +16,4 @@ public class GetData {
 	public List<Korisnik> getKorisnici() {
 		
 	}
-}
+}*/
