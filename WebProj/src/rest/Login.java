@@ -19,4 +19,10 @@ public class Login {
 		@FormParam("remember") Boolean remember) {
 		return Response.status(200).entity("Username: " + username + ", i sifra i pamcenje").build();
 	}
+	
+	@POST
+	@Path("/logout")
+	public Response logOut() {
+		return Response.status(200).entity("Evo ne znam leba mi sta je ovo").build();
+	}
 }
