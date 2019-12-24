@@ -2,6 +2,8 @@ package model;
 
 import javax.validation.constraints.NotNull;
 
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
+
 import model.enums.TipDiska;
 
 /**
@@ -9,6 +11,7 @@ import model.enums.TipDiska;
  * @author Veljko
  * @since 21.12.2019.
  */
+@JsonAutoDetect(fieldVisibility= JsonAutoDetect.Visibility.ANY)
 public class Disk {
 	
 	@NotNull
