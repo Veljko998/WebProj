@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.time.LocalDateTime;
@@ -20,7 +21,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 public class Korisnici {
 	private HashMap<String, Korisnik> korisniciMapa = new HashMap<String, Korisnik>();
 	private List<Korisnik> korisniciLista = new ArrayList<Korisnik>();
-	private String putanja;
+	private String putanja = "C:\\Users\\Ivana\\git\\WebProj\\WebProj\\WebContent\\korisnici.json";
 	
 	public Korisnici(){}
 	
@@ -30,15 +31,18 @@ public class Korisnici {
 	 * */
 	public Korisnici(String putanja){
 		this.putanja = putanja;
-		
+	}
+	
+	public List<Korisnik> UcitajKorisnike(){
 		try{
 			ObjectMapper mapper = new ObjectMapper();
-			korisniciLista = mapper.readValue(putanja, mapper.getTypeFactory().constructCollectionType(List.class, Korisnik.class));
-			
+			//korisniciLista =  Arrays.asList(mapper.readValue(putanja, Korisnik[].class));
+			korisniciLista = mapper.readValue(new File(putanja), new TypeReference<List<Korisnik>>(){});
 			for(Korisnik k : korisniciLista){
 				korisniciMapa.put(k.getEmail(), k);
 			}
-			System.out.println(korisniciMapa);
+			
+			return korisniciLista;
 			
 		}catch(JsonParseException e){
 			
@@ -48,24 +52,25 @@ public class Korisnici {
 			
 		}
 		catch(Exception e){
-			
+			return korisniciLista;
 		}
+		return korisniciLista;
 	}
 	
 	public List<Korisnik> UpisiKorisnike(){
-		try{/*
+		try{
 			Korisnik k = new Korisnik("mail", "Ime1", "Prezime1",
 					new Organizacija(), Uloga.KORISNIK,
 					 new ArrayList<Tuple<LocalDateTime, LocalDateTime>>());
-			Korisnik k2 = new Korisnik("mail", "Ime1", "Prezime1",
+			Korisnik k2 = new Korisnik("mail2", "Ime1", "Prezime1",
 					new Organizacija(), Uloga.KORISNIK,
 					 new ArrayList<Tuple<LocalDateTime, LocalDateTime>>());
 			
 			korisniciLista.add(k);
 			korisniciLista.add(k2);
-			*/
+			
 			ObjectMapper mapper = new ObjectMapper();
-			this.putanja = "C:\\Users\\Ivana\\git\\WebProj\\WebProj\\WebContent\\korisnici.json";
+			//this.putanja = "C:\\Users\\Ivana\\git\\WebProj\\WebProj\\WebContent\\korisnici.json";
 			mapper.writeValue(new File(putanja), korisniciLista);
 			return korisniciLista;
 			
