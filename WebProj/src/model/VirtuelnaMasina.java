@@ -5,11 +5,14 @@ import java.util.ArrayList;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
+
 /**
  * 
  * @author Veljko
  * @since 20.12.2019.
  */
+@JsonAutoDetect(fieldVisibility= JsonAutoDetect.Visibility.ANY)
 public class VirtuelnaMasina {
 	
 	@NotNull
