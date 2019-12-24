@@ -2,29 +2,21 @@
 <head>
 	<meta charset="UTF-8">
 	<title>Insert title here</title>
+	
 </head>
 <body>
-	 <div id="login">
-		<h1>Login Baticeeeee</h1>
+	 <div id="idlogin">
+		<h1>Login Baticeeeee 1 2 3 4</h1>
 		<form action="rest/user/login" method="POST">
-			<input type="text" name="username" /><br />
-			<input type="password" name="password" /><br />
+			<input type="text" name="username" v-model="username"/><br />
+			<input type="password" name="password"/><br />
 			<input type="checkbox" name="remember" />Remember me<br />
 			<input type="submit" value="Log in"/>
+			<p>The value is {{username}}.</p>
 		</form>
 	</div>
 	
-	<div id="logout">
-		Idemooo bree Logout ...
-		{{fromChild1}} <br />
-		<button v-on:click="sendToIspis1">Poruka poslata ispis1-u ...</button> <br />
-		<child1></child1>
-		<child2></child2>
-	</div>
-	
-	<!--  <script src="js/vue.js"></script>
+	<script src="js/vue.js"></script>
 	<script src="app/app.js"></script>
-	<script src="app/child1.js"></script>
-	<script src="app/child2.js"></script> -->
 </body>
 </html>
