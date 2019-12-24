@@ -12,6 +12,7 @@ import model.Korisnik;
 
 @Path("/data")  
 public class GetData {
+	/*
 	@GET
 	@Path("/getallusers")
 	@Produces(MediaType.APPLICATION_JSON)
@@ -21,4 +22,5 @@ public class GetData {
 		return k.UpisiKorisnike();
 		//return k.UcitajKorisnike();
 	}
+	*/
 }

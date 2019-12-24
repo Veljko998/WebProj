@@ -19,65 +19,81 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 
 public class Korisnici {
-	private HashMap<String, Korisnik> korisniciMapa = new HashMap<String, Korisnik>();
-	private List<Korisnik> korisniciLista = new ArrayList<Korisnik>();
+	private HashMap<String, Korisnik> mapaKorisnici = new HashMap<String, Korisnik>();
+	private List<Korisnik> listaKorisnici = new ArrayList<Korisnik>();
 	private String putanja = "C:\\Users\\Ivana\\git\\WebProj\\WebProj\\WebContent\\korisnici.json";
 	
 	public Korisnici(){}
 	
-	/* 
-	 * Ucitava listu korisnika iz fajla i pravi asocijativnu listu korisnika.
-	 * Kljuc je email korisnika jer je on jedinstven, vrednost je objekat Korisnik.
-	 * */
-	public Korisnici(String putanja){
+	public HashMap<String, Korisnik> getMapaKorisnici() {
+		return mapaKorisnici;
+	}
+
+	public List<Korisnik> getListaKorisnici() {
+		return listaKorisnici;
+	}
+
+	public String getPutanja() {
+		return putanja;
+	}
+	
+	public void setPutanja(String putanja){
 		this.putanja = putanja;
 	}
 	
-	public List<Korisnik> UcitajKorisnike(){
-		try{
-			ObjectMapper mapper = new ObjectMapper();
-			//korisniciLista =  Arrays.asList(mapper.readValue(putanja, Korisnik[].class));
-			korisniciLista = mapper.readValue(new File(putanja), new TypeReference<List<Korisnik>>(){});
-			for(Korisnik k : korisniciLista){
-				korisniciMapa.put(k.getEmail(), k);
-			}
-			
-			return korisniciLista;
-			
-		}catch(JsonParseException e){
-			
-		}catch(JsonMappingException e){
-			
-		}catch(IOException e){
-			
-		}
-		catch(Exception e){
-			return korisniciLista;
-		}
-		return korisniciLista;
+	/*Vraca Korisnika preko zadatog id-a (email)*/
+	public Korisnik getKorisnik(String email){
+		return mapaKorisnici.get(email);
 	}
 	
-	public List<Korisnik> UpisiKorisnike(){
+	/* Funkcija vraca false ukoliko korisnik postoji,
+	 * u suprotnom dodaje novog korisnika.*/
+	public boolean dodajKorisnika(Korisnik korisnik){
+		if(mapaKorisnici.containsKey(korisnik.getEmail())){
+			return false;
+		}
+		else{
+			listaKorisnici.add(korisnik);
+			mapaKorisnici.put(korisnik.getEmail(), korisnik);
+		}
+		return true;
+	}
+	
+	/* Upisuje korisnike u fajl u json formatu.*/
+	public boolean UpisiKorisnike(){
 		try{
-			Korisnik k = new Korisnik("mail", "Ime1", "Prezime1",
-					new Organizacija(), Uloga.KORISNIK,
-					 new ArrayList<Tuple<LocalDateTime, LocalDateTime>>());
-			Korisnik k2 = new Korisnik("mail2", "Ime1", "Prezime1",
-					new Organizacija(), Uloga.KORISNIK,
-					 new ArrayList<Tuple<LocalDateTime, LocalDateTime>>());
-			
-			korisniciLista.add(k);
-			korisniciLista.add(k2);
-			
 			ObjectMapper mapper = new ObjectMapper();
-			//this.putanja = "C:\\Users\\Ivana\\git\\WebProj\\WebProj\\WebContent\\korisnici.json";
-			mapper.writeValue(new File(putanja), korisniciLista);
-			return korisniciLista;
-			
+			mapper.writeValue(new File(putanja), listaKorisnici);
+			return true;
 			
 		}catch(Exception e){
-			return korisniciLista;
+			return false;
 		}
 		
+	}
+	
+	/* 
+	 * Ucitava listu korisnika iz fajla i pravi asocijativnu listu korisnika.
+	 * Kljuc je email korisnika (jedinstven), vrednost je objekat Korisnik.
+	 */
+	public boolean UcitajKorisnike(){
+		try{
+			ObjectMapper mapper = new ObjectMapper();
+			listaKorisnici = mapper.readValue(new File(putanja), new TypeReference<List<Korisnik>>(){});
+			for(Korisnik k : listaKorisnici){
+				mapaKorisnici.put(k.getEmail(), k);
+			}
+			return true;
+			
+		}catch(JsonParseException e){
+			return false;
+		}catch(JsonMappingException e){
+			return false;
+		}catch(IOException e){
+			return false;
+		}
+		catch(Exception e){
+			return false;
+		}
 	}
 }
