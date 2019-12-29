@@ -7,10 +7,12 @@
 <body>
 	 <div id="webproj">
 		<h1>Login Baticeeeee {{ title }}</h1>
-		<input type="text" name="username" v-model="user.username" v-bind:disabled="mode=='BROWSE'" /><br/> <!-- v-model="username" -->
-		<input type="text" name="password" v-model="user.password" v-bind:disabled="mode=='BROWSE'" /><br/>
-		<input type="checkbox" name="remember" />Remember me<br/>
-		<button v-on:click="updateUser(selectedUser)" v-bind:disabled="mode=='BROWSE'">Login</button>
+		<label>Username: </label>
+		<input name="username" type="text" v-model="selectedUser.username"/><br/>
+		<label>Password: </label>
+		<input name="password" type="text" v-model="selectedUser.password"/><br/>
+<!-- 		<input type="checkbox" name="remember" />Remember me<br/> -->
+		<button v-on:click="updateUser(selectedUser)">Login</button>
 
 		<table class="users">
 			<tr bgcolor="lightgrey">

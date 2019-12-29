@@ -4,14 +4,14 @@ var app = new Vue({
         users: null,
         title: 'listanje korisnika kad se ulogujes',
         mode: "BROWSE",
-        selectedUsers: {},
+        selectedUser: {},
         searchField: ""
     },
     methods: {
         updateUser : function(user){
             axios
             .post("rest/webproj/adduser", user)
-            .then(response => toast('User ' + user.username + " " + user.password + " successfuly saved."));
+            .then(response => toast('User ' + user.username + " " + " successfuly saved."));
             this.mode = "BROWSE";
         }
     }
