@@ -5,19 +5,18 @@ import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.core.Response;
 
+import model.Korisnik;
+
 /** 
  * @author Veljko
  * @since 21.12.2019.
  */
-@Path("/user")
+@Path("/webproj")
 public class Login {
 	@POST
-	@Path("/login")
-	public Response logIn(
-		@FormParam("username") String username,
-		@FormParam("password") String password,
-		@FormParam("remember") Boolean remember) {
-		return Response.status(200).entity("Username: " + username + ", i sifra i pamcenje").build();
+	@Path("/adduser")
+	public void saveStudent(Korisnik selectedUser) {
+		System.out.println("saving student: " + selectedUser);
 	}
 	
 }
