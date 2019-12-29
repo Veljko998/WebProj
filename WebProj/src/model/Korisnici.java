@@ -23,8 +23,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 public class Korisnici {
 	private HashMap<String, Korisnik> mapaKorisnici = new HashMap<String, Korisnik>();
 	private List<Korisnik> listaKorisnici = new ArrayList<Korisnik>();
+	private String putanja = "";
 	//private String putanja = "C:\\Users\\Ivana\\git\\WebProj\\WebProj\\WebContent\\korisnici.json";
-	private String putanja = ""; //"WebProj\\WebContent\\korisnici.json";
 	
 	public Korisnici(){}
 	
