@@ -2,6 +2,8 @@ package model;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -21,7 +23,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 public class Korisnici {
 	private HashMap<String, Korisnik> mapaKorisnici = new HashMap<String, Korisnik>();
 	private List<Korisnik> listaKorisnici = new ArrayList<Korisnik>();
-	private String putanja = "C:\\Users\\Ivana\\git\\WebProj\\WebProj\\WebContent\\korisnici.json";
+	//private String putanja = "C:\\Users\\Ivana\\git\\WebProj\\WebProj\\WebContent\\korisnici.json";
+	private String putanja = ""; //"WebProj\\WebContent\\korisnici.json";
 	
 	public Korisnici(){}
 	
@@ -37,8 +40,19 @@ public class Korisnici {
 		return putanja;
 	}
 	
-	public void setPutanja(String putanja){
-		this.putanja = putanja;
+	/*pronalazi apsolutnu putanju do fajla*/
+	public void setPutanja() {
+		try {
+			String path = this.getClass().getClassLoader().getResource("").getPath();
+			String fullPath = URLDecoder.decode(path, "UTF-8");
+			String pathArr[] = fullPath.split("/WEB-INF/classes/");
+			fullPath = pathArr[0];
+			String reponsePath = "";
+			reponsePath = new File(fullPath).getPath() + File.separatorChar + "korisnici.json";
+			this.putanja = reponsePath;
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+		}
 	}
 	
 	/*Vraca Korisnika preko zadatog id-a (email)*/
