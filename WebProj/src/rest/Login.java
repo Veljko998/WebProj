@@ -1,11 +1,13 @@
 package rest;
 
 import javax.ws.rs.FormParam;
+import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
+import javax.ws.rs.Produces;
 import javax.ws.rs.core.Response;
-
-import model.Korisnik;
+import javax.ws.rs.core.MediaType;
 
 /** 
  * @author Veljko
@@ -13,10 +15,12 @@ import model.Korisnik;
  */
 @Path("/webproj")
 public class Login {
-	@POST
-	@Path("/adduser")
-	public void saveStudent(Korisnik selectedUser) {
-		System.out.println("saving student: " + selectedUser);
-	}
+	
+	@GET
+	@Path("/login/{param1}/{param2}")
+	public Response getMsg(@PathParam("param1") String username, @PathParam("param2") String password) {
+ 		String output = "Username : " + username + ", Password: " + password + ".";
+ 		return Response.status(200).entity(output).build();
+ 	}
 	
 }
