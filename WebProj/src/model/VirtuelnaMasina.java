@@ -31,7 +31,7 @@ public class VirtuelnaMasina {
 	
 	private int gpu;
 	
-	private ArrayList<Disk> diskovi;
+	private ArrayList<String> diskovi; //jedinstvena imena diskova
 	
 	
 	public VirtuelnaMasina(){}
@@ -42,7 +42,7 @@ public class VirtuelnaMasina {
 	 * @param kategorjia
 	 * @param diskovi
 	 */
-	public VirtuelnaMasina(String ime, VM kategorjia, ArrayList<Disk> diskovi) {
+	public VirtuelnaMasina(String ime, VM kategorjia, ArrayList<String> diskovi) {
 		this.ime = ime;
 		this.kategorjia = kategorjia;
 		this.diskovi = diskovi;
@@ -91,7 +91,7 @@ public class VirtuelnaMasina {
 	 * 
 	 * @return all connected disks
 	 */
-	public ArrayList<Disk> getDiskovi() {
+	public ArrayList<String> getDiskovi() {
 		return diskovi;
 	}
 
@@ -99,7 +99,7 @@ public class VirtuelnaMasina {
 	 * 
 	 * @param diskovi
 	 */
-	public void setDiskovi(ArrayList<Disk> diskovi) {
+	public void setDiskovi(ArrayList<String> diskovi) {
 		this.diskovi = diskovi;
 	}
 	

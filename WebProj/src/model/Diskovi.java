@@ -82,7 +82,7 @@ public class Diskovi {
 	 * Ucitava listu diskova iz fajla i pravi asocijativnu listu diskova.
 	 * Kljuc je ime diska, vrednost je objekat Disk.
 	 */
-	public boolean UcitajOrganizacije(){
+	public boolean UcitajDiskove(){
 		try{
 			ObjectMapper mapper = new ObjectMapper();
 			listaDiskovi = mapper.readValue(new File(putanja), new TypeReference<List<Disk>>(){});

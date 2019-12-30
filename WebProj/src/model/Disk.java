@@ -23,7 +23,7 @@ public class Disk {
 	@NotNull
 	private int kapacitet;
 	
-	private VirtuelnaMasina virtualnaMasina;
+	private String virtualnaMasina; //jedinstveno ime virtuelne masine
 	
 	public Disk(){}
 	/**
@@ -34,7 +34,7 @@ public class Disk {
 	 * @param kapacitet
 	 * @param virtualnaMasina
 	 */
-	public Disk(String ime, TipDiska tip, int kapacitet, VirtuelnaMasina virtualnaMasina) {
+	public Disk(String ime, TipDiska tip, int kapacitet, String virtualnaMasina) {
 		this.ime = ime;
 		this.tip = tip;
 		this.kapacitet = kapacitet;
@@ -93,7 +93,7 @@ public class Disk {
 	 * 
 	 * @return
 	 */
-	public VirtuelnaMasina getVirtualnaMasina() {
+	public String getVirtualnaMasina() {
 		return virtualnaMasina;
 	}
 
@@ -101,7 +101,7 @@ public class Disk {
 	 * 
 	 * @param virtualnaMasina
 	 */
-	public void setVirtualnaMasina(VirtuelnaMasina virtualnaMasina) {
+	public void setVirtualnaMasina(String virtualnaMasina) {
 		this.virtualnaMasina = virtualnaMasina;
 	}
 }
