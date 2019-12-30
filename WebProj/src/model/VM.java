@@ -26,6 +26,7 @@ public class VM {
 	
 	private int gpu;
 	
+	public VM(){}
 	/**
 	 * Constructor.
 	 * 

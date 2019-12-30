@@ -25,6 +25,7 @@ public class Disk {
 	
 	private VirtuelnaMasina virtualnaMasina;
 	
+	public Disk(){}
 	/**
 	 * Constructor.
 	 * 

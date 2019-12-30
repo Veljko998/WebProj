@@ -33,6 +33,8 @@ public class VirtuelnaMasina {
 	
 	private ArrayList<Disk> diskovi;
 	
+	
+	public VirtuelnaMasina(){}
 	/**
 	 * Constructor.
 	 * 
