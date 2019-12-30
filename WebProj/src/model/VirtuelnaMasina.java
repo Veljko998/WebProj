@@ -51,6 +51,16 @@ public class VirtuelnaMasina {
 		this.gpu = kategorjia.getGpu();
 	}
 	
+	public VirtuelnaMasina(String ime, VM kategorjia, ArrayList<String> diskovi, int brojJezgara,
+			int ram, int gpu) {
+		this.ime = ime;
+		this.kategorjia = kategorjia;
+		this.diskovi = diskovi;
+		this.brojJezgara = brojJezgara;
+		this.ram = ram;
+		this.gpu = gpu;
+	}
+	
 	/**
 	 * 
 	 * @return
