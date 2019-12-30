@@ -2,6 +2,8 @@ package model;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -14,7 +16,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 public class Diskovi {
 	private HashMap<String, Disk> mapaDiskovi = new HashMap<String, Disk>();
 	private List<Disk> listaDiskovi = new ArrayList<Disk>();
-	private String putanja = "C:\\Users\\Ivana\\git\\WebProj\\WebProj\\WebContent\\diskovi.json";
+	private String putanja = "";
 	
 	public Diskovi(){}
 	
@@ -22,11 +24,20 @@ public class Diskovi {
 		return putanja;
 	}
 
-	public void setPutanja(String putanja) {
-		this.putanja = putanja;
+	/*pronalazi apsolutnu putanju do fajla*/
+	public void setPutanja() {
+		try {
+			String path = this.getClass().getClassLoader().getResource("").getPath();
+			String fullPath = URLDecoder.decode(path, "UTF-8");
+			String pathArr[] = fullPath.split("/WEB-INF/classes/");
+			fullPath = pathArr[0];
+			String reponsePath = "";
+			reponsePath = new File(fullPath).getPath() + File.separatorChar + "diskovi.json";
+			this.putanja = reponsePath;
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+		}
 	}
-
-	
 
 	public HashMap<String, Disk> getMapaDiskovi() {
 		return mapaDiskovi;

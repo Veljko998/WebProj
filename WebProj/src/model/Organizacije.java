@@ -2,6 +2,8 @@ package model;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -15,7 +17,7 @@ public class Organizacije {
 	
 	private HashMap<String, Organizacija> mapaOrganizacije = new HashMap<String, Organizacija>();
 	private List<Organizacija> listaOrganizacije = new ArrayList<Organizacija>();
-	private String putanja = "C:\\Users\\Ivana\\git\\WebProj\\WebProj\\WebContent\\organizacije.json";
+	private String putanja = "";
 	
 	public Organizacije(){}
 	
@@ -23,8 +25,19 @@ public class Organizacije {
 		return putanja;
 	}
 
-	public void setPutanja(String putanja) {
-		this.putanja = putanja;
+	/*pronalazi apsolutnu putanju do fajla*/
+	public void setPutanja() {
+		try {
+			String path = this.getClass().getClassLoader().getResource("").getPath();
+			String fullPath = URLDecoder.decode(path, "UTF-8");
+			String pathArr[] = fullPath.split("/WEB-INF/classes/");
+			fullPath = pathArr[0];
+			String reponsePath = "";
+			reponsePath = new File(fullPath).getPath() + File.separatorChar + "organizacije.json";
+			this.putanja = reponsePath;
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+		}
 	}
 
 	public HashMap<String, Organizacija> getMapaOrganizacije() {
