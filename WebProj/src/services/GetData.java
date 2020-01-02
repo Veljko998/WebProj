@@ -1,4 +1,4 @@
-package rest;
+package services;
 
 import java.util.ArrayList;
 import java.util.List;

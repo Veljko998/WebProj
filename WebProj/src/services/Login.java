@@ -1,4 +1,4 @@
-package rest;
+package services;
 
 import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
@@ -18,7 +18,7 @@ public class Login {
 	
 	@GET
 	@Path("/login/{param1}/{param2}")
-	public Response getMsg(@PathParam("param1") String username, @PathParam("param2") String password) {
+	public Response login(@PathParam("param1") String username, @PathParam("param2") String password) {
  		String output = "Username : " + username + ", Password: " + password + ".";
  		return Response.status(200).entity(output).build();
  	}
