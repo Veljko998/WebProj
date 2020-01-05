@@ -3,14 +3,19 @@ Vue.component("log-in", {
         	return {
         		title: 'Login',
                 User: {},
-                users: [],
+                users: null, //[]
                 name: ''
         	}
     },
     template:`
 <div>
-    <h1>Ajmooooo vise</h1>
 	<h3>{{ title }}</h3>
+	<label>Username: </label>
+	<input name="username" type="text" v-model="User.username"/><br/>
+	<label>Password: </label>
+	<input name="password" type="text" v-model="User.password"/>
+	<input type="checkbox" name="remember" />Remember me<br/>
+	<a v-bind:href="'rest/webproj/login/' + User.username +'/' + User.password"><button v-on:click="checkUser(User)">Login</button></a>
 </div>
 `
     ,
@@ -18,6 +23,9 @@ Vue.component("log-in", {
         addUser: function(User){
         	this.users.push(User)
         	this.name = User.username
+        },
+        checkUser: function(User){
+        	
         }
     },
 });
