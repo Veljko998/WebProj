@@ -9,7 +9,8 @@ Vue.component("log-in", {
     },
     template:`
 <div>
-	<p>Bilostaa asd Samo da se ispise na ekranu</p>
+    <h1>Ajmooooo vise</h1>
+	<h3>{{ title }}</h3>
 </div>
 `
     ,
