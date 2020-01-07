@@ -8,18 +8,27 @@ Vue.component("log-in", {
                 role: 'nema uloge',
                 loading: true,
                 errored: false,
-                verified: false
+                verified: false,
+                errors: []
         	}
     },
     template:`
 <div>
 	<h3>{{ title }}</h3>
+	
+	<p v-if="errors.length">
+	    <b>Please correct the following error(s):</b>
+	    <ul>
+	    	<li v-for="error in errors">{{ error }}</li>
+	    </ul>
+  </p>
+	
 	<label>Username: </label>
 	<input name="username" type="text" v-model="User.username"/><br/>
 	<label>Password: </label>
-	<input name="password" type="text" v-model="User.password"/></br>
+	<input id="password-input" name="password" type="text" v-model="User.password"/></br>
 	<input type="checkbox" name="remember" />Remember me<br/>
-	<button v-on:click="login(User)">Login</button></br>
+	<button v-on:click="login(User);checkForm();">Login</button></br>
 	
 	<p>Ovo je samo da bi smo videli da li radi llogovanje. Obrisati kasnije.</p>
 	<table border="1">
@@ -32,20 +41,22 @@ Vue.component("log-in", {
 		</tr>
 		</table>
 </div>
-`
-    ,
+    `,
     methods: {
-//    	checkRole: function(){
-//    		axios
-//    		.post('rest/webproj/checkRole', {"email": this.User.username, "password": this.User.password})
-//    		.then(response => {
-//    			this.role = response.data;
-//    		});
-//    	},
-        addUser: function(User){
-        	this.users.push(User)
-        	this.name = User.username
-        },
+    	checkForm: function(){
+    		if(this.User.username && this.User.password){
+    			return true;
+    		}
+    		
+    		this.errors = [];
+    		
+    		if(!this.User.username){
+    			this.errors.push('Username or email required.');
+    		}
+    		if(!this.User.password){
+    			this.errors.push('Password equired.');
+    		}
+    	},
         login: function(User){
         	axios
         	.post('rest/webproj/verifyUser', {"email": this.User.username, "password": this.User.password})
@@ -80,11 +91,11 @@ Vue.component("log-in", {
     		.get('rest/webproj/getJustUsers')
     		.then(response => (this.users = response.data))
     	
-//    	.catch(error => {
-//        console.log(error)
-//        this.errored = true
-//    	})
-//    	.finally(() => this.loading = false)
+	//    	.catch(error => {
+	//        console.log(error)
+	//        this.errored = true
+	//    	})
+	//    	.finally(() => this.loading = false)
     },
 });
 

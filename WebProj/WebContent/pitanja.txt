@@ -25,7 +25,8 @@ axios
 	}
 	Ovo gore radi tek na drugi klik. Kao da na prvi samo upise a jos pre toga se pozove ovo toast.
 	
-2. Da li je uredu da pravim za svaku ulogu posebnu kopmonentu, odnosno da prilikom logovanja korisnika proveravam
-u posebnoj metodi da li koja je njegova uloga, i da na osnovu toga pozivam odredjenu komponentu(templejt)? primer: login.js, 'login' metoda.
+2. Da li je uredu da pravim za svaku ulogu posebnu kopmonentu(kor,admin,superadmin), odnosno da prilikom logovanja korisnika proveravam
+u posebnoj metodi da li koja je njegova uloga, i da na osnovu toga pozivam odredjenu komponentu(templejt)? 
+Primer: login.js, 'login' metoda.
 
 3. 
