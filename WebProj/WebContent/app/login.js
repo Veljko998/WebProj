@@ -30,6 +30,7 @@ Vue.component("log-in", {
 	<input type="checkbox" name="remember" />Remember me<br/>
 	<button v-on:click="login(User);checkForm();">Login</button></br>
 	
+	<!--
 	<p>Ovo je samo da bi smo videli da li radi llogovanje. Obrisati kasnije.</p>
 	<table border="1">
 		<tr bgcolor="lightgrey">
@@ -40,6 +41,7 @@ Vue.component("log-in", {
 		<td> {{i.prezime}}</td>
 		</tr>
 		</table>
+	-->
 </div>
     `,
     methods: {

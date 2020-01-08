@@ -112,7 +112,7 @@ public class Login {
 	/**
 	 * Check for user's role.
 	 * 
-	 * @param u
+	 * @param u - UserToVerify
 	 * @return user's role as string
 	 */
 	public String checkRole(UserToVerify u) {

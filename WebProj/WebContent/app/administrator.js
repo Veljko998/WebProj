@@ -3,7 +3,8 @@ Vue.component("administrator-page", {
 		return {
 			title: 'administrator',
 			loading: true,
-            errored: false
+            errored: false,
+            showUsersTable: false
 		}
 	},
 	template:
@@ -20,7 +21,7 @@ Vue.component("administrator-page", {
 					<a class="nav-link" href="#">Home option<span class="sr-only">(current)</span></a>
 				</li>
 				<li class="nav-item">
-					<a class="nav-link" href="#/pregledKorisnika">Pregled korisnika</a>
+					<a class="nav-link" href="#" v-on:click="showUsersTable = !showUsersTable">Pregled korisnika</a>
 				</li>
 				
 				<li class="nav-item">
@@ -30,9 +31,9 @@ Vue.component("administrator-page", {
 		</div>
 
 	</nav>
-	<p>Ovo obrisati</p>
-	<pregled-korisnika></pregled-korisnika>
+	</br>
+	<pregled-korisnika v-if="showUsersTable"></pregled-korisnika>
 </div>
-		`,
+		`
 		
 });

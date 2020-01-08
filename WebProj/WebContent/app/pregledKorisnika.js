@@ -3,12 +3,12 @@ Vue.component("pregled-korisnika" ,{
 		return {
 			title: "Pregled korisnika",
 			users: null,
-			errored: false
 		}
 	},
 	template: 
 	`
 <div class="container-fluid">
+	<h2>Pregled korisnika.</h2>
 	<table class="table table-hover">
 	  <thead>
 	    <tr>
@@ -20,8 +20,8 @@ Vue.component("pregled-korisnika" ,{
 	  </thead>
 	  <tbody>
 
-	  	<tr v-for="u in users">
-			<th scope="row">{{ $index }}</th>
+	  	<tr v-for="(u, index) in users">
+			<th scope="row">{{ index+1 }}</th>
 			<td>{{ u.email }}</td>
 			<td>{{ u.ime }}</td>
 			<td>{{ u.prezime }}</td>
@@ -38,10 +38,5 @@ Vue.component("pregled-korisnika" ,{
     	axios
     		.get('rest/webproj/getJustUsers')
     		.then(response => (this.users = response.data))
-	    	.catch(error => {
-	        console.log(error)
-	        this.errored = true
-	    	})
-	    	.finally(() => this.loading = false)
     },
 });
