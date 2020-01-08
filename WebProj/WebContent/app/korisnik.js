@@ -8,7 +8,9 @@ Vue.component("korisnik-page", {
 	},
 	template:
 		`
-<p>Stranica za ulogovanog korisnika...Ovo je title: {{ title }}</p>
+<div class="container">
+	<button class="position-absolute">Logout</button>
+</div>
 		`,
 		
 });
