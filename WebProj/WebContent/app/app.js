@@ -20,16 +20,16 @@ router.beforeEach((to, from, next) => {
 	axios
 	.get("rest/webproj/ensureLogin")
 	.then(response =>{
-		isLogedIn = response.data.isLogedIn;  // response.data je objekat LoginToEnsure.
-		if (!isLogedIn && to.path !== "/") {  // ako je uneta bilo koja druga putanja koja nije login page...
-			next("/");  // ...idi na login page.
-		}
-		else {
-			//  Ovde bi bilo da sacuvamo ulogu i email.
-//			localStorage.setItem("role", response.data.role);
-//          localStorage.setItem("email", response.data.email);
-			next();  // Ako je sve uspesno idi tamo gde trebas(home page jedne od uloga).
-		}
+		isLogedIn = response.data.isLogedIn;
+		
+//		if (!isLogedIn && to.path !== "/") {
+//			next("/");  // ...idi na login page.
+//		}
+//		else {
+////			localStorage.setItem("role", response.data.role);
+////          localStorage.setItem("email", response.data.email);
+//			next();
+//		}
 	})
 })
 
