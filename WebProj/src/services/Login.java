@@ -17,6 +17,7 @@ import javax.ws.rs.core.Response;
 import model.Korisnici;
 import model.Korisnik;
 import model.enums.Uloga;
+import model.kendo.LoginToEnsure;
 import model.kendo.UserToVerify;
 
 import javax.ws.rs.core.Context;
@@ -40,7 +41,7 @@ public class Login {
  		String output = "Username : " + username + ", Password: " + password + ".";
  		return Response.status(200).entity(output).build();
  	}
-
+	
 	@GET
 	@Path("/getJustUsers")
 	@Produces(MediaType.APPLICATION_JSON)
@@ -61,6 +62,22 @@ public class Login {
 			System.out.println("Nije ucitao ni jendog korisnika.");
 		}
 		return null;
+	}
+
+	@GET
+	@Path("/ensureLogin")
+	@Produces(MediaType.APPLICATION_JSON)
+	/**
+	 * This method should check is user logged in, to secure going to other page if not.
+	 * 
+	 * @return true if user is logged in correctly, or logged in at all.
+	 */
+	public boolean ensureLogin(){
+		LoginToEnsure lte = new LoginToEnsure();
+		//TODO: Implement logic.
+		
+		
+		return !lte.isLogedIn; //return true initially while not implement logic.
 	}
 	
 	@POST
@@ -88,6 +105,7 @@ public class Login {
 		}
 		return false;
 	}
+	
 	@POST
 	@Path("/checkRole")
 	@Produces(MediaType.APPLICATION_JSON)
