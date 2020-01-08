@@ -10,7 +10,7 @@ Vue.component("korisnik-page", {
 		`
 <div class="container-fluid">
 	<nav class="navbar navbar-dark bg-dark">
-		<a class="navbar-brand" href="#">Username text</a>
+		<a class="navbar-brand" href="#">Korisnik</a>
 		<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarText" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
 			<span class="navbar-toggler-icon"></span>
 		</button>
