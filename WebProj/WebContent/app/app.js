@@ -28,7 +28,7 @@ router.beforeEach((to, from, next) => {
 //		else {
 ////			localStorage.setItem("role", response.data.role);
 ////          localStorage.setItem("email", response.data.email);
-//			next();
+			next();
 //		}
 	})
 })
