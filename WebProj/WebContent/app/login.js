@@ -73,9 +73,9 @@ Vue.component("log-in", {
 	            			toast(this.role);
 	            			if (this.role == "korisnik") {
 	            				router.push({path: "/korisnik"});
-	            			}else if (this.role == "administrator") {
+	            			}else if (this.role == "admin") {
 								router.push({path: "/administrator"});
-							}else if (this.role == "superadministrator"){
+							}else if (this.role == "superadmin"){
 								router.push({path: "/superadministrator"});
 							}
 	            		});
