@@ -13,7 +13,7 @@ Vue.component("log-in", {
         	}
     },
     template:`
-<div>
+<div class="container-fluid">
 	<h3>{{ title }}</h3>
 	
 	<p v-if="errors.length">
