@@ -12,6 +12,7 @@ import model.enums.Uloga;
 @JsonAutoDetect(fieldVisibility= JsonAutoDetect.Visibility.ANY)
 public class Korisnik {
 	private String email; //jedinstveno
+	private String lozinka;
 	private String ime;
 	private String prezime;
 	private Organizacija organizacija;
@@ -20,11 +21,12 @@ public class Korisnik {
 	
 	public Korisnik(){}
 	
-	public Korisnik(String email, String ime, String prezime,
+	public Korisnik(String email, String lozinka, String ime, String prezime,
 			Organizacija organizacija, Uloga uloga,
 			List<Tuple<LocalDateTime, LocalDateTime>> listaAktivnosti) {
 		super();
 		this.email = email;
+		this.lozinka = lozinka;
 		this.ime = ime;
 		this.prezime = prezime;
 		this.organizacija = organizacija;
@@ -35,11 +37,20 @@ public class Korisnik {
 	public Korisnik(Korisnik k) {
 		super();
 		this.email = k.getEmail();
+		this.lozinka = k.getLozinka();
 		this.ime = k.getIme();
 		this.prezime = k.getPrezime();
 		this.organizacija = k.getOrganizacija();
 		this.uloga = k.getUloga();
 		this.listaAktivnosti = k.getListaAktivnosti();
+	}
+
+	public String getLozinka() {
+		return lozinka;
+	}
+
+	public void setLozinka(String lozinka) {
+		this.lozinka = lozinka;
 	}
 
 	public String getEmail() {

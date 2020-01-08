@@ -1,5 +1,6 @@
 package services;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,10 +16,12 @@ import model.Korisnici;
 import model.Korisnik;
 import model.Organizacija;
 import model.Organizacije;
+import model.Tuple;
 import model.VM;
 import model.VirtuelnaMasina;
 import model.VirtuelneMasine;
 import model.enums.TipDiska;
+import model.enums.Uloga;
 
 @Path("/data")  
 public class GetData {
@@ -27,11 +30,20 @@ public class GetData {
 	@Path("/make")
 	@Produces(MediaType.APPLICATION_JSON)
 	public boolean getKorisnici() {
-		//Korisnici k = new Korisnici();
-		//k.setPutanja();
+		Korisnici k = new Korisnici();
+		k.setPutanja();
+		List<Tuple<LocalDateTime, LocalDateTime>> lista = new ArrayList<Tuple<LocalDateTime, LocalDateTime>>();
 		//Korisnici k = new Korisnici("C:\\Users\\Ivana\\git\\WebProj\\WebProj\\WebContent\\korisnici.json");
-		//k.UpisiKorisnike();
-		//k.UcitajKorisnike();
+		Korisnik k1 = new Korisnik("email1", "lozinka1", "ime1", "prezime1",
+				new Organizacija(), Uloga.KORISNIK,
+				lista);
+		Korisnik k2 = new Korisnik("email2", "lozinka2", "ime2", "prezime2",
+				new Organizacija(), Uloga.KORISNIK,
+				lista);
+		k.dodajKorisnika(k1);
+		k.dodajKorisnika(k2);
+		k.UpisiKorisnike();
+		return k.UcitajKorisnike();
 		//return k.UpisiKorisnike(); 
 		/*
 		Diskovi d = new Diskovi();
@@ -63,7 +75,7 @@ public class GetData {
 		k.UpisiKategorijeVM();
 		k.UcitajKategorijeVM();
 		*/
-		
+		/*
 		VirtuelneMasine m = new VirtuelneMasine();
 		m.setPutanja();
 		ArrayList<String> lista = new ArrayList<String>();
@@ -73,7 +85,7 @@ public class GetData {
 		m.dodajVirtuelnuMasinu(vm2);
 		m.UpisiVirtuelneMasine();
 		return m.UcitajVirtuelneMasine();
-		
+		*/
 	}
 	
 }
