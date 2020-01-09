@@ -4,9 +4,12 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.servlet.ServletContext;
+import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 
 import model.Disk;
@@ -25,6 +28,11 @@ import model.enums.Uloga;
 
 @Path("/data")  
 public class GetData {
+	
+	@Context
+	HttpServletRequest request;
+	@Context
+	ServletContext ctx;
 	
 	@GET
 	@Path("/make")
@@ -86,6 +94,20 @@ public class GetData {
 		m.UpisiVirtuelneMasine();
 		return m.UcitajVirtuelneMasine();
 		*/
+	}
+	
+	@GET
+	@Path("/getOrganisations")
+	@Produces(MediaType.APPLICATION_JSON)
+	public List<Organizacija> getOrganisations(){
+		Organizacije o = new Organizacije();
+		o.setPutanja(); 
+		if (o.UcitajOrganizacije()) {
+			return o.getListaOrganizacije();
+		}else {
+			System.out.println("Nije ucitao ni jendnu organizaciju.");
+		}
+		return null;
 	}
 	
 }

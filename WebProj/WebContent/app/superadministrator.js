@@ -3,7 +3,8 @@ Vue.component("superadministrator-page", {
 		return {
 			title: 'superadministrator',
 			loading: true,
-            errored: false
+            errored: false,
+            showOrganisationsTable: false
 		}
 	},
 	template:
@@ -20,7 +21,7 @@ Vue.component("superadministrator-page", {
 					<a class="nav-link" href="#">Home option<span class="sr-only">(current)</span></a>
 				</li>
 				<li class="nav-item">
-					<a class="nav-link" href="#">Option1</a>
+					<a class="nav-link" href="#" v-on:click="showOrganisationsTable = !showOrganisationsTable">Pregled organizacija</a>
 				</li>
 				<li class="nav-item">
 					<a class="nav-link" href="#">Option2</a>
@@ -35,7 +36,8 @@ Vue.component("superadministrator-page", {
 		</div>
 
 	</nav>
-	<p>Ovde ce ici iz home dugmeta. valjda</p>
+	</br>
+	<pregled-organizacija v-if="showOrganisationsTable"></pregled-organizacija>
 </div>
 		`,
 		
