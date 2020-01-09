@@ -3,13 +3,15 @@ Vue.component("pregled-korisnika" ,{
 		return {
 			title: "Pregled korisnika",
 			users: null,
+			role: '',
+			email: ''
 		}
 	},
 	template: 
 	`
-<div class="container-fluid">
+<div class="container-fluid scrollable">
 	<h2>Pregled korisnika.</h2>
-	<table class="table table-hover">
+	<table class="table table-hover table-striped">
 	  <thead>
 	    <tr>
 	      <th scope="col">#</th>
@@ -35,8 +37,12 @@ Vue.component("pregled-korisnika" ,{
 		
 	},
 	mounted () {  //created 
-    	axios
-    		.get('rest/webproj/getJustUsers')
+		this.role = localStorage.getItem('role');
+		this.email = localStorage.getItem('email');
+		var path = 'rest/overview/getJustUsers/' + this.role + '/' + this.email
+    
+		axios
+    		.get(path)
     		.then(response => (this.users = response.data))
     },
 });

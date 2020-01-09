@@ -43,6 +43,23 @@ public class Login {
  	}
 	
 	@GET
+	@Path("/getJustUsers2/{param1}/{param2}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public List<Korisnik> getJustUsers2(@PathParam("param1") String role, @PathParam("param2") String email){
+		System.out.println(role);
+		System.out.println(email);
+		
+		Korisnici k = new Korisnici();
+		k.setPutanja();  //set .json files path before reading from them.
+		if (k.UcitajKorisnike()) {
+			return k.getListaKorisnici();
+		}else {
+			System.out.println("Nije ucitao ni jendog korisnika.");
+		}
+		return null;
+	}
+	
+	@GET
 	@Path("/getJustUsers")
 	@Produces(MediaType.APPLICATION_JSON)
 	/**

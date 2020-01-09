@@ -4,7 +4,8 @@ Vue.component("administrator-page", {
 			title: 'administrator',
 			loading: true,
             errored: false,
-            showUsersTable: false
+            showUsersTable: false,
+            someMessage: ''
 		}
 	},
 	template:
@@ -25,6 +26,10 @@ Vue.component("administrator-page", {
 				</li>
 				
 				<li class="nav-item">
+					<a class="nav-link" href="#" v-on:click="doNothing()">Do nothing</a>
+				</li>
+				
+				<li class="nav-item">
 					<a class="nav-link" href="#/">Logout</a>
 				</li>
 			</ul>
@@ -34,6 +39,12 @@ Vue.component("administrator-page", {
 	</br>
 	<pregled-korisnika v-if="showUsersTable"></pregled-korisnika>
 </div>
-		`
+		`,
+	methods: {
+		doNothing: function(){
+			someMessage = localStorage.getItem('role');
+			console.log(someMessage);
+		}
+	},
 		
 });
