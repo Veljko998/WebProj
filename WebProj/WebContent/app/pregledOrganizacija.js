@@ -24,7 +24,7 @@ Vue.component("pregled-organizacija" ,{
 			<th scope="row">{{ index+1 }}</th>
 			<td>{{ o.ime }}</td>
 			<td>{{ o.opis }}</td>
-			<td> <b-img src="https://picsum.photos/300/150/?image=41" fluid-grow alt="Fluid-grow image"></b-img> </td>
+			<td style="width:100%;" class="text-center"><img class="img-fluid" src="https://unsplash.it/164/92"/></td>
 	  	</tr>
 	  	
 	  </tbody>
