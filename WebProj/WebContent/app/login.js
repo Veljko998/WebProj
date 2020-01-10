@@ -9,83 +9,86 @@ Vue.component("log-in", {
                 loading: true,
                 errored: false,
                 verified: false,
-                errors: []
+                errors: [],
+                permition: false,
+                un: '',
+                pw: ''
         	}
     },
     template:`
-<div class="container-fluid">
-	<h3>{{ title }}</h3>
-	
-	<p v-if="errors.length">
-	    <b>Please correct the following error(s):</b>
-	    <ul>
-	    	<li v-for="error in errors">{{ error }}</li>
-	    </ul>
-  </p>
-	
-	<label>Username: </label>
-	<input name="username" type="text" v-model="User.username"/><br/>
-	<label>Password: </label>
-	<input id="password-input" name="password" type="text" v-model="User.password"/></br>
-	<input type="checkbox" name="remember" />Remember me<br/>
-	<button v-on:click="login(User);checkForm();">Login</button></br>
-	
-	<!--
-	<p>Ovo je samo da bi smo videli da li radi llogovanje. Obrisati kasnije.</p>
-	<table border="1">
-		<tr bgcolor="lightgrey">
-			<th>Ime</th><th>Prezime</th>
-		</tr>
-		<tr v-for="i in users">
-		<td> {{i.ime}}</td>
-		<td> {{i.prezime}}</td>
-		</tr>
-		</table>
-	-->
+<div class="container">
+    <div class="wrapper">
+    	<div class="form-signin">       
+    		<h3 class="form-signin-heading">Welcome Back! Please Sign In</h3>
+    		
+    			<input type="text" class="form-control" name="username" placeholder="Username" required="" autofocus="" v-model="User.username"/>
+				<input type="text" class="form-control" name="password" placeholder="Password" required="" v-model="User.password"/>  
+				<button class="btn btn-lg btn-primary btn-block" v-on:click="getInputValue(); login(User);">Submit</button>		
+		</div>
+	</div>
 </div>
     `,
     methods: {
-    	checkForm: function(){
-    		if(this.User.username && this.User.password){
-    			return true;
-    		}
-    		
-    		this.errors = [];
-    		
-    		if(!this.User.username){
-    			this.errors.push('Username or email required.');
-    		}
-    		if(!this.User.password){
-    			this.errors.push('Password equired.');
+    	getInputValue: function(){
+    		this.permition = false;
+    		console.log("USERNAME: " + this.User.username);
+    		console.log("PASSWORD: " + this.User.password);
+    		un = this.User.username;
+    		pw = this.User.password;
+    		if((un != '' && pw != '') && (un !== undefined && pw !== undefined )){
+    			this.permition = true;
+    			console.log("permition je true");
+    		}else{
+    			console.log("permition je false");
     		}
     	},
+//    	checkForm: function(){
+//    		if(this.User.username && this.User.password){
+//    			return true;
+//    		}
+//    		
+//    		this.errors = [];
+//    		
+//    		if(!this.User.username){
+//    			this.errors.push('Username or email required.');
+//    		}
+//    		if(!this.User.password){
+//    			this.errors.push('Password equired.');
+//    		}
+//    	},
         login: function(User){
-        	axios
-        	.post('rest/webproj/verifyUser', {"email": this.User.username, "password": this.User.password})
-        	.then(response => {
-        		this.verified = response.data;
-        		if(this.verified){  //user inputs email and password correctly.
-        			axios
-	            		.post('rest/webproj/checkRole', {"email": this.User.username, "password": this.User.password})
-	            		.then(response => {
-	            			this.role = response.data;
-	            			localStorage.setItem("role", response.data);
-	            			localStorage.setItem("email", this.User.username);
-	            			localStorage.setItem("isUserLogedIn", "true");
-	            			
-	            			if (this.role == "korisnik") {
-	            				router.push({path: "/korisnik"});
-	            			}else if (this.role == "admin") {
-								router.push({path: "/administrator"});
-							}else if (this.role == "superadmin"){
-								router.push({path: "/superadministrator"});
-							}
-	            		});
-        		}
-        		else {
-                    toast("Wrong email or password. Please try again.");
-                }
-        	});
+        	if(this.permition === true){
+        		console.log("usao sam ovde");
+        		axios
+            	.post('rest/webproj/verifyUser', {"email": this.User.username, "password": this.User.password})
+            	.then(response => {
+            		this.verified = response.data;
+            		if(this.verified){  //user inputs email and password correctly.
+            			axios
+    	            		.post('rest/webproj/checkRole', {"email": this.User.username, "password": this.User.password})
+    	            		.then(response => {
+    	            			this.role = response.data;
+    	            			localStorage.setItem("role", response.data);
+    	            			localStorage.setItem("email", this.User.username);
+    	            			localStorage.setItem("isUserLogedIn", "true");
+    	            			
+    	            			if (this.role == "korisnik") {
+    	            				router.push({path: "/korisnik"});
+    	            			}else if (this.role == "admin") {
+    								router.push({path: "/administrator"});
+    							}else if (this.role == "superadmin"){
+    								router.push({path: "/superadministrator"});
+    							}
+    	            		});
+            		}
+            		else {
+                        toast("Wrong email or password. Please try again.");
+                        this.User.username = '';
+                        this.User.password = '';
+                    }
+            	});
+        	}
+        	
         }
     },
     mounted () {  //created 

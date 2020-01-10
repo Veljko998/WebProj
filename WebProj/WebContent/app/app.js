@@ -21,42 +21,42 @@ const router = new VueRouter({
 
 localStorage.clear();
 //localStorage.setItem("isUserLogedIn", "false");
-console.log("promenili smo islogedin");
+//console.log("promenili smo islogedin");
 
 router.beforeEach((to, from, next) => {
 	var isLoggedIn = localStorage.getItem("isUserLogedIn");
-	console.log("IDEMOOOOOOOOOOOOOOOOOO");
+//	console.log("IDEMOOOOOOOOOOOOOOOOOO");
 	
 	axios
 	.post('rest/webproj/checkPath', {"path": to.path})
 	.then(response => {
 		var rd = response.data;
 		var userRole = localStorage.getItem("role");
-		console.log("response data: " + rd);
-		console.log("local storage: " + userRole);
+//		console.log("response data: " + rd);
+//		console.log("local storage: " + userRole);
 		
 		if(isLoggedIn !== "true" && to.path !== "/"){
-			console.log("Nemamo prijavljenog korisnika i ne mozemo da idemo dalje");
+//			console.log("Nemamo prijavljenog korisnika i ne mozemo da idemo dalje");
 			next("/");
 		}else{
 			console.log("USER LOOGGGGG   " + userRole);
 			if(userRole === null){
-				console.log("AAAAAAAAAAAAAAAAAAAAAA");
+//				console.log("AAAAAAAAAAAAAAAAAAAAAA");
 				next();
 			}else{
 				if(rd === "korisnik" && userRole === "korisnik"){
-					console.log("Imamo prijavljenog -KORISNIKA- i mozemo da idemo dalje.");
+//					console.log("Imamo prijavljenog -KORISNIKA- i mozemo da idemo dalje.");
 					next();
 				}else if(rd === "admin" && userRole === "admin"){
-					console.log("Imamo prijavljenog -ADMIN- i mozemo da idemo dalje.");
+//					console.log("Imamo prijavljenog -ADMIN- i mozemo da idemo dalje.");
 					next();
 				}else if(rd === "superadmin" && userRole === "superadmin"){
-					console.log("Imamo prijavljenog -SUPERADMIN- i mozemo da idemo dalje.");
+//					console.log("Imamo prijavljenog -SUPERADMIN- i mozemo da idemo dalje.");
 					next();
 				}else{
-					console.log("Ne mogu da verujem...........");
+//					console.log("Ne mogu da verujem...........");
 					next();
-					console.log("da li ovde uopste moze da udje");
+//					console.log("da li ovde uopste moze da udje");
 					next("/");
 //					next();
 				}
