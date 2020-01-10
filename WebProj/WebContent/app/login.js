@@ -64,15 +64,15 @@ Vue.component("log-in", {
         	.post('rest/webproj/verifyUser', {"email": this.User.username, "password": this.User.password})
         	.then(response => {
         		this.verified = response.data;
-        		if(this.verified){  //user inputs email and password correctly
+        		if(this.verified){  //user inputs email and password correctly.
         			axios
 	            		.post('rest/webproj/checkRole', {"email": this.User.username, "password": this.User.password})
 	            		.then(response => {
 	            			this.role = response.data;
 	            			localStorage.setItem("role", response.data);
 	            			localStorage.setItem("email", this.User.username);
+	            			localStorage.setItem("isUserLogedIn", "true");
 	            			
-	            			console.log("Hello world!");
 	            			if (this.role == "korisnik") {
 	            				router.push({path: "/korisnik"});
 	            			}else if (this.role == "admin") {
