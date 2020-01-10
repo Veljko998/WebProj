@@ -30,7 +30,7 @@ Vue.component("administrator-page", {
 				</li>
 				
 				<li class="nav-item">
-					<a class="nav-link" href="#/">Logout</a>
+					<a class="nav-link" href="#/" v-on:click="removeRole()">Logout</a>
 				</li>
 			</ul>
 		</div>
@@ -44,6 +44,9 @@ Vue.component("administrator-page", {
 		doNothing: function(){
 			someMessage = localStorage.getItem('role');
 			console.log(someMessage);
+		},
+		removeRole: function(){
+			localStorage.setItem("role", "noRole");
 		}
 	},
 		

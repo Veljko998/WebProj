@@ -1,27 +1,23 @@
 package services;
 
-import java.util.Collection;
 import java.util.List;
 
-import javax.annotation.PostConstruct;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
-import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.core.Context;
+import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import model.Korisnici;
 import model.Korisnik;
-import model.enums.Uloga;
 import model.kendo.LoginToEnsure;
+import model.kendo.PathToLimit;
 import model.kendo.UserToVerify;
-
-import javax.ws.rs.core.Context;
-import javax.ws.rs.core.MediaType;
 
 /** 
  * @author Veljko
@@ -144,6 +140,23 @@ public class Login {
 			}
 		}
 		return null;
+	}
+	
+	@POST
+	@Path("/checkPath")
+	@Produces(MediaType.APPLICATION_JSON)
+	/**
+	 * If user is logged in limit his path. For example: If user's role is admin, he can go on .admin/..., but he can't go to /korisnik...
+	 * 
+	 * @param u
+	 * @return users role if user is logged in, or null otherwise.
+	 */
+	public String checkPath(PathToLimit ptl) {
+		System.out.println("Ovo je putanja: " + ptl.path);
+		if (ptl.path.startsWith("/korisnik")) return "korisnik"; 
+		else if (ptl.path.startsWith("/admin")) return "admin"; 
+		else if (ptl.path.startsWith("/superadmin")) return "superadmin"; 
+		else return "null"; 
 	}
 	
 }
