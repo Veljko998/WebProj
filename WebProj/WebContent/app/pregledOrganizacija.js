@@ -9,7 +9,7 @@ Vue.component("pregled-organizacija" ,{
 	`
 <div class="container-fluid">
 	<h2>Pregled organizacija</h2>
-	<table class="table table-hover">
+	<table class="table table-hover" >
 	  <thead>
 	    <tr>
 	      <th scope="col"></th>
@@ -24,7 +24,7 @@ Vue.component("pregled-organizacija" ,{
 			<th scope="row">{{ index+1 }}</th>
 			<td>{{ o.ime }}</td>
 			<td>{{ o.opis }}</td>
-			<td style="width:100%;" class="text-center"><img class="img-fluid" src="https://unsplash.it/164/92"/></td>
+			<td  class="text-center"><img class="img-fluid" v-bind:src="o.logo"/></td>
 	  	</tr>
 	  	
 	  </tbody>
