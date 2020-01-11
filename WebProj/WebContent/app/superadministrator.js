@@ -4,6 +4,7 @@ Vue.component("superadministrator-page", {
 			title: 'superadministrator',
 			loading: true,
             errored: false,
+            showUsersTable: false,
             showOrganisationsTable: false
 		}
 	},
@@ -24,7 +25,7 @@ Vue.component("superadministrator-page", {
 					<a class="nav-link" href="#" v-on:click="showOrganisationsTable = !showOrganisationsTable">Pregled organizacija</a>
 				</li>
 				<li class="nav-item">
-					<a class="nav-link" href="#">Option2</a>
+					<a class="nav-link" href="#" v-on:click="showUsersTable = !showUsersTable">Pregled korisnika</a>
 				</li>
 				<li class="nav-item">
 					<a class="nav-link" href="#">Option3</a>
@@ -37,7 +38,9 @@ Vue.component("superadministrator-page", {
 
 	</nav>
 	</br>
+	<pregled-korisnika v-if="showUsersTable"></pregled-korisnika>
 	<pregled-organizacija v-if="showOrganisationsTable"></pregled-organizacija>
+	
 </div>
 		`,
 		

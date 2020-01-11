@@ -9,29 +9,37 @@ Vue.component("pregled-korisnika" ,{
 	},
 	template: 
 	`
-<div class="container-fluid scrollable">
+<div class="container-fluid">
 	<h2>Pregled korisnika.</h2>
-	<table class="table table-hover table-striped">
-	  <thead>
-	    <tr>
-	      <th scope="col">#</th>
-	      <th scope="col">Email</th>
-	      <th scope="col">Name</th>
-	      <th scope="col">Surname</th>
-	    </tr>
-	  </thead>
-	  <tbody>
-
-	  	<tr v-for="(u, index) in users">
-			<th scope="row">{{ index+1 }}</th>
-			<td>{{ u.email }}</td>
-			<td>{{ u.ime }}</td>
-			<td>{{ u.prezime }}</td>
-	  	</tr>
-	  	
-	  </tbody>
-	</table>
+	
+	<div class="container-fluid scrollable">
+		<table class="table table-hover table-striped">
+		  <thead>
+		    <tr>
+		      <th scope="col">#</th>
+		      <th scope="col">Email</th>
+		      <th scope="col">Name</th>
+		      <th scope="col">Surname</th>
+		      <th scope="col" v-if="this.role === 'admin'">Organisation</th>
+		    </tr>
+		  </thead>
+		  <tbody>
+	
+		  	<tr v-for="(u, index) in users">
+				<th scope="row">{{ index+1 }}</th>
+				<td>{{ u.email }}</td>
+				<td>{{ u.ime }}</td>
+				<td>{{ u.prezime }}</td>
+				<td  v-if="this.role === 'admin'">{{ u.organizacija.ime }}</td>
+		  	</tr>
+		  	
+		  </tbody>
+		</table>
+	</div>
+	
+	<button type="button" class="btn btn-lg btn-primary" v-on:click="router.push({path: "/dodajKorisnika"});">Add user</button>
 </div>
+
 	`,
 	methods: {
 		

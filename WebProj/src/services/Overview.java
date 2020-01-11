@@ -42,9 +42,15 @@ public class Overview {
 		}else if (role.equals("admin")) { //Vracamo samo korisnike iz njegove organizacije
 			Korisnik korisnik = new Korisnik();
 			korisnik = k.getMapaKorisnici().get(email);
-			return getListOfUsersByEmail(korisnik.getOrganizacija().getListaKorisnika());
+			
+			List<Korisnik> listOfUsersByEmail = new ArrayList<Korisnik>();
+			try {
+				listOfUsersByEmail = getListOfUsersByEmail(korisnik.getOrganizacija().getListaKorisnika());
+				return listOfUsersByEmail;
+			} catch (NullPointerException e) {
+				return null;
+			}
 		}
-		
 		return null;
 	}
 
@@ -61,6 +67,9 @@ public class Overview {
 					korList.add(kor1);
 				}
 			}
+		}
+		if (korList.isEmpty()) {
+			return null;
 		}
 		return korList;
 	}

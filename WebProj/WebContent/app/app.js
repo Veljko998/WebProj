@@ -4,6 +4,7 @@ const AdminPage = { template: '<administrator-page></administrator-page>'}
 const SuperAdministratorPage = { template: '<superadministrator-page></superadministrator-page>'}
 const PregledKorisnika = { template: '<pregled-korisnika></pregled-korisnika>'}
 const PregledOrganizacija = { template: '<pregled-organizacija></pregled-organizacija>'}
+const DodajKorisnika = {template: '<dodaj-korisnika></dodaj-korisnika>'}
 
 const router = new VueRouter({
 	  mode: 'hash',
@@ -13,7 +14,8 @@ const router = new VueRouter({
 	    { path: '/administrator', component: AdminPage},
 	    { path: '/superadministrator', component: SuperAdministratorPage},
 	    { path: '/pregledKorisnika', component: PregledKorisnika},
-	    { path: '/pregledOrganizacija', component: PregledOrganizacija}
+	    { path: '/pregledOrganizacija', component: PregledOrganizacija},
+	    { path: '/dodajKorisnika', component: DodajKorisnika}
 //	    { path: '/', component: }
 	  ]
 });
