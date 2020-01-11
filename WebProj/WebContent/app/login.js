@@ -21,9 +21,9 @@ Vue.component("log-in", {
     	<div class="form-signin">       
     		<h3 class="form-signin-heading">Welcome Back! Please Sign In</h3>
     		
-    			<input type="text" class="form-control" name="username" placeholder="Username" required="" autofocus="" v-model="User.username"/>
-				<input type="text" class="form-control" name="password" placeholder="Password" required="" v-model="User.password"/>  
-				<button class="btn btn-lg btn-primary btn-block" v-on:click="getInputValue(); login(User);">Submit</button>		
+    			<input type="email" class="form-control" name="username" placeholder="Username" required="" autofocus="" v-model="User.username"/>
+				<input type="password" class="form-control" name="password" placeholder="Password" required="" v-model="User.password"/>  
+				<button class="btn btn-lg btn-primary btn-block" v-on:click="getInputValue(); login(User);">Login</button>		
 		</div>
 	</div>
 </div>
