@@ -37,12 +37,15 @@ Vue.component("pregled-korisnika" ,{
 		</table>
 	</div>
 	
-	<button type="button" class="btn btn-lg btn-primary" v-on:click="router.push({path: "/dodajKorisnika"});">Add user</button>
+	<button type="button" class="btn btn-lg btn-primary" v-on:click="changeRouter();">Add user</button>
 </div>
 
 	`,
 	methods: {
-		
+		changeRouter: function(){
+			console.log("Treba da predje na stranicu za dodavanje korisnika");
+			router.push({path: '/dodajKorisnika'});
+		}
 	},
 	mounted () {  //created 
 		this.role = localStorage.getItem('role');

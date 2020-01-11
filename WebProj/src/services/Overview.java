@@ -4,7 +4,9 @@
 package services;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
@@ -14,6 +16,8 @@ import javax.ws.rs.core.MediaType;
 
 import model.Korisnici;
 import model.Korisnik;
+import model.Organizacija;
+import model.Organizacije;
 
 /** 
  * @author Veljko
@@ -52,6 +56,58 @@ public class Overview {
 			}
 		}
 		return null;
+	}
+	
+	@GET
+	@Path("/getJustOrganisations/{param1}/{param2}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public List<Organizacija> getJustOrganisations(@PathParam("param1") String role, @PathParam("param2") String email){
+		Korisnici k = new Korisnici();
+		k.setPutanja();
+		k.UcitajKorisnike();
+		
+		Organizacije orgs = new Organizacije();
+		orgs.setPutanja();
+		
+		if (role.equals("superadmin")) {
+			  //set .json files path before reading from them.
+			if (orgs.UcitajOrganizacije()) {
+				return orgs.getListaOrganizacije();
+			}else {
+				System.out.println("Nije ucitao ni jednu organizaciju.");
+			}
+		}else if (role.equals("admin")) { //Vracamo samo korisnike iz njegove organizacije
+			Korisnik korisnik = new Korisnik();
+			korisnik = k.getMapaKorisnici().get(email);
+			
+			List<Organizacija> listOfOrganisationsByIdName = new ArrayList<Organizacija>();
+			try {
+				listOfOrganisationsByIdName = getListOfOrganisationsByIdName(email, korisnik);
+				if (listOfOrganisationsByIdName.isEmpty()) {
+					System.out.println("Lista organizacije za admina je prazna...");
+				}else if (listOfOrganisationsByIdName.size() == 1) {
+					System.out.println("Ima tacno jedna organizacija...");
+				}
+				System.out.println("Ovo vracam: " + listOfOrganisationsByIdName.get(0).getIme());
+				return listOfOrganisationsByIdName;
+			} catch (NullPointerException e) {
+				return null;
+			}
+		}
+		return null;
+	}
+
+	/**
+	 * @param email
+	 * @param korisnik
+	 * @return list of just one organisation from user's email.
+	 */
+	private List<Organizacija> getListOfOrganisationsByIdName(String email, Korisnik korisnik) {
+		List<Organizacija> listaOrg = new ArrayList<Organizacija>();
+		listaOrg.add(korisnik.getOrganizacija());
+		System.out.println("Velicina liste kkorisnika: " + listaOrg.size());
+		
+		return listaOrg;
 	}
 
 	/**
