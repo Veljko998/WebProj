@@ -70,7 +70,7 @@ Vue.component("pregled-vm", {
 		</tbody>
 	</table>
 	
-	<button type="button" class="btn btn-lg btn-primary" <!--v-on:click="changeRouter();"-->>Add VM</button>
+	<button type="button" class="btn btn-lg btn-primary">Add VM</button>
 </div>
     `,
     methods: {
