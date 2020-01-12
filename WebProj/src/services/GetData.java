@@ -8,6 +8,7 @@ import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
@@ -97,17 +98,72 @@ public class GetData {
 	}
 	
 	@GET
-	@Path("/getOrganisations")
+	@Path("/getOrganisations/{param1}/{param2}")
 	@Produces(MediaType.APPLICATION_JSON)
-	public List<Organizacija> getOrganisations(){
+	public List<Organizacija> getOrganisations(@PathParam("param1") String uloga, @PathParam("param2") String mejl){
 		Organizacije o = new Organizacije();
 		o.setPutanja(); 
+	
 		if (o.UcitajOrganizacije()) {
-			return o.getListaOrganizacije();
+			//return o.getListaOrganizacije();
+		
+			switch(uloga){
+			case "superadmin": 
+				return o.getListaOrganizacije();
+			case "admin": 
+				Korisnici k = new Korisnici();
+				k.setPutanja();
+				Korisnik korisnik = k.getMapaKorisnici().get(mejl);
+				ArrayList<Organizacija> lista = new ArrayList<Organizacija>();
+				lista.add(korisnik.getOrganizacija());
+				return lista;
+			case "korisnik": 
+				return null;
+			default: break;
+			}
 		}else {
 			System.out.println("Nije ucitao ni jendnu organizaciju.");
 		}
 		return null;
 	}
+	/*
+	@GET
+	@Path("/getJustOrganisations/{param1}/{param2}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public List<Organizacija> getJustOrganisations(@PathParam("param1") String role, @PathParam("param2") String email){
+		Korisnici k = new Korisnici();
+		k.setPutanja();
+		k.UcitajKorisnike();
+		
+		Organizacije orgs = new Organizacije();
+		orgs.setPutanja();
+		
+		if (role.equals("superadmin")) {
+			  //set .json files path before reading from them.
+			if (orgs.UcitajOrganizacije()) {
+				return orgs.getListaOrganizacije();
+			}else {
+				System.out.println("Nije ucitao ni jednu organizaciju.");
+			}
+		}else if (role.equals("admin")) { //Vracamo samo korisnike iz njegove organizacije
+			Korisnik korisnik = new Korisnik();
+			korisnik = k.getMapaKorisnici().get(email);
+			
+			List<Organizacija> listOfOrganisationsByIdName = new ArrayList<Organizacija>();
+			try {
+				listOfOrganisationsByIdName = getListOfOrganisationsByIdName(email, korisnik);
+//				if (listOfOrganisationsByIdName.isEmpty()) {
+//					System.out.println("Lista organizacije za admina je prazna...");
+//				}else if (listOfOrganisationsByIdName.size() == 1) {
+//					System.out.println("Ima tacno jedna organizacija...");
+//				}
+				System.out.println("Ovo vracam: " + listOfOrganisationsByIdName.get(0).getIme());
+				return listOfOrganisationsByIdName;
+			} catch (NullPointerException e) {
+				return null;
+			}
+		}
+		return null;
+	}*/
 	
 }
