@@ -107,7 +107,6 @@ public class Login {
 		if (k.UcitajKorisnike()) {
 			for (Korisnik korisnik : k.getListaKorisnici()) {
 				if (korisnik.getEmail().equals(u.email)) {
-					System.out.println("ima korisnik sa tim mejlom.");
 					return true;
 				}
 			}
