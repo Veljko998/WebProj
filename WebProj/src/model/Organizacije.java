@@ -27,6 +27,9 @@ public class Organizacije {
 
 	/*pronalazi apsolutnu putanju do fajla*/
 	public void setPutanja() {
+		//this.putanja = "C:\\Users\\Ivana\\git\\WebProj\\WebProj\\WebContent\\organizacije.json";
+		this.putanja = "D:\\Semestar5\\Veb programiranje\\Projekat\\WebProj\\WebContent\\organizacije.json";
+		/*
 		try {
 			String path = this.getClass().getClassLoader().getResource("").getPath();
 			String fullPath = URLDecoder.decode(path, "UTF-8");
@@ -38,6 +41,7 @@ public class Organizacije {
 		} catch (UnsupportedEncodingException e) {
 			e.printStackTrace();
 		}
+		*/
 	}
 
 	public HashMap<String, Organizacija> getMapaOrganizacije() {
