@@ -83,11 +83,11 @@ public class Overview {
 			List<Organizacija> listOfOrganisationsByIdName = new ArrayList<Organizacija>();
 			try {
 				listOfOrganisationsByIdName = getListOfOrganisationsByIdName(email, korisnik);
-				if (listOfOrganisationsByIdName.isEmpty()) {
-					System.out.println("Lista organizacije za admina je prazna...");
-				}else if (listOfOrganisationsByIdName.size() == 1) {
-					System.out.println("Ima tacno jedna organizacija...");
-				}
+//				if (listOfOrganisationsByIdName.isEmpty()) {
+//					System.out.println("Lista organizacije za admina je prazna...");
+//				}else if (listOfOrganisationsByIdName.size() == 1) {
+//					System.out.println("Ima tacno jedna organizacija...");
+//				}
 				System.out.println("Ovo vracam: " + listOfOrganisationsByIdName.get(0).getIme());
 				return listOfOrganisationsByIdName;
 			} catch (NullPointerException e) {

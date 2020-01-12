@@ -64,6 +64,7 @@ public class Korisnici {
 	 * u suprotnom dodaje novog korisnika.*/
 	public boolean dodajKorisnika(Korisnik korisnik){
 		if(mapaKorisnici.containsKey(korisnik.getEmail())){
+			System.out.println("Postoji korisnik sa tim mejlom. Korisnici/dodajKorisnika");
 			return false;
 		}
 		else{

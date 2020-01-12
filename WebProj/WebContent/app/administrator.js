@@ -18,9 +18,11 @@ Vue.component("administrator-page", {
 		</button>
 		<div class="collapse navbar-collapse" id="navbarText">
 			<ul class="navbar-nav mr-auto">
+				<!--
 				<li class="nav-item active">
 					<a class="nav-link" href="#">Home option<span class="sr-only">(current)</span></a>
 				</li>
+				
 				<li class="nav-item">
 					<a class="nav-link" href="#" v-on:click="showUsersTable = !showUsersTable">Pregled korisnika</a>
 				</li>
@@ -28,6 +30,7 @@ Vue.component("administrator-page", {
 				<li class="nav-item">
 					<a class="nav-link" href="#" v-on:click="doNothing()">Do nothing</a>
 				</li>
+				-->
 				
 				<li class="nav-item">
 					<a class="nav-link" href="#/" v-on:click="removeRole()">Logout</a>
@@ -37,7 +40,7 @@ Vue.component("administrator-page", {
 
 	</nav>
 	</br>
-	<pregled-korisnika v-if="showUsersTable"></pregled-korisnika>
+	<pregled-korisnika></pregled-korisnika>
 </div>
 		`,
 	methods: {

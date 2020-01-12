@@ -43,7 +43,6 @@ Vue.component("pregled-korisnika" ,{
 	`,
 	methods: {
 		changeRouter: function(){
-			console.log("Treba da predje na stranicu za dodavanje korisnika");
 			router.push({path: '/dodajKorisnika'});
 		}
 	},

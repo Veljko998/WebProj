@@ -42,8 +42,6 @@ public class Login {
 	@Path("/getJustUsers2/{param1}/{param2}")
 	@Produces(MediaType.APPLICATION_JSON)
 	public List<Korisnik> getJustUsers2(@PathParam("param1") String role, @PathParam("param2") String email){
-		System.out.println(role);
-		System.out.println(email);
 		
 		Korisnici k = new Korisnici();
 		k.setPutanja();  //set .json files path before reading from them.
@@ -134,7 +132,6 @@ public class Login {
 		if (k.UcitajKorisnike()) {
 			for (Korisnik korisnik : k.getListaKorisnici()) {
 				if (korisnik.getEmail().equals(u.email)) {
-					System.out.println("Uloga: " + korisnik.getUloga().name().toLowerCase());
 					return korisnik.getUloga().name().toLowerCase();
 				}
 			}
@@ -152,7 +149,6 @@ public class Login {
 	 * @return users role if user is logged in, or null otherwise.
 	 */
 	public String checkPath(PathToLimit ptl) {
-		System.out.println("Ovo je putanja: " + ptl.path);
 		if (ptl.path.startsWith("/korisnik")) return "korisnik"; 
 		else if (ptl.path.startsWith("/admin")) return "admin"; 
 		else if (ptl.path.startsWith("/superadmin")) return "superadmin"; 

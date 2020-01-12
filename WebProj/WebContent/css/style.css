@@ -2,3 +2,8 @@
   height: 300px;
   overflow: scroll;
 }
+
+p.errorMessageRegisterUser {
+	color: red;
+	text-align: center;
+}
