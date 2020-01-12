@@ -122,6 +122,12 @@ Vue.component("dodaj-korisnika" ,{
             		
             		if(userSuccesfullyRegistered){
             			console.log("Korisnik je uspesno registrovan.");
+            			var currentRole = localStorage.getItem("role");
+            			if(currentRole === 'administrator'){
+            				router.push({path: "/administrator"});
+            			}else if (currentRole === 'superadministrator') {
+            				router.push({path: "/superadministrator"});
+						}
             		}else{
             			console.log("Korisnik nije registrovan.");
             		}
