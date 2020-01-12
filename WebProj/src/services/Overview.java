@@ -45,7 +45,6 @@ public class Overview {
 	 */
 	public List<VirtuelnaMasina> getAllVM(UserToGetData utgt){
 		List<VirtuelnaMasina> orgs = new ArrayList<>();
-		System.out.println("uloga: " + utgt.role);
 		
 		Korisnici korisnici = new Korisnici();
 		korisnici.setPutanja();
@@ -86,7 +85,6 @@ public class Overview {
 	
 	
 	public List<VirtuelnaMasina> getListOfVirtualMachines(List<String> listaResursa){
-		System.out.println("USAO NA POCETAK" + listaResursa.size());
 		List<VirtuelnaMasina> vmsList = new ArrayList<VirtuelnaMasina>();
 		HashMap<String, VirtuelnaMasina> vmsMap = new HashMap<>();
 		
@@ -95,12 +93,9 @@ public class Overview {
 		virtuelneMasine.UcitajVirtuelneMasine();
 		
 		vmsMap = virtuelneMasine.getMapaVirtuelnihMasina();
-		System.out.println("45454545454545");
 		for (String nameOfVM : listaResursa) {
 			vmsList.add(vmsMap.get(nameOfVM));
 		}
-		
-		System.out.println("Ovde je greska? getListOfVirtualMachines");
 		
 		return vmsList;
 	}
@@ -111,8 +106,6 @@ public class Overview {
 	@Path("/getJustUsers/{param1}/{param2}")
 	@Produces(MediaType.APPLICATION_JSON)
 	public List<Korisnik> getJustUsers(@PathParam("param1") String role, @PathParam("param2") String email){
-		System.out.println(role);
-		System.out.println(email);
 		
 		Korisnici k = new Korisnici();
 		k.setPutanja();
