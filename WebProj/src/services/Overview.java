@@ -18,6 +18,8 @@ import model.Korisnici;
 import model.Korisnik;
 import model.Organizacija;
 import model.Organizacije;
+import model.VirtuelnaMasina;
+import model.kendo.UserToGetData;
 
 /** 
  * @author Veljko
@@ -25,6 +27,49 @@ import model.Organizacije;
  */
 @Path("/overview")
 public class Overview {
+	
+	//getAllVM
+	
+	@GET
+	@Path("/getAllVM")
+	@Produces(MediaType.APPLICATION_JSON)
+	/**
+	 * Superadmin take all Virtual machines from organisation from all users.
+	 * Admin and user take VM from theirs organisation
+	 * 
+	 * @param utgt
+	 * @return list of organisations
+	 */
+	public List<VirtuelnaMasina> getAllVM(UserToGetData utgt){
+		List<VirtuelnaMasina> orgs = new ArrayList<>();
+		
+		Korisnici korisnici = new Korisnici();
+		korisnici.setPutanja();
+		korisnici.UcitajKorisnike();
+		
+		Organizacije organizacije = new Organizacije();
+		organizacije.setPutanja();
+		organizacije.UcitajOrganizacije();
+		
+		try {
+			if (utgt.role.toLowerCase().equals("superadmin")) {
+				for (Korisnik kor : korisnici.getListaKorisnici()) {
+					for (VirtuelnaMasina virtuelnaMasina : kor.getOrganizacija().getListOfVirtualMachines()) {
+						orgs.add(virtuelnaMasina);
+					}
+				}
+				return orgs;
+			}else { // korisnik i admin
+				Korisnik korisnik = new Korisnik();
+				korisnik = korisnici.getMapaKorisnici().get(utgt.email);
+				orgs = korisnik.getOrganizacija().getListOfVirtualMachines();
+				return orgs;
+			}
+		} catch (Exception e) {
+			System.out.println("Vraca null sto se ne bi smelo desiti. Overview/getAllVM");
+			return null;
+		}
+	}
 	
 	@GET
 	@Path("/getJustUsers/{param1}/{param2}")
