@@ -75,22 +75,4 @@ public class Organizacija {
 	public void setListaResursa(List<String> listaResursa) {
 		this.listaResursa = listaResursa;
 	}
-	
-	public List<VirtuelnaMasina> getListOfVirtualMachines(){
-		List<VirtuelnaMasina> vmsList = new ArrayList<VirtuelnaMasina>();
-		HashMap<String, VirtuelnaMasina> vmsMap = new HashMap<>();
-		
-		VirtuelneMasine virtuelneMasine = new VirtuelneMasine();
-		virtuelneMasine.setPutanja();
-		virtuelneMasine.UcitajVirtuelneMasine();
-		
-		vmsMap = virtuelneMasine.getMapaVirtuelnihMasina();
-		
-		for (String nameOfVM : listaResursa) {
-			vmsList.add(vmsMap.get(nameOfVM));
-		}
-		
-		return vmsList;
-	}
-	
 }

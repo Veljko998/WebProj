@@ -103,5 +103,4 @@ public class Organizacije {
 			return false;
 		}
 	}
-	
 }

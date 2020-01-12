@@ -6,9 +6,10 @@ package services;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
+import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
+import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
@@ -19,6 +20,7 @@ import model.Korisnik;
 import model.Organizacija;
 import model.Organizacije;
 import model.VirtuelnaMasina;
+import model.VirtuelneMasine;
 import model.kendo.UserToGetData;
 
 /** 
@@ -30,9 +32,10 @@ public class Overview {
 	
 	//getAllVM
 	
-	@GET
+	@POST
 	@Path("/getAllVM")
 	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
 	/**
 	 * Superadmin take all Virtual machines from organisation from all users.
 	 * Admin and user take VM from theirs organisation
@@ -42,6 +45,7 @@ public class Overview {
 	 */
 	public List<VirtuelnaMasina> getAllVM(UserToGetData utgt){
 		List<VirtuelnaMasina> orgs = new ArrayList<>();
+		System.out.println("uloga: " + utgt.role);
 		
 		Korisnici korisnici = new Korisnici();
 		korisnici.setPutanja();
@@ -50,26 +54,58 @@ public class Overview {
 		Organizacije organizacije = new Organizacije();
 		organizacije.setPutanja();
 		organizacije.UcitajOrganizacije();
-		
 		try {
 			if (utgt.role.toLowerCase().equals("superadmin")) {
 				for (Korisnik kor : korisnici.getListaKorisnici()) {
-					for (VirtuelnaMasina virtuelnaMasina : kor.getOrganizacija().getListOfVirtualMachines()) {
-						orgs.add(virtuelnaMasina);
+					if (kor.getOrganizacija().getListaResursa() != null) {
+						for (VirtuelnaMasina virtuelnaMasina : getListOfVirtualMachines(kor.getOrganizacija().getListaResursa())) {
+							orgs.add(virtuelnaMasina);
+						}
 					}
 				}
-				return orgs;
+				if (orgs.isEmpty()) {
+					return null;
+				} return orgs;
 			}else { // korisnik i admin
 				Korisnik korisnik = new Korisnik();
 				korisnik = korisnici.getMapaKorisnici().get(utgt.email);
-				orgs = korisnik.getOrganizacija().getListOfVirtualMachines();
-				return orgs;
+				if (korisnik.getOrganizacija().getListaResursa() == null) {
+					return null;
+				}else {
+					orgs = getListOfVirtualMachines(korisnik.getOrganizacija().getListaResursa());
+					return orgs;
+				}
+				
+				
 			}
 		} catch (Exception e) {
 			System.out.println("Vraca null sto se ne bi smelo desiti. Overview/getAllVM");
 			return null;
 		}
 	}
+	
+	
+	public List<VirtuelnaMasina> getListOfVirtualMachines(List<String> listaResursa){
+		System.out.println("USAO NA POCETAK" + listaResursa.size());
+		List<VirtuelnaMasina> vmsList = new ArrayList<VirtuelnaMasina>();
+		HashMap<String, VirtuelnaMasina> vmsMap = new HashMap<>();
+		
+		VirtuelneMasine virtuelneMasine = new VirtuelneMasine();
+		virtuelneMasine.setPutanja();
+		virtuelneMasine.UcitajVirtuelneMasine();
+		
+		vmsMap = virtuelneMasine.getMapaVirtuelnihMasina();
+		System.out.println("45454545454545");
+		for (String nameOfVM : listaResursa) {
+			vmsList.add(vmsMap.get(nameOfVM));
+		}
+		
+		System.out.println("Ovde je greska? getListOfVirtualMachines");
+		
+		return vmsList;
+	}
+	
+	
 	
 	@GET
 	@Path("/getJustUsers/{param1}/{param2}")

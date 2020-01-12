@@ -31,34 +31,17 @@ Vue.component("log-in", {
     methods: {
     	getInputValue: function(){
     		this.permition = false;
-    		console.log("USERNAME: " + this.User.username);
-    		console.log("PASSWORD: " + this.User.password);
     		un = this.User.username;
     		pw = this.User.password;
     		if((un != '' && pw != '') && (un !== undefined && pw !== undefined )){
     			this.permition = true;
-    			console.log("permition je true");
-    		}else{
-    			console.log("permition je false");
     		}
+//    		else{
+//    			console.log("permition je false");
+//    		}
     	},
-//    	checkForm: function(){
-//    		if(this.User.username && this.User.password){
-//    			return true;
-//    		}
-//    		
-//    		this.errors = [];
-//    		
-//    		if(!this.User.username){
-//    			this.errors.push('Username or email required.');
-//    		}
-//    		if(!this.User.password){
-//    			this.errors.push('Password equired.');
-//    		}
-//    	},
         login: function(User){
         	if(this.permition === true){
-        		console.log("usao sam ovde");
         		axios
             	.post('rest/webproj/verifyUser', {"email": this.User.username, "password": this.User.password})
             	.then(response => {
@@ -95,12 +78,6 @@ Vue.component("log-in", {
     	axios
     		.get('rest/webproj/getJustUsers')
     		.then(response => (this.users = response.data))
-    	
-	//    	.catch(error => {
-	//        console.log(error)
-	//        this.errored = true
-	//    	})
-	//    	.finally(() => this.loading = false)
     },
 });
 
