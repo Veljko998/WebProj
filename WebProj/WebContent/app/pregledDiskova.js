@@ -22,10 +22,10 @@ Vue.component("pregled-diskova", {
 	</div>
 	<div class="row">
 		<div class="col col-md-2">
-			<input min="1" type="number" class="form-control" placeholder="From" id="inputCoreFrom">
+			<input min="1" type="number" class="form-control" v-on:click="myFunction()" v-on:keyup="myFunction()" placeholder="From" id="inputCoreFrom">
 		</div>
 		<div class="col col-md-2">
-			<input min="1" type="number" class="form-control" placeholder="To" id="inputCoreTo">
+			<input min="1" type="number" class="form-control" v-on:click="myFunction()" v-on:keyup="myFunction()" placeholder="To" id="inputCoreTo">
 		</div>
 	</div>
 	
@@ -45,9 +45,9 @@ Vue.component("pregled-diskova", {
 		<tbody>
 			<tr v-for="(d, index) in this.disks">
 				<th scope="row">{{ index+1 }}</th>
-				<td>{{ d.name }}</td>
-				<td>{{ d.diskCapacity }}</td>
-				<td>{{ d.vmName }}</td>
+				<td>{{ d.ime }}</td>
+				<td>{{ d.kapacitet }}</td>
+				<td>{{ d.virtualnaMasina }}</td>
 			</tr>
 		</tbody>
 	</table>
@@ -70,6 +70,9 @@ Vue.component("pregled-diskova", {
         	table = document.getElementById("myTable");
         	tr = table.getElementsByTagName("tr");
         	
+        	console.log("donji broj: " + filter1);
+        	console.log("gornji broj: " + filter2);
+        	
         	// Loop through all table rows, and hide those who don't match the search query
         	for (i = 0; i < tr.length; i++){
         		td = tr[i].getElementsByTagName("td")[0]; //by VM name
@@ -79,8 +82,31 @@ Vue.component("pregled-diskova", {
         			txtValue = td.textContent || td.innerText;
         			txtValue2 = coreNum.textContent || coreNumber.innerText;
         			coreNumber = Number(txtValue2);
-        			if (txtValue.toUpperCase().indexOf(filter) > -1 && (filter1 <= coreNumber && filter2 >= coreNumber)){
-        				tr[i].style.display = "";
+        			
+        			// ((filter1 <= coreNumber && filter2 >= coreNumber) && (filter1 == 0 && filter2 == 0))
+        			if (txtValue.toUpperCase().indexOf(filter) > -1){
+        				if (filter1 == 0 && filter2 == 0) {
+        					tr[i].style.display = "";
+						}else if (filter1 != 0 && filter2 == 0) {
+							if (filter1 <= coreNumber) {
+								tr[i].style.display = "";
+							}else {
+								tr[i].style.display = "none";
+							}
+						}else if (filter1 == 0 && filter2 != 0) {
+							if (filter2 >= coreNumber) {
+								tr[i].style.display = "";
+							}else {
+								tr[i].style.display = "none";
+							}
+						}else if (filter1 != 0 && filter2 != 0) {
+							if (filter1 <= coreNumber && filter2 >= coreNumber) {
+								tr[i].style.display = "";
+							}else {
+								tr[i].style.display = "none";
+							}
+						}
+//        				tr[i].style.display = "";
         			}else{
         				tr[i].style.display = "none";
         			}
@@ -95,8 +121,9 @@ Vue.component("pregled-diskova", {
     	axios
 		.post('rest/overview/getAllDiscs', {"role": role, "email": email})
 		.then(response => {
-			this.machines = response.data;
-			if (this.machines === '') {
+			
+			this.disks = response.data;
+			if (this.disks === '') {
 				console.log("Nema Diskova za ispis kod ovog korisnika.");
 			}
 		});

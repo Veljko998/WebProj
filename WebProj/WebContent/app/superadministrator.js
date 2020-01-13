@@ -15,6 +15,7 @@ Vue.component("superadministrator-page", {
 		<div class="div-inline">
 			<button class="btn btn-light" type="button" v-on:click="GoToPregledVM();">Pregled VM</button>
 			<button class="btn btn-sm btn-outline-secondary" type="button"  v-on:click="showPregledKor();">Pregled korisnika</button>
+			<button class="btn btn-sm btn-outline-secondary" type="button"  v-on:click="showPregledDiskova();">Pregled diskova</button>
 			<button class="btn btn-sm btn-outline-secondary" type="button"  v-on:click="showOrganisationsTable = !showOrganisationsTable">Pregled organizacija</button>
 			
 		</div>
@@ -41,6 +42,9 @@ Vue.component("superadministrator-page", {
 		},
 		showPregledKor: function(){
 			this.showUsersTable = !this.showUsersTable;
+		},
+		showPregledDiskova: function(){
+			router.push({path: "/pregledDiskova"});
 		}
 	},
 });
