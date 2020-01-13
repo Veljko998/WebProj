@@ -1,11 +1,11 @@
-Vue.component("pregled-vm", {
+Vue.component("pregled-diskova", {
 	data: function () {
         	return {
-        		title: 'Pregled Virtuelnih masina',
+        		title: 'Pregled Diskova',
                 User: {},
                 users: null,
                 role: 'noRule',
-                machines: null
+                disks: null
         	}
     },
     template:`
@@ -17,7 +17,7 @@ Vue.component("pregled-vm", {
 
 	<div class="row">
 		<div class="col">
-			<label for="inputEmail4">Number of cores: </label>
+			<label for="inputEmail4">Disc capacity: </label>
 		</div>
 	</div>
 	<div class="row">
@@ -26,20 +26,6 @@ Vue.component("pregled-vm", {
 		</div>
 		<div class="col col-md-2">
 			<input min="1" type="number" class="form-control" placeholder="To" id="inputCoreTo">
-		</div>
-	</div>
-
-	<div class="row">
-		<div class="col">
-			<label for="inputEmail4">RAM capacity: </label>
-		</div>
-	</div>
-	<div class="row">
-		<div class="col col-md-2">
-			<input min="1" type="number" class="form-control" placeholder="From" id="inputRamFrom">
-		</div>
-		<div class="col col-md-2">
-			<input min="1" type="number" class="form-control" placeholder="To" id="inputRamTo">
 		</div>
 	</div>
 	
@@ -52,40 +38,32 @@ Vue.component("pregled-vm", {
 			<tr>
 				<th scope="col">#</th>
 				<th scope="col">Name</th>
-				<th scope="col">Core number</th>
-				<th scope="col">RAM</th>
-				<th scope="col">GPU</th>
-				<th scope="col" v-if="this.role === 'superadmin'">Organisation name</th>
+				<th scope="col">Dick capacity</th>
+				<th scope="col">VM name</th>
 			</tr>
 		</thead>
 		<tbody>
-			<tr v-for="(m, index) in this.machines">
+			<tr v-for="(d, index) in this.disks">
 				<th scope="row">{{ index+1 }}</th>
-				<td>{{ m.name }}</td>
-				<td>{{ m.coreNumber }}</td>
-				<td>{{ m.ram }}</td>
-				<td>{{ m.gpu }}</td>
-				<td v-if="this.role === 'superadmin'">{{ m.organisationName }}</td>
+				<td>{{ d.name }}</td>
+				<td>{{ d.diskCapacity }}</td>
+				<td>{{ d.vmName }}</td>
 			</tr>
 		</tbody>
 	</table>
 	
-	<button type="button" class="btn btn-lg btn-primary">Add VM</button>
+	<button type="button" class="btn btn-lg btn-primary">Add New Disk</button>
 </div>
     `,
     methods: {
     	myFunction: function(){
     		var input, filter, table, tr, td, i, txtValue;
-    		var inputCoreFrom, inputCoreTo, inputRamFrom, inputRamTo, coreNumber, ramNumber, txtValue2, txtValue3;
+    		var inputCoreFrom, inputCoreTo, inputRamFrom, inputRamTo, coreNumber, ramNumber, txtValue2;
     		
     		inputCoreFrom = document.getElementById("inputCoreFrom");
     		filter1 = Number(inputCoreFrom.value);
     		inputCoreTo = document.getElementById("inputCoreTo");
     		filter2 = Number(inputCoreTo.value);
-    		inputRamFrom = document.getElementById("inputRamFrom");
-    		filter3 = Number(inputRamFrom.value);
-    		inputRamTo = document.getElementById("inputRamTo");
-    		filter4 = Number(inputRamTo.value);
     		
         	input = document.getElementById("myInputVM");
         	filter = input.value.toUpperCase();
@@ -96,18 +74,12 @@ Vue.component("pregled-vm", {
         	for (i = 0; i < tr.length; i++){
         		td = tr[i].getElementsByTagName("td")[0]; //by VM name
         		coreNum = tr[i].getElementsByTagName("td")[1];
-//        		coreNumber = Number(coreNum);
-        		
-        		ramNum = tr[i].getElementsByTagName("td")[2];
-//        		ramNumber = Number(ramNum);
         		
         		if (td){
         			txtValue = td.textContent || td.innerText;
         			txtValue2 = coreNum.textContent || coreNumber.innerText;
-        			txtValue3 = ramNum.textContent || ramNumber.innerText;
         			coreNumber = Number(txtValue2);
-        			ramNumber = Number(txtValue3);
-        			if (txtValue.toUpperCase().indexOf(filter) > -1 && (filter1 <= coreNumber && filter2 >= coreNumber) && (filter3 <= ramNumber && filter4 >= ramNumber)){
+        			if (txtValue.toUpperCase().indexOf(filter) > -1 && (filter1 <= coreNumber && filter2 >= coreNumber)){
         				tr[i].style.display = "";
         			}else{
         				tr[i].style.display = "none";
@@ -121,11 +93,11 @@ Vue.component("pregled-vm", {
     	var email = localStorage.getItem("email");
     	
     	axios
-		.post('rest/overview/getAllVM', {"role": role, "email": email})
+		.post('rest/overview/getAllDiscs', {"role": role, "email": email})
 		.then(response => {
 			this.machines = response.data;
 			if (this.machines === '') {
-				console.log("Nema masina za ispis kod ovog korisnika.");
+				console.log("Nema Diskova za ispis kod ovog korisnika.");
 			}
 		});
     },

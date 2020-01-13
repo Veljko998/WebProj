@@ -15,6 +15,8 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
+import model.Disk;
+import model.Diskovi;
 import model.Korisnici;
 import model.Korisnik;
 import model.Organizacija;
@@ -33,18 +35,86 @@ public class Overview {
 	//getAllVM
 	
 	@POST
+	@Path("/getAllDiscs")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+	/**
+	 * In case of superadmin we take all Discs.
+	 * In case of other users we take just Discs from their organisation.
+	 * 
+	 * 
+	 * @param utgt - email and role as parameters.
+	 * @return List of Discs if not empty, otherwise null.
+	 */
+	public List<Disk> getAllDiscs(UserToGetData utgt){
+		List<VirtuelnaMasina> vms = new ArrayList<>();
+		List<Disk> diskoviToReturn = new ArrayList<Disk>();
+		
+		// All of users from korisnici.json
+		Korisnici korisnici = new Korisnici();
+		korisnici.setPutanja();
+		korisnici.UcitajKorisnike();
+		
+		// All of organisations from organizacije.json
+		Organizacije organizacije = new Organizacije();
+		organizacije.setPutanja();
+		organizacije.UcitajOrganizacije();
+		
+		// All of discs from diskovi.json
+		Diskovi diskovi = new Diskovi();
+		diskovi.setPutanja();
+		diskovi.UcitajDiskove();
+		
+		try {
+			// If role is SUPERADMIN take all Disck from file.
+			if (utgt.role.toLowerCase().equals("superadmin")) {
+				for (Disk disk : diskovi.getListaDiskovi()) {
+					diskoviToReturn.add(disk);
+				}
+				
+				if (diskoviToReturn.isEmpty()) {
+					return null;
+				} return diskoviToReturn;
+				
+			// Takes just disck from utgt's organisation
+			}else { // KORISNIK and ADMIN
+				Korisnik korisnik = new Korisnik();
+				korisnik = korisnici.getMapaKorisnici().get(utgt.email);
+				
+				if (korisnik.getOrganizacija().getListaResursa() == null || korisnik.getOrganizacija().getListaResursa().isEmpty()) {
+					return null;
+				}else {
+					vms = getListOfVirtualMachines(korisnik.getOrganizacija().getListaResursa()); //sve virtuelne masine korisnika koji salje zahtev
+					for (VirtuelnaMasina vm : vms) {
+						for (String diskName : vm.getDiskovi()) {
+							diskoviToReturn.add(diskovi.getMapaDiskovi().get(diskName));
+						}
+					}
+					
+					if (diskoviToReturn.isEmpty()) { //Ovo mozda i nije potrebno jer smo vec proverili da li korisnik ima listu resursa
+						return null;
+					}return diskoviToReturn;
+				}
+			}
+		} catch (Exception e) {
+			System.out.println("Vraca null sto se ne bi smelo desiti. Overview/getAllVM");
+			return null;
+		}
+	}
+	
+	@POST
 	@Path("/getAllVM")
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
 	/**
-	 * Superadmin take all Virtual machines from organisation from all users.
+	 * Superadmin take all Virtual machines.
 	 * Admin and user take VM from theirs organisation
 	 * 
 	 * @param utgt
 	 * @return list of organisations
 	 */
 	public List<VirtuelnaMasina> getAllVM(UserToGetData utgt){
-		List<VirtuelnaMasina> orgs = new ArrayList<>();
+		List<VirtuelnaMasina> vms = new ArrayList<>();
 		
 		Korisnici korisnici = new Korisnici();
 		korisnici.setPutanja();
@@ -53,29 +123,27 @@ public class Overview {
 		Organizacije organizacije = new Organizacije();
 		organizacije.setPutanja();
 		organizacije.UcitajOrganizacije();
-		try {
+		
+		VirtuelneMasine virtuelneMasine = new VirtuelneMasine();
+		virtuelneMasine.setPutanja();
+		virtuelneMasine.UcitajVirtuelneMasine();
+		
+		try { 
 			if (utgt.role.toLowerCase().equals("superadmin")) {
-				for (Korisnik kor : korisnici.getListaKorisnici()) {
-					if (kor.getOrganizacija().getListaResursa() != null) {
-						for (VirtuelnaMasina virtuelnaMasina : getListOfVirtualMachines(kor.getOrganizacija().getListaResursa())) {
-							orgs.add(virtuelnaMasina);
-						}
-					}
-				}
-				if (orgs.isEmpty()) {
+				if (virtuelneMasine.getListaVirtuelnihMasina() != null && !virtuelneMasine.getListaVirtuelnihMasina().isEmpty()) {
+					return virtuelneMasine.getListaVirtuelnihMasina();
+				}else {
 					return null;
-				} return orgs;
+				}
 			}else { // korisnik i admin
 				Korisnik korisnik = new Korisnik();
 				korisnik = korisnici.getMapaKorisnici().get(utgt.email);
 				if (korisnik.getOrganizacija().getListaResursa() == null) {
 					return null;
 				}else {
-					orgs = getListOfVirtualMachines(korisnik.getOrganizacija().getListaResursa());
-					return orgs;
+					vms = getListOfVirtualMachines(korisnik.getOrganizacija().getListaResursa());
+					return vms;
 				}
-				
-				
 			}
 		} catch (Exception e) {
 			System.out.println("Vraca null sto se ne bi smelo desiti. Overview/getAllVM");
