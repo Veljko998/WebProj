@@ -36,7 +36,7 @@ Vue.component("pregled-diskova", {
 	
 	<table class="table table-hover " id="myTable">
 		<thead>
-			<tr>
+			<tr v-on:keyup="helper();">
 				<th scope="col">#</th>
 				<th scope="col">Name</th>
 				<th scope="col">Dick capacity</th>
@@ -44,7 +44,7 @@ Vue.component("pregled-diskova", {
 			</tr>
 		</thead>
 		<tbody>
-			<tr v-for="(d, index) in this.disks">
+			<tr v-for="(d, index) in this.disks" v-on:keyup="helper();">
 				<th scope="row">{{ index+1 }}</th>
 				<td>{{ d.ime }}</td>
 				<td>{{ d.kapacitet }}</td>
@@ -53,10 +53,30 @@ Vue.component("pregled-diskova", {
 		</tbody>
 	</table>
 	
-	<button v-if="this.role !== 'korisnik'" type="button" class="btn btn-lg btn-primary">Add New Disk</button>
+	<button v-if="this.role !== 'korisnik'" v-on:click="goToAddDiscPage();" type="button" class="btn btn-lg btn-primary">Add New Disk</button>
 </div>
     `,
     methods: {
+    	helper: function(){
+    		var table = document.getElementsByTagName("table")[0];
+    		var tbody = table.getElementsByTagName("tbody")[0];
+    		tbody.onclick = function (e) {
+    		    e = e || window.event;
+    		    var data = [];
+    		    var target = e.srcElement || e.target;
+    		    while (target && target.nodeName !== "TR") {
+    		        target = target.parentNode;
+    		    }
+    		    if (target) {
+    		        var cells = target.getElementsByTagName("td");
+    		        for (var i = 0; i < cells.length; i++) {
+    		            data.push(cells[i].innerHTML);
+    		        }
+    		    }
+    		    alert(data);
+    		    console.log("USAOOOO: " + data);
+    		};
+    	},
     	myFunction: function(){
     		var input, filter, table, tr, td, i, txtValue;
     		var inputCoreFrom, inputCoreTo, inputRamFrom, inputRamTo, coreNumber, ramNumber, txtValue2;
@@ -130,6 +150,7 @@ Vue.component("pregled-diskova", {
 				console.log("Nema Diskova za ispis kod ovog korisnika.");
 			}
 		});
+    	
     },
 });
 

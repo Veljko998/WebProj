@@ -3,6 +3,7 @@
  */
 package services;
 
+import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
@@ -43,6 +44,7 @@ public class DiscService {
 	@POST
 	@Path("/addDisc")
 	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
 	public boolean addDisc(DiscToAdd dta) {
 		Diskovi diskovi = new Diskovi();
 		diskovi.setPutanja();
@@ -57,7 +59,6 @@ public class DiscService {
 		diskovi.dodajDisk(disk);
 		
 		//TODO: Maybe write this disc to virtual machine ?
-		
 		if (diskovi.UpisiDiskove()) {
 			return true;
 		} return false;

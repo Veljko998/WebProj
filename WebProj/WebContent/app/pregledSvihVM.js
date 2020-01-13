@@ -61,8 +61,8 @@ Vue.component("pregled-vm", {
 		<tbody>
 			<tr v-for="(m, index) in this.machines">
 				<th scope="row">{{ index+1 }}</th>
-				<td>{{ m.name }}</td>
-				<td>{{ m.coreNumber }}</td>
+				<td>{{ m.ime }}</td>
+				<td>{{ m.brojJezgara }}</td>
 				<td>{{ m.ram }}</td>
 				<td>{{ m.gpu }}</td>
 				<td v-if="this.role === 'superadmin'">{{ m.organisationName }}</td>
