@@ -5,6 +5,7 @@ Vue.component("pregled-diskova", {
                 User: {},
                 users: null,
                 role: 'noRule',
+                email: '',
                 disks: null
         	}
     },
@@ -52,7 +53,7 @@ Vue.component("pregled-diskova", {
 		</tbody>
 	</table>
 	
-	<button type="button" class="btn btn-lg btn-primary">Add New Disk</button>
+	<button v-if="this.role !== 'korisnik'" type="button" class="btn btn-lg btn-primary">Add New Disk</button>
 </div>
     `,
     methods: {
@@ -70,9 +71,6 @@ Vue.component("pregled-diskova", {
         	table = document.getElementById("myTable");
         	tr = table.getElementsByTagName("tr");
         	
-        	console.log("donji broj: " + filter1);
-        	console.log("gornji broj: " + filter2);
-        	
         	// Loop through all table rows, and hide those who don't match the search query
         	for (i = 0; i < tr.length; i++){
         		td = tr[i].getElementsByTagName("td")[0]; //by VM name
@@ -83,7 +81,7 @@ Vue.component("pregled-diskova", {
         			txtValue2 = coreNum.textContent || coreNumber.innerText;
         			coreNumber = Number(txtValue2);
         			
-        			// ((filter1 <= coreNumber && filter2 >= coreNumber) && (filter1 == 0 && filter2 == 0))
+        			// Logic for taking event on changed fields for filtering
         			if (txtValue.toUpperCase().indexOf(filter) > -1){
         				if (filter1 == 0 && filter2 == 0) {
         					tr[i].style.display = "";
@@ -106,17 +104,22 @@ Vue.component("pregled-diskova", {
 								tr[i].style.display = "none";
 							}
 						}
-//        				tr[i].style.display = "";
         			}else{
         				tr[i].style.display = "none";
         			}
         		}
         	}
+    	},
+    	goToAddDiscPage: function(){
+    		router.push({path: "/dodajDisk"});
     	}
     },
     mounted () {  //created 
     	var role = localStorage.getItem("role");
     	var email = localStorage.getItem("email");
+    	
+    	this.role = role;
+    	this.email = email;
     	
     	axios
 		.post('rest/overview/getAllDiscs', {"role": role, "email": email})
