@@ -41,6 +41,7 @@ Vue.component("pregled-diskova", {
 				<th scope="col">Name</th>
 				<th scope="col">Dick capacity</th>
 				<th scope="col">VM name</th>
+				<th scope="col">Functions</th>
 			</tr>
 		</thead>
 		<tbody>
@@ -49,6 +50,10 @@ Vue.component("pregled-diskova", {
 				<td>{{ d.ime }}</td>
 				<td>{{ d.kapacitet }}</td>
 				<td>{{ d.virtualnaMasina }}</td>
+				<td>
+					<button :id="d.ime" type="button" class="btn btn-sm btn-secondary" v-on:click="editDisk();">Edit</button>
+					<button :id="d.ime" type="button" class="btn btn-sm btn-danger" v-on:click="deleteDisk();">Delete</button>
+				</td>
 			</tr>
 		</tbody>
 	</table>
@@ -57,6 +62,22 @@ Vue.component("pregled-diskova", {
 </div>
     `,
     methods: {
+    	editDisk: function(){
+    		//Ovde cemo menjamo disk...
+    		
+    		var diskId = event.srcElement.id;
+    		console.log('EDIT Disk with id: ' + diskId);
+    	},
+    	deleteDisk: function(){
+    		//Ovde cemo brisemo disk...
+    		
+    		var diskId = event.srcElement.id;
+    		console.log('DELETE Disk with id: ' + diskId);
+    	},
+    	getID: function(oObject){
+    		var id = oObject.id;
+    		console.log("This object's ID attribute is set to \"" + id + "\".");
+    	},
     	helper: function(){
     		var table = document.getElementsByTagName("table")[0];
     		var tbody = table.getElementsByTagName("tbody")[0];
