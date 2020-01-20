@@ -10,7 +10,7 @@ Vue.component("pregled-organizacija" ,{
 	template: 
 	`
 <div class="container-fluid">
-	<h2>Pregled organizacija</h2>
+	<h2> {{this.title}} </h2>
 		<table class="table table-hover table-striped" >
 		  <thead>
 		    <tr>
@@ -28,10 +28,9 @@ Vue.component("pregled-organizacija" ,{
 				<td>{{ o.opis }}</td>
 				<td><img style="height: 50px; width: 50px; text-align: left;" v-bind:src="o.logo"/></td>
 		  	</tr>
-		  	
 		  </tbody>
 		</table>
-	
+		<button  type="button" class="btn btn-lg btn-primary">Add New Organisation</button>
 </div>
 	`,
 	methods: {
