@@ -26,7 +26,7 @@ Vue.component("pregled-organizacija" ,{
 				<th scope="row">{{ index+1 }}</th>
 				<td>{{ o.ime }}</td>
 				<td>{{ o.opis }}</td>
-				<td class="text-center"><img class="img-fluid" v-bind:src="o.logo"/></td>
+				<td><img style="height: 50px; width: 50px; text-align: left;" v-bind:src="o.logo"/></td>
 		  	</tr>
 		  	
 		  </tbody>

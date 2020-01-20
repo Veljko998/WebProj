@@ -117,7 +117,7 @@ public class GetData {
 				ArrayList<Organizacija> lista = new ArrayList<Organizacija>();
 				lista.add(korisnik.getOrganizacija());
 				return lista;
-			case "korisnik": 
+			case "noRole": 
 				return null;
 			default: break;
 			}
