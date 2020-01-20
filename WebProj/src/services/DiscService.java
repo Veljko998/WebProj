@@ -16,6 +16,7 @@ import model.Diskovi;
 import model.VirtuelneMasine;
 import model.enums.TipDiska;
 import model.kendo.DiscToAdd;
+import model.kendo.DiskToDelete;
 
 /** 
  * @author Veljko
@@ -24,6 +25,23 @@ import model.kendo.DiscToAdd;
 @Path("/discService")
 public class DiscService {
 
+	@POST
+	@Path("/deleteDisk")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+	public boolean deleteDisk(DiskToDelete dtd) {
+		Diskovi diskovi = new Diskovi();
+		diskovi.setPutanja();
+		diskovi.UcitajDiskove();
+		Disk diskToDelete;
+		
+		if ((diskToDelete = diskovi.getMapaDiskovi().get(dtd.name)) != null) {
+			diskovi.getListaDiskovi().remove(diskToDelete);
+			diskovi.UpisiDiskove();
+			return true;
+		}return false;
+	}
+	
 	@GET
 	@Path("/checkIfDiscExist/{param1}")
 	@Produces(MediaType.APPLICATION_JSON)

@@ -63,16 +63,28 @@ Vue.component("pregled-diskova", {
     `,
     methods: {
     	editDisk: function(){
-    		//Ovde cemo menjamo disk...
-    		
     		var diskId = event.srcElement.id;
-    		console.log('EDIT Disk with id: ' + diskId);
+    		
+    		
+    		
     	},
     	deleteDisk: function(){
-    		//Ovde cemo brisemo disk...
-    		
     		var diskId = event.srcElement.id;
-    		console.log('DELETE Disk with id: ' + diskId);
+    		
+    		axios
+    		.post('rest/discService/deleteDisk', {"name": diskId})
+    		.then(response => {
+    			var disk_deleted = response.data;
+    			
+    			if (disk_deleted == true) {
+					console.log("Disk is succesfully deleted.");
+					this.loadDisks();
+				}else {
+					console.log("Disk is not deleted.");
+				}
+    		});
+    		
+    		//console.log('DELETE Disk with id: ' + diskId);
     	},
     	getID: function(oObject){
     		var id = oObject.id;
@@ -153,25 +165,27 @@ Vue.component("pregled-diskova", {
     	},
     	goToAddDiscPage: function(){
     		router.push({path: "/dodajDisk"});
-    	}
+    	},
+    	loadDisks: function() {
+    		var role = localStorage.getItem("role");
+        	var email = localStorage.getItem("email");
+        	
+        	this.role = role;
+        	this.email = email;
+        	
+        	axios
+    		.post('rest/overview/getAllDiscs', {"role": role, "email": email})
+    		.then(response => {
+    			
+    			this.disks = response.data;
+    			if (this.disks === '') {
+    				console.log("Nema Diskova za ispis kod ovog korisnika.");
+    			}
+    		});
+    	},
     },
     mounted () {  //created 
-    	var role = localStorage.getItem("role");
-    	var email = localStorage.getItem("email");
-    	
-    	this.role = role;
-    	this.email = email;
-    	
-    	axios
-		.post('rest/overview/getAllDiscs', {"role": role, "email": email})
-		.then(response => {
-			
-			this.disks = response.data;
-			if (this.disks === '') {
-				console.log("Nema Diskova za ispis kod ovog korisnika.");
-			}
-		});
-    	
+    	this.loadDisks();
     },
 });
 
