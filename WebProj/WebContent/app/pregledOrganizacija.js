@@ -30,10 +30,14 @@ Vue.component("pregled-organizacija" ,{
 		  	</tr>
 		  </tbody>
 		</table>
-		<button  type="button" class="btn btn-lg btn-primary">Add New Organisation</button>
+		<button  type="button" v-on:click="goToAddPage();" class="btn btn-lg btn-primary">Dodaj novu organizaciju</button>
 </div>
 	`,
 	methods: {
+		
+		goToAddPage: function(){
+			router.push({path: "/dodajOrganizaciju"});		
+    	},
 		
 	},
 	mounted () {  
