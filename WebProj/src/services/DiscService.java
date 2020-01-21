@@ -69,7 +69,7 @@ public class DiscService {
 		
 		//ako diskovi imaju isti naziv, nista ne diramo jer vm imaju listu naziva diskova. 
 		//Disk ce se svakako ucitati iz diskovi.json sto je vec promenjeno
-		if (!dte.oldName.equals(dte.name)) {
+		if (dte.oldName.equals(dte.name)) {
 			System.out.println("Diskovi imaju isti naziv i ne diram nista kod vir. masina.");
 			return true;
 		}

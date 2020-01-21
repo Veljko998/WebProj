@@ -1,4 +1,4 @@
-Vue.component("izmena-diskova", {
+Vue.component("izmena-diska", {
 	data: function () {
         	return {
         		title: 'Izmena Diska',
@@ -113,33 +113,14 @@ Vue.component("izmena-diskova", {
 				}
 		},
 		discAlreadyExists: function(){
-//			if (this.showErrorEmptyField == false) {
-//				
-//				var path = "rest/discService/checkIfDiscExist/" + this.Disc.name;
-//				
-//				axios
-//				.get(path)
-//				.then(response => {
-//					if (response.data == false || response.data == 'false') {
-//						this.canAddDisc = true;
-//						console.log("Dodajemo novi disk");
-//						this.addDisc.call();
-//					}
-//				});
-//			}
 			this.canAddDisc = true;
-			this.addDisc.call();
+			this.editDisc.call();
 		},
 		//SAME AS addDisk()
 		editDisc: function(){
 			console.log("Dosli smo i dovde: " + this.canAddDisc );
 			if (this.canAddDisc == true || this.canAddDisc === true) {
 
-				console.log(this.Disc.name);
-				console.log(this.Disc.capacity);
-				console.log(this.Disc.VMName);
-				console.log(this.Disc.type);
-				
 				axios
             	.post('rest/discService/editDisk', {"email": this.email, "role": this.role, "oldName": this.diskName, "name": this.Disc.name, "capacity": this.Disc.capacity, "VMName": this.Disc.VMName, "type": this.Disc.type})
             	.then(response => {
