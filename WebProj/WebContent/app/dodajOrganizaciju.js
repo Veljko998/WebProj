@@ -52,8 +52,10 @@ Vue.component("dodaj-organizaciju" ,{
 						<div class="input-group-prepend">
 							<span class="input-group-text" id="inputGroup-sizing-default">Organisation resources:</span>
 						</div>
-						<select class="form-control" id="resources" name="resources" v-for="r in resources" v-model="Organisation.resources">
-					      <option> {{r}} </option>
+						<select multiple class="form-control" id="resourcesList" name="resourcesList" v-model="Organisation.resourcesList">
+					      <option v-for="r in resources"> 
+					      	{{r}}
+					      </option>
 					    </select>
 					</div>
 					
