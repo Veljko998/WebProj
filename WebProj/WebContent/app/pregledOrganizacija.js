@@ -47,7 +47,7 @@ Vue.component("pregled-organizacija" ,{
     
 		axios
     		.get(path)
-    		.then(response => (this.organisations = response.data))
+    		.then(response => (this.organisations = response.data));
 		
     },
 });

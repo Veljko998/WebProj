@@ -105,8 +105,6 @@ public class GetData {
 		o.setPutanja(); 
 	
 		if (o.UcitajOrganizacije()) {
-			//return o.getListaOrganizacije();
-		
 			switch(uloga){
 			case "superadmin": 
 				return o.getListaOrganizacije();
