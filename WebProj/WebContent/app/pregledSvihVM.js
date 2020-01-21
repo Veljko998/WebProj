@@ -70,10 +70,13 @@ Vue.component("pregled-vm", {
 		</tbody>
 	</table>
 	
-	<button type="button" class="btn btn-lg btn-primary">Add VM</button>
+	<button type="button" class="btn btn-lg btn-primary" v-on:click="addNewVM();">Add VM</button>
 </div>
     `,
     methods: {
+    	addNewVM: function() {
+    		router.push({path: "/dodajVM"});
+    	},
     	myFunction: function(){
     		var input, filter, table, tr, td, i, txtValue;
     		var inputCoreFrom, inputCoreTo, inputRamFrom, inputRamTo, coreNumber, ramNumber, txtValue2, txtValue3;
