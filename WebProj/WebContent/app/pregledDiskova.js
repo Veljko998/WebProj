@@ -6,7 +6,8 @@ Vue.component("pregled-diskova", {
                 users: null,
                 role: 'noRule',
                 email: '',
-                disks: null
+                disks: null,
+                diskToEdit: null
         	}
     },
     template:`
@@ -39,7 +40,7 @@ Vue.component("pregled-diskova", {
 			<tr v-on:keyup="helper();">
 				<th scope="col">#</th>
 				<th scope="col">Name</th>
-				<th scope="col">Dick capacity</th>
+				<th scope="col">Disk capacity</th>
 				<th scope="col">VM name</th>
 				<th scope="col">Functions</th>
 			</tr>
@@ -64,8 +65,25 @@ Vue.component("pregled-diskova", {
     methods: {
     	editDisk: function(){
     		var diskId = event.srcElement.id;
+    		this.role = localStorage.getItem("role");
     		
-    		
+    		axios
+    		.post('rest/discService/getDiskByName', {"name": diskId})
+    		.then(response => {
+    			this.diskToEdit = response.data;
+    			
+    			localStorage.setItem("imeDiska", this.diskToEdit.ime);
+    			localStorage.setItem("tipDiska", this.diskToEdit.tip);
+    			localStorage.setItem("kapacitetDiska", this.diskToEdit.kapacitet);
+    			localStorage.setItem("nazivVMDiska", this.diskToEdit.virtuelnaMasina);
+    			
+    			if (this.role == "admin" || this.role == "superadmin") {
+    				router.push({path: "/izmenaDiska"});
+				}else {
+					console.log("Ulazi mi u deteljan pregled diska koji nisam jos uradio.");
+//					router.push({path: "/detaljanPregledDiska"});
+				}
+    		});
     		
     	},
     	deleteDisk: function(){

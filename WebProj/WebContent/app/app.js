@@ -9,6 +9,7 @@ const PregledVM = {template: '<pregled-vm></pregled-vm>'}
 const PregledDiskova = {template: '<pregled-diskova></pregled-diskova>'}
 const DodajDisk = {template: '<dodaj-disk></dodaj-disk>'}
 const DodajOrganizaciju = {template: '<dodaj-organizaciju></dodaj-organizaciju>'}
+const IzmenaDiska = {template: '<izmena-diska></izmena-diska>'}
 
 const router = new VueRouter({
 	  mode: 'hash',
@@ -23,7 +24,8 @@ const router = new VueRouter({
 	    { path: '/pregledVM', component: PregledVM},
 	    { path: '/pregledDiskova', component: PregledDiskova},
 	    { path: '/dodajDisk', component: DodajDisk},
-	    { path: '/dodajOrganizaciju', component: DodajOrganizaciju}
+	    { path: '/dodajOrganizaciju', component: DodajOrganizaciju},
+	    { path: '/izmenaDiska', component: IzmenaDiska}
 //	    { path: '/', component: }
 	  ]
 });

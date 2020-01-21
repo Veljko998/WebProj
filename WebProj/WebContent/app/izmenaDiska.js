@@ -1,24 +1,27 @@
-Vue.component("dodaj-disk" ,{
-	data: function() {
-		return {
-			title: "Dodavanje diska",
-			role: '',
-			email: '',
-			machines: null,
-			Disc: {},
-			showErrorEmptyField: false,
-			showErrorDiscExists: false,
-			canAddDisc: false
-		}
-	},
-	template: 
-	`
+Vue.component("izmena-diskova", {
+	data: function () {
+        	return {
+        		title: 'Izmena Diska',
+                role: 'noRule',
+                email: '',
+                showErrorEmptyField: false,
+    			showErrorDiscExists: false,
+    			Disc: {},
+    			machines: null,
+                diskName: '',  // old disk name
+                diskType: '',  // old disk type
+                diskCapacity: '',  // old disk capacity
+                diskVMName: ''  // old disk VM name
+                
+        	}
+    },
+    template:`
 <div class="container bg-secondary">
 	<div class="row justify-content-center">
 		<div class="col-md-8">
 			<div class="card">
 				<div class="card-header">
-					Register
+					<h2>Edit Disk</h2>
 				</div>
 				<div class="card-body">
 
@@ -27,7 +30,7 @@ Vue.component("dodaj-disk" ,{
 						<div class="input-group-prepend">
 							<span class="input-group-text" id="inputGroup-sizing-default">Disc name</span>
 						</div>
-						<input type="text" class="form-control" name="name" id="name" placeholder="Enter Disc Name" v-model="Disc.name"/>
+						<input type="text" class="form-control" name="name" id="name" placeholder="Enter New Disc Name" v-model="Disc.name"/>
 					</div>
 
 					<!-- input field for disc capacity -->
@@ -35,7 +38,7 @@ Vue.component("dodaj-disk" ,{
 						<div class="input-group-prepend">
 							<span class="input-group-text" id="inputGroup-sizing-default">Disc capacity</span>
 						</div>
-						<input type="number" min="1" class="form-control" name="capacity" id="capacity" placeholder="Enter Disk Capacity" v-model="Disc.capacity"/>
+						<input type="number" min="1" class="form-control" name="capacity" id="capacity" placeholder="Enter New Disk Capacity" v-model="Disc.capacity"/>
 					</div>
 
 					<!-- select type of disc from drop down menu -->
@@ -65,16 +68,29 @@ Vue.component("dodaj-disk" ,{
 					<p class="errorMessageDiscExists" v-if="this.showErrorDiscExists == true">Disk sa tim imenom vec postoji !!!</br></p>
 					
 					<div class="form-group ">
-						<button type="button" class="btn btn-primary btn-lg btn-block login-button" v-on:click="emptyField(); discAlreadyExists();">Add new disc</button>
+						<button type="button" class="btn btn-primary btn-lg btn-block login-button" v-on:click="emptyField(); discAlreadyExists();">Edit Disc</button>
 					</div>
 				</div>
 			</div>
 		</div>
 	</div>
 </div>
-	`,
-	methods: {
-		emptyField: function(){
+    `,
+    methods: {
+    	readAttributesFromDisk: function() {
+    		this.diskName = localStorage.getItem("imeDiska");
+    		this.diskType = localStorage.getItem("tipDiska");
+    		this.diskCapacity = localStorage.getItem("kapacitetDiska");
+    		this.diskVMName = localStorage.getItem("nazivVMDiska");
+    		this.role = localStorage.getItem("role");
+    		this.email = localStorage.getItem("email");
+    		
+    		localStorage.removeItem('imeDiska');
+    		localStorage.removeItem('tipDiska');
+    		localStorage.removeItem('kapacitetDiska');
+    		localStorage.removeItem('nazivVMDiska');
+    	},
+    	emptyField: function(){
 			this.showErrorEmptyField = false;
 			this.showErrorDiscExists = false;
 			this.canAddDisc = false;
@@ -97,23 +113,26 @@ Vue.component("dodaj-disk" ,{
 				}
 		},
 		discAlreadyExists: function(){
-			if (this.showErrorEmptyField == false) {
-				
-				var path = "rest/discService/checkIfDiscExist/" + this.Disc.name;
-				
-				axios
-				.get(path)
-				.then(response => {
-					if (response.data == false || response.data == 'false') {
-						this.canAddDisc = true;
-						console.log("Dodajemo novog korisnika");
-						this.addDisc.call();
-					}
-				});
-			}
+//			if (this.showErrorEmptyField == false) {
+//				
+//				var path = "rest/discService/checkIfDiscExist/" + this.Disc.name;
+//				
+//				axios
+//				.get(path)
+//				.then(response => {
+//					if (response.data == false || response.data == 'false') {
+//						this.canAddDisc = true;
+//						console.log("Dodajemo novi disk");
+//						this.addDisc.call();
+//					}
+//				});
+//			}
+			this.canAddDisc = true;
+			this.addDisc.call();
 		},
-		addDisc: function(){
-			console.log("Dosli smo i dovde: " +this.canAddDisc );
+		//SAME AS addDisk()
+		editDisc: function(){
+			console.log("Dosli smo i dovde: " + this.canAddDisc );
 			if (this.canAddDisc == true || this.canAddDisc === true) {
 
 				console.log(this.Disc.name);
@@ -122,30 +141,37 @@ Vue.component("dodaj-disk" ,{
 				console.log(this.Disc.type);
 				
 				axios
-            	.post('rest/discService/addDisc', {"name": this.Disc.name, "capacity": this.Disc.capacity, "VMName": this.Disc.VMName, "type": this.Disc.type})
+            	.post('rest/discService/editDisk', {"email": this.email, "role": this.role, "oldName": this.diskName, "name": this.Disc.name, "capacity": this.Disc.capacity, "VMName": this.Disc.VMName, "type": this.Disc.type})
             	.then(response => {
             		var discSuccesfullyRegistered = response.data;
-            		console.log("disk uspesno upisan? : "+discSuccesfullyRegistered);
+            		console.log("disk uspesno izmenjen? : " + discSuccesfullyRegistered);
             		
             		if(discSuccesfullyRegistered){
-            			console.log("Disk je uspesno upisan.");
+            			console.log("Disk je uspesno izmenjen.");
             			router.push({path: "/pregledDiskova"}); // Bring user back to pregledDiskova
             		}else{
             			console.log("disk nije upisan.");
             		}
             	});
 			}
-		}
-	},
-	mounted () {  //created 
-		this.role = localStorage.getItem('role');
-		this.email = localStorage.getItem('email');
-		var path = "rest/overview/getAllVM";// + this.role + '/' + this.email
-    
-		axios
-		.post('rest/overview/getAllVM', {"role": this.role, "email": this.email})
-		.then(response => {
-			this.machines = response.data;
-    	});
+		},
+		readMachines: function() {
+			axios
+			.post('rest/overview/getAllVM', {"role": this.role, "email": this.email})
+			.then(response => {
+				this.machines = response.data;
+	    	});
+		},
+    },
+    mounted () {  //created 
+    	this.readAttributesFromDisk();
+    	this.readMachines();
     },
 });
+
+
+
+
+
+
+
