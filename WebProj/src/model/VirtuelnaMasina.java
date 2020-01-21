@@ -29,6 +29,7 @@ public class VirtuelnaMasina {
 	@Min(1)
 	private int ram;
 	
+	@Min(1)
 	private int gpu;
 	
 	private ArrayList<String> diskovi; //jedinstvena imena diskova
