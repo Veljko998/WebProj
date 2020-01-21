@@ -124,6 +124,30 @@ public class GetData {
 		}
 		return null;
 	}
+	
+	@GET
+	@Path("/getResources/{param1}/{param2}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public List<String> getResources(@PathParam("param1") String uloga, @PathParam("param2") String mejl){
+		Diskovi d = new Diskovi();
+		d.setPutanja();
+		VirtuelneMasine vm = new VirtuelneMasine();
+		vm.setPutanja();
+		ArrayList<String> resources = new ArrayList<String>();
+		
+		if(d.UcitajDiskove()){
+			for(Disk disk : d.getListaDiskovi()){
+				resources.add(disk.getIme());
+			}
+		}
+		
+		if(vm.UcitajVirtuelneMasine()){
+			for(VirtuelnaMasina virtm : vm.getListaVirtuelnihMasina()){
+				resources.add(virtm.getIme());
+			}
+		}
+		return resources;
+	}
 	/*
 	@GET
 	@Path("/getJustOrganisations/{param1}/{param2}")

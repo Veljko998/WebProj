@@ -5,6 +5,7 @@ Vue.component("dodaj-organizaciju" ,{
 			role: '',
 			email: '',
 			organisations: null,
+			resources: null,
 			Organisation: {},
 			showErrorEmptyField: false,
 			showErrorOrganisationExists: false,
@@ -46,6 +47,16 @@ Vue.component("dodaj-organizaciju" ,{
 						<input type="file" class="form-control-file" name="logo" id="logo" v-model="Organisation.logo"/>
 					</div>
 					
+					<!-- Dodavanje resursa -->
+					<div class="input-group mb-4">
+						<div class="input-group-prepend">
+							<span class="input-group-text" id="inputGroup-sizing-default">Organisation resources:</span>
+						</div>
+						<select class="form-control" id="resources" name="resources" v-for="r in resources" v-model="Organisation.resources">
+					      <option> {{r}} </option>
+					    </select>
+					</div>
+					
 					<p class="errorMessageRegisterDisc" v-if="this.showErrorEmptyField == true">Sva polja moraju biti popunjena !!!</br></p>
 					<p class="errorMessageOrganisationExists" v-if="this.showErrorOrganisationExists == true">Organizacija sa tim imenom vec postoji !!!</br></p>
 					
@@ -62,13 +73,21 @@ Vue.component("dodaj-organizaciju" ,{
 		
 		
 	},
-	mounted () {  //created 
+	mounted () {   
 		this.role = localStorage.getItem('role');
 		this.email = localStorage.getItem('email');
-		var path = 'rest/data/getOrganisations/' + this.role + '/' + this.email
-    
-		axios
-    		.get(path)
-    		.then(response => (this.organisations = response.data))
+		var path1 = 'rest/data/getOrganisations/' + this.role + '/' + this.email;
+		var path2 = 'rest/data/getResources/' + this.role + '/' + this.email
+		
+		const reqOne = axios.get(path1);
+		const reqTwo = axios.get(path2);
+		
+		axios.all([reqOne, reqTwo]).then(axios.spread((...responses) => {
+			  const responseOne = organisations
+			  const responseTwo = resources 
+			})).catch(errors => {
+			  // react on errors.
+			})
+    		
     },
 });
