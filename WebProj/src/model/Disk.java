@@ -15,6 +15,9 @@ import model.enums.TipDiska;
 public class Disk {
 	
 	@NotNull
+	/**
+	 * Unique
+	 */
 	private String ime;
 	
 	@NotNull
