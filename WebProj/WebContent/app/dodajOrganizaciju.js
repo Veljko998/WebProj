@@ -53,7 +53,7 @@ Vue.component("dodaj-organizaciju" ,{
 							<span class="input-group-text" id="inputGroup-sizing-default">Organisation resources:</span>
 						</div>
 						<select multiple class="form-control" id="resourcesList" name="resourcesList" v-model="Organisation.resourcesList">
-					      <option v-for="r in resources" :selected="selected.indexOf (r) != -1> 
+					      <option v-for="r in resources"> 
 					      	{{r}}
 					      </option>
 					    </select>
@@ -85,8 +85,12 @@ Vue.component("dodaj-organizaciju" ,{
 		const reqTwo = axios.get(path2);
 		
 		axios.all([reqOne, reqTwo]).then(axios.spread((...responses) => {
-			  const responseOne = organisations
-			  const responseTwo = resources 
+			  const responseOne = responses[0];
+			  const responseTwo = responses[1];
+			  
+			  organisations = responseOne;
+			  resources = responseTwo;
+			  
 			})).catch(errors => {
 			  // react on errors.
 			})
