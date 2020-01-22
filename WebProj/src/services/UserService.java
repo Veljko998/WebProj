@@ -64,8 +64,9 @@ public class UserService {
 			Organizacije organizacije = new Organizacije();
 			organizacije.setPutanja();
 			
-			Organizacija organizacija = new Organizacija();
-			organizacija = organizacije.getMapaOrganizacije().get(utr.organisationName);
+			Organizacija organizacija = organizacije.getMapaOrganizacije().get(utr.organisationName);
+			organizacije.getMapaOrganizacije().get(utr.organisationName).getListaKorisnika().add(utr.email);
+			organizacije.UpisiOrganizacije();
 			
 			Korisnik korisnik = new Korisnik();
 			korisnik.setEmail(utr.email);
@@ -76,6 +77,8 @@ public class UserService {
 			korisnik.setOrganizacija(organizacija);
 			
 			if (korisnici.dodajKorisnika(korisnik)) {
+				korisnici.UpisiKorisnike();
+				System.out.println("Korisnik je uspesno upisan");
 				return true;
 			} 
 			return false;
