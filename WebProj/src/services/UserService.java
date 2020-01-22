@@ -14,6 +14,7 @@ import model.Korisnik;
 import model.Organizacija;
 import model.Organizacije;
 import model.enums.Uloga;
+import model.kendo.UserToGetData;
 import model.kendo.UserToRegister;
 
 /** 
@@ -22,6 +23,28 @@ import model.kendo.UserToRegister;
  */
 @Path("/userService")
 public class UserService {
+	
+	@POST
+	@Path("/getUserOrganisationName")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+	/**
+	 * @param ugt - attributes are role and name
+	 * @return name of users organisation
+	 */
+	public String getUsersOrganisationName(UserToGetData ugt) {
+		Korisnici korisnici = new Korisnici();
+		korisnici.setPutanja();
+		korisnici.UcitajKorisnike();
+		
+		try {
+			return korisnici.getMapaKorisnici().get(ugt.email).getOrganizacija().getIme();
+		} catch (Exception e) {
+			System.out.println("Neuspesno vracanje naziva organizacije admina.");
+			return null;
+		}
+	}
+	
 	@POST
 	@Path("/registerUser")
 	@Produces(MediaType.APPLICATION_JSON)
