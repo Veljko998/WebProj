@@ -56,6 +56,11 @@ public class DiscService {
 		organizacije.setPutanja();
 		organizacije.UcitajOrganizacije();
 		
+		if (organizacije.getMapaOrganizacije().get(ugt.orgName) == null) {
+			System.out.println("Ne postoji organizacija sa imenom: " + ugt.orgName);
+			return null;
+		}
+		
 		VirtuelneMasine virtuelneMasine = new VirtuelneMasine();
 		virtuelneMasine.setPutanja();
 		virtuelneMasine.UcitajVirtuelneMasine();
@@ -67,7 +72,11 @@ public class DiscService {
 		
 		try {
 			for (String vmName : organizacije.getMapaOrganizacije().get(ugt.orgName).getListaResursa()) {
-				masine.add(virtuelneMasine.getMapaVirtuelnihMasina().get(vmName));
+				if (virtuelneMasine.getMapaVirtuelnihMasina().get(vmName) == null) {
+					System.out.println("Ne postoji VM sa nazivom: " + vmName);
+				}else {
+					masine.add(virtuelneMasine.getMapaVirtuelnihMasina().get(vmName));
+				}
 			}
 			
 			for (VirtuelnaMasina vm : masine) {
@@ -76,6 +85,7 @@ public class DiscService {
 				}
 			}
 			
+			System.out.println("Velicina liste koju vracam je: " + imenaDiskova.size());
 			return imenaDiskova;
 		} catch (Exception e) {
 			System.out.println("Nesto ne valja prilikom vracanja diskova. /discService/getAllDisks");

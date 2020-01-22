@@ -3,6 +3,7 @@
  */
 package services;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.ws.rs.Consumes;
@@ -29,15 +30,16 @@ public class CategoryService {
 	 * 
 	 * @return all categories
 	 */
-	public List<VM> getAllCategories() {
+	public List<String> getAllCategories() {
 		KategorijeVM kategorijeVM = new KategorijeVM();
 		kategorijeVM.setPutanja();
 		kategorijeVM.UcitajKategorijeVM();
 
 		try {
-			return kategorijeVM.getListaKategorijeVM();
+//			return kategorijeVM.getListaKategorijeVM();
+			return new ArrayList<String>(kategorijeVM.getMapaKategorijeVM().keySet());
 		} catch (Exception e) {
-			System.out.println("Nismo uspeli da vratimo kategorije. /categoryService/getAllCategories");
+			System.out.println("Nismo uspeli da vratimo listu imena kategorija. /categoryService/getAllCategories");
 			return null;
 		}
 	}

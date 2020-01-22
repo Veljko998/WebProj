@@ -38,7 +38,10 @@ public class UserService {
 		korisnici.setPutanja();
 		korisnici.UcitajKorisnike();
 		
+		System.out.println(ugt.email);
+		
 		try {
+			System.out.println("ime organizacije koju vracam je: " + korisnici.getMapaKorisnici().get(ugt.email).getOrganizacija().getIme());
 			return korisnici.getMapaKorisnici().get(ugt.email).getOrganizacija().getIme();
 		} catch (Exception e) {
 			System.out.println("Neuspesno vracanje naziva organizacije admina.");

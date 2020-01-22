@@ -46,7 +46,7 @@ public class VMService {
 		organizacije.setPutanja();
 		organizacije.UcitajOrganizacije();
 		
-		if (virtuelneMasine.getMapaVirtuelnihMasina().get(vma.name) == null) {
+		if (virtuelneMasine.getMapaVirtuelnihMasina().get(vma.name) != null) {
 			System.out.println("Vec postoji ova virtuelna masina. Ovde ne bi trebalo da udje. Vracamo false.");
 			return false;
 		}
@@ -54,9 +54,11 @@ public class VMService {
 		VM kategorija = kategorijeVM.getMapaKategorijeVM().get(vma.categoryName);
 		Organizacija organizacija = organizacije.getMapaOrganizacije().get(vma.organisationName);
 		//TODO: diskove trebam da ubacim u lsitu.
-		ArrayList<String> diskovi = new ArrayList<>();
+		ArrayList<String> diskovi = (ArrayList<String>)vma.disks;
 
 		VirtuelnaMasina vMasina = new VirtuelnaMasina(vma.name, kategorija, diskovi, Integer.parseInt(vma.coreNumber), Integer.parseInt(vma.ram), Integer.parseInt(vma.gpu)); 
+		
+		System.out.println(vMasina);
 		
 		virtuelneMasine.dodajVirtuelnuMasinu(vMasina);
 		virtuelneMasine.UpisiVirtuelneMasine();

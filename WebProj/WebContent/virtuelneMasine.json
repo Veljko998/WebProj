@@ -1,1 +1,1 @@
-[{"ime":"vm1","kategorjia":{"ime":"vm1","brojJezgara":1,"ramMemory":1,"gpu":1},"brojJezgara":1,"ram":2,"gpu":3,"diskovi":[]},{"ime":"vm2","kategorjia":{"ime":"vm1","brojJezgara":1,"ramMemory":1,"gpu":1},"brojJezgara":1,"ram":2,"gpu":3,"diskovi":["disk5"]}]
+[{"ime":"vm1","kategorjia":{"ime":"vm1","brojJezgara":1,"ramMemory":1,"gpu":1},"brojJezgara":1,"ram":2,"gpu":3,"diskovi":["disk1"]},{"ime":"vm2","kategorjia":{"ime":"vm1","brojJezgara":1,"ramMemory":1,"gpu":1},"brojJezgara":1,"ram":2,"gpu":3,"diskovi":["disk5","disk2"]}]
