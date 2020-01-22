@@ -44,7 +44,7 @@ Vue.component("dodaj-organizaciju" ,{
 						<div class="input-group-prepend">
 							<span class="input-group-text" id="inputGroup-sizing-default">Organisation logo:</span>
 						</div>
-						<input type="file" class="form-control-file" name="logo" id="logo" v-model="Organisation.logo"/>
+						<input type="file" class="form-control-file" name="logo" id="logo"/>
 					</div>
 					
 					<!-- Dodavanje resursa -->
@@ -53,7 +53,7 @@ Vue.component("dodaj-organizaciju" ,{
 							<span class="input-group-text" id="inputGroup-sizing-default">Organisation resources:</span>
 						</div>
 						<select multiple class="form-control" id="resourcesList" name="resourcesList" v-model="Organisation.resourcesList">
-					      <option v-for="r in resources"> 
+					      <option v-for="r in resources" :selected="selected.indexOf (r) != -1> 
 					      	{{r}}
 					      </option>
 					    </select>
