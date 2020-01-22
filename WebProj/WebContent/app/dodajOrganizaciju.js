@@ -49,14 +49,12 @@ Vue.component("dodaj-organizaciju" ,{
 					
 					<!-- Dodavanje resursa -->
 					<div class="input-group mb-4">
-						<div class="input-group-prepend">
-							<span class="input-group-text" id="inputGroup-sizing-default">Organisation resources:</span>
-						</div>
-						<select multiple class="form-control" id="resourcesList" name="resourcesList" v-model="Organisation.resourcesList">
-					      <option v-for="r in resources"> 
-					      	{{r}}
-					      </option>
-					    </select>
+					<div class="input-group-prepend">
+						<span class="input-group-text" id="inputGroup-sizing-default">Organisation resources: </span>
+					</div>
+					<select multiple class="form-control" id="resources" name="resources" v-model="Organisation.resources">
+						<option v-for="r in resources" :value="r">{{ r }}</option>
+					</select>
 					</div>
 					
 					<p class="errorMessageRegisterDisc" v-if="this.showErrorEmptyField == true">Sva polja moraju biti popunjena !!!</br></p>
@@ -81,19 +79,12 @@ Vue.component("dodaj-organizaciju" ,{
 		var path1 = 'rest/data/getOrganisations/' + this.role + '/' + this.email;
 		var path2 = 'rest/data/getResources/' + this.role + '/' + this.email
 		
-		const reqOne = axios.get(path1);
-		const reqTwo = axios.get(path2);
-		
-		axios.all([reqOne, reqTwo]).then(axios.spread((...responses) => {
-			  const responseOne = responses[0];
-			  const responseTwo = responses[1];
-			  
-			  organisations = responseOne;
-			  resources = responseTwo;
-			  
-			})).catch(errors => {
-			  // react on errors.
-			})
+		axios
+		.get(path1)
+		.then(response => (this.organisations = response.data));
+		axios
+		.get(path2)
+		.then(response => (this.resources = response.data))
     		
     },
 });
