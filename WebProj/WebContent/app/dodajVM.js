@@ -71,9 +71,19 @@ Vue.component("dodaj-vm" ,{
 						<div class="input-group-prepend">
 							<span class="input-group-text" id="inputGroup-sizing-default">Organisations</span>
 						</div>
-						<select class="custom-select" data-live-search="true" id="inputGroupSelect02" v-model="VM.vmOrganisationName">
+						<select class="custom-select" data-live-search="true" id="inputGroupSelect02" v-model="VM.vmOrganisationName" v-on:click="loadDisks();">
 							<option selected>Choose...</option>
 							<option v-for="m in organisations" :value="m.ime">{{ m.ime }}</option>
+						</select>
+					</div>
+					
+					<!-- Select disk/s -->
+					<div class="input-group mb-4">
+						<div class="input-group-prepend">
+							<span class="input-group-text" id="inputGroup-sizing-default">Disks: </span>
+						</div>
+						<select multiple class="form-control" id="resources" name="resources" v-model="VM.disks	">
+							<option v-for="d in disks" :value="d">{{ d }}</option>
 						</select>
 					</div>
 					
@@ -90,9 +100,21 @@ Vue.component("dodaj-vm" ,{
 </div>
 	`,
 	methods: {
-		//Proveriti da li radi: v-if="this.role == 'superadmin'"
+		/**
+		 * If user is admin, he can choose just disks from his organisation.
+		 * superadmin get disks from chosen organisation. 
+		 */
+		loadDisks: function() {
+			axios
+			.post("rest/discService/getAllDisks", {"role": this.role, "email": this.email, "orgName": this.VM.vmOrganisationName})
+			.then(response => {
+				this.VM.disks = response.data;
+			});
+		},
 		/**
 		 * Load all categories, no matter of user's role.
+		 * 
+		 * Proveriti da li radi: v-if="this.role == 'superadmin'"
 		 */
 		loadCategories: function() {
 			axios
@@ -102,11 +124,23 @@ Vue.component("dodaj-vm" ,{
 			});
 		},
 		/**
-		 * If user is admin, he can choose just disks from his organisation.
-		 * super admin get disks from all organisations to choose.
+		 * If user is superadmin, he must chose organisation.
+		 * Else (admin) he has his organisation.
 		 */
 		loadOrganisations: function() {
-			
+			if (this.role == "superadmin") {
+				axios
+				.post("rest/organisaitonService/getAllOrganisations")
+				.then(response => {
+					this.organisations = response.data;
+				});
+			}else {
+				axios
+				.post("rest/userService/getUserOrganisationName", {"role": this.role, "email": this.email})
+				.then(response => {
+					this.VM.vmOrganisationName = response.data;
+				});
+			}
 		},
 		emptyField: function() {
 			this.showErrorEmptyField = false;

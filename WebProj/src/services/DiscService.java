@@ -3,8 +3,10 @@
  */
 package services;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
@@ -16,12 +18,16 @@ import javax.ws.rs.core.MediaType;
 
 import model.Disk;
 import model.Diskovi;
+import model.Korisnici;
+import model.Korisnik;
+import model.Organizacije;
 import model.VirtuelnaMasina;
 import model.VirtuelneMasine;
 import model.enums.TipDiska;
 import model.kendo.DiscToAdd;
 import model.kendo.DiskToDelete;
 import model.kendo.DiskToEdit;
+import model.kendo.UserToGetData2;
 
 /** 
  * @author Veljko
@@ -30,6 +36,53 @@ import model.kendo.DiskToEdit;
 @Path("/discService")
 public class DiscService {
 	
+	@POST
+	@Path("/getAllDisks")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+	/**
+	 * Take just disks from users organisation if admin
+	 * Else take disks from picked organisation
+	 * 
+	 * @param ugt
+	 * @return list of name of disks
+	 */
+	public List<String> getAllDisks(UserToGetData2 ugt) {
+		Diskovi diskovi = new Diskovi();
+		diskovi.setPutanja();
+		diskovi.UcitajDiskove();
+		
+		Organizacije organizacije = new Organizacije();
+		organizacije.setPutanja();
+		organizacije.UcitajOrganizacije();
+		
+		VirtuelneMasine virtuelneMasine = new VirtuelneMasine();
+		virtuelneMasine.setPutanja();
+		virtuelneMasine.UcitajVirtuelneMasine();
+		
+		organizacije.getMapaOrganizacije().get(ugt.orgName);
+		
+		List<VirtuelnaMasina> masine = new ArrayList<VirtuelnaMasina>();
+		List<String> imenaDiskova = new ArrayList<String>();
+		
+		try {
+			for (String vmName : organizacije.getMapaOrganizacije().get(ugt.orgName).getListaResursa()) {
+				masine.add(virtuelneMasine.getMapaVirtuelnihMasina().get(vmName));
+			}
+			
+			for (VirtuelnaMasina vm : masine) {
+				for (String diskName : vm.getDiskovi()) {
+					imenaDiskova.add(diskName);
+				}
+			}
+			
+			return imenaDiskova;
+		} catch (Exception e) {
+			System.out.println("Nesto ne valja prilikom vracanja diskova. /discService/getAllDisks");
+			return null;
+		}
+		
+	}
 	
 	@POST
 	@Path("/editDisk")

@@ -24,6 +24,7 @@ import model.kendo.UserToRegister;
 @Path("/userService")
 public class UserService {
 	
+	
 	@POST
 	@Path("/getUserOrganisationName")
 	@Produces(MediaType.APPLICATION_JSON)
