@@ -17,13 +17,11 @@ public class Korisnik {
 	private String prezime;
 	private Organizacija organizacija;
 	private Uloga uloga;
-	private List<Tuple<LocalDateTime, LocalDateTime>> listaAktivnosti; //(vremePrijave, vremeOdjave)
 	
 	public Korisnik(){}
 	
 	public Korisnik(String email, String lozinka, String ime, String prezime,
-			Organizacija organizacija, Uloga uloga,
-			List<Tuple<LocalDateTime, LocalDateTime>> listaAktivnosti) {
+			Organizacija organizacija, Uloga uloga) {
 		super();
 		this.email = email;
 		this.lozinka = lozinka;
@@ -31,7 +29,6 @@ public class Korisnik {
 		this.prezime = prezime;
 		this.organizacija = organizacija;
 		this.uloga = uloga;
-		this.listaAktivnosti = listaAktivnosti;
 	}
 	
 	public Korisnik(Korisnik k) {
@@ -42,7 +39,6 @@ public class Korisnik {
 		this.prezime = k.getPrezime();
 		this.organizacija = k.getOrganizacija();
 		this.uloga = k.getUloga();
-		this.listaAktivnosti = k.getListaAktivnosti();
 	}
 
 	public String getLozinka() {
@@ -92,18 +88,5 @@ public class Korisnik {
 	public void setUloga(Uloga uloga) {
 		this.uloga = uloga;
 	}
-
-	public List<Tuple<LocalDateTime, LocalDateTime>> getListaAktivnosti() {
-		return listaAktivnosti;
-	}
-
-	public void setListaAktivnosti(
-			List<Tuple<LocalDateTime, LocalDateTime>> listaAktivnosti) {
-		this.listaAktivnosti = listaAktivnosti;
-	}
-	
-	
-	
-	
 	
 }

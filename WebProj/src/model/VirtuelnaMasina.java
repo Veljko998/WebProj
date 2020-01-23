@@ -1,6 +1,8 @@
 package model;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
@@ -34,6 +36,7 @@ public class VirtuelnaMasina {
 	
 	private ArrayList<String> diskovi; //jedinstvena imena diskova
 	
+	private List<Tuple<LocalDateTime, LocalDateTime>> listaAktivnosti; //(vremePaljenja, vremeGasenja)
 	
 	public VirtuelnaMasina(){}
 	/**
@@ -50,16 +53,29 @@ public class VirtuelnaMasina {
 		this.brojJezgara = kategorjia.getBrojJezgara();
 		this.ram = kategorjia.getRamMemory();
 		this.gpu = kategorjia.getGpu();
+		this.listaAktivnosti = new ArrayList<Tuple<LocalDateTime, LocalDateTime>>();
+	}
+	
+	public VirtuelnaMasina(String ime, VM kategorjia, ArrayList<String> diskovi, ArrayList<Tuple<LocalDateTime, 
+			LocalDateTime>> listaAktivnosti) {
+		this.ime = ime;
+		this.kategorjia = kategorjia;
+		this.diskovi = diskovi;
+		this.brojJezgara = kategorjia.getBrojJezgara();
+		this.ram = kategorjia.getRamMemory();
+		this.gpu = kategorjia.getGpu();
+		this.listaAktivnosti = listaAktivnosti;
 	}
 	
 	public VirtuelnaMasina(String ime, VM kategorjia, ArrayList<String> diskovi, int brojJezgara,
-			int ram, int gpu) {
+			int ram, int gpu, ArrayList<Tuple<LocalDateTime, LocalDateTime>> listaAktivnosti) {
 		this.ime = ime;
 		this.kategorjia = kategorjia;
 		this.diskovi = diskovi;
 		this.brojJezgara = brojJezgara;
 		this.ram = ram;
 		this.gpu = gpu;
+		this.listaAktivnosti = listaAktivnosti;
 	}
 	
 	/**
@@ -160,6 +176,15 @@ public class VirtuelnaMasina {
 	 */
 	public void setGpu(int gpu) {
 		this.gpu = gpu;
+	}
+	
+	public List<Tuple<LocalDateTime, LocalDateTime>> getListaAktivnosti() {
+		return listaAktivnosti;
+	}
+	
+	public void setListaAktivnosti(
+			List<Tuple<LocalDateTime, LocalDateTime>> listaAktivnosti) {
+		this.listaAktivnosti = listaAktivnosti;
 	}
 	
 	
