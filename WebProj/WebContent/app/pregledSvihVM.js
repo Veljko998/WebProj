@@ -22,10 +22,10 @@ Vue.component("pregled-vm", {
 	</div>
 	<div class="row">
 		<div class="col col-md-2">
-			<input min="1" type="number" class="form-control" placeholder="From" id="inputCoreFrom">
+			<input min="1" type="number" class="form-control" placeholder="From" id="inputCoreFrom" v-on:click="myFunction()" v-on:keyup="myFunction()">
 		</div>
 		<div class="col col-md-2">
-			<input min="1" type="number" class="form-control" placeholder="To" id="inputCoreTo">
+			<input min="1" type="number" class="form-control" placeholder="To" id="inputCoreTo" v-on:click="myFunction()" v-on:keyup="myFunction()">
 		</div>
 	</div>
 
@@ -36,12 +36,30 @@ Vue.component("pregled-vm", {
 	</div>
 	<div class="row">
 		<div class="col col-md-2">
-			<input min="1" type="number" class="form-control" placeholder="From" id="inputRamFrom">
+			<input min="1" type="number" class="form-control" placeholder="From" id="inputRamFrom" v-on:click="myFunction()" v-on:keyup="myFunction()">
 		</div>
 		<div class="col col-md-2">
-			<input min="1" type="number" class="form-control" placeholder="To" id="inputRamTo">
+			<input min="1" type="number" class="form-control" placeholder="To" id="inputRamTo" v-on:click="myFunction()" v-on:keyup="myFunction()">
 		</div>
 	</div>
+	
+	
+	
+	<div class="row">
+		<div class="col">
+			<label for="inputEmail4">GPU capacity: </label>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col col-md-2">
+			<input min="1" type="number" class="form-control" placeholder="From" id="inputGpuFrom" v-on:click="myFunction()" v-on:keyup="myFunction()">
+		</div>
+		<div class="col col-md-2">
+			<input min="1" type="number" class="form-control" placeholder="To" id="inputGpuTo" v-on:click="myFunction()" v-on:keyup="myFunction()">
+		</div>
+	</div>
+	
+	
 	
 	<br>
 
@@ -65,7 +83,7 @@ Vue.component("pregled-vm", {
 				<td>{{ m.brojJezgara }}</td>
 				<td>{{ m.ram }}</td>
 				<td>{{ m.gpu }}</td>
-				<td v-if="this.role === 'superadmin'">{{ m.organisationName }}</td>
+				<td v-if="this.role == 'superadmin'">{{ m.organisationName }}</td>
 			</tr>
 		</tbody>
 	</table>
@@ -74,12 +92,13 @@ Vue.component("pregled-vm", {
 </div>
     `,
     methods: {
-    	addNewVM: function() {
-    		router.push({path: "/dodajVM"});
-    	},
-    	myFunction: function(){
-    		var input, filter, table, tr, td, i, txtValue;
-    		var inputCoreFrom, inputCoreTo, inputRamFrom, inputRamTo, coreNumber, ramNumber, txtValue2, txtValue3;
+    	myFunction: function() {
+    		console.log("Usaooooooooooo");
+    		var input, table, tr, td, i;
+    		var txtValue, txtValue2, txtValue3, txtValue4;
+    		var filter, filter2, filter3, filter4, filter5;
+    		var inputCoreFrom, inputCoreTo, inputRamFrom, inputRamTo, inputGpuFrom, inputGpuTo;
+    		var coreNumber, ramNumber, gpuNumber,  coreNum, ramNum, gpuNum;
     		
     		inputCoreFrom = document.getElementById("inputCoreFrom");
     		filter1 = Number(inputCoreFrom.value);
@@ -89,6 +108,10 @@ Vue.component("pregled-vm", {
     		filter3 = Number(inputRamFrom.value);
     		inputRamTo = document.getElementById("inputRamTo");
     		filter4 = Number(inputRamTo.value);
+    		inputGpuFrom = document.getElementById("inputGpuFrom");
+    		filter5 = Number(inputGpuFrom.value);
+    		inputGpuTo = document.getElementById("inputGpuTo");
+    		filter6 = Number(inputGpuTo.value);
     		
         	input = document.getElementById("myInputVM");
         	filter = input.value.toUpperCase();
@@ -97,27 +120,127 @@ Vue.component("pregled-vm", {
         	
         	// Loop through all table rows, and hide those who don't match the search query
         	for (i = 0; i < tr.length; i++){
-        		td = tr[i].getElementsByTagName("td")[0]; //by VM name
-        		coreNum = tr[i].getElementsByTagName("td")[1];
-//        		coreNumber = Number(coreNum);
-        		
-        		ramNum = tr[i].getElementsByTagName("td")[2];
-//        		ramNumber = Number(ramNum);
+        		var helpMe = true;
+        		td = tr[i].getElementsByTagName("td")[0]; 		//by VM name
+        		coreNum = tr[i].getElementsByTagName("td")[1]; 	//by core
+        		ramNum = tr[i].getElementsByTagName("td")[2];	//by ram
+        		gpuNum = tr[i].getElementsByTagName("td")[3];	//by gpu
         		
         		if (td){
         			txtValue = td.textContent || td.innerText;
-        			txtValue2 = coreNum.textContent || coreNumber.innerText;
-        			txtValue3 = ramNum.textContent || ramNumber.innerText;
+        			txtValue2 = coreNum.textContent || coreNum.innerText;
+        			txtValue3 = ramNum.textContent || ramNum.innerText;
+        			txtValue4 = gpuNum.textContent || gpuNum.innerText;
+        			
         			coreNumber = Number(txtValue2);
         			ramNumber = Number(txtValue3);
-        			if (txtValue.toUpperCase().indexOf(filter) > -1 && (filter1 <= coreNumber && filter2 >= coreNumber) && (filter3 <= ramNumber && filter4 >= ramNumber)){
-        				tr[i].style.display = "";
+        			gpuNumber = Number(txtValue4);
+        			
+        			// Logic for taking event on changed fields for filtering
+        			
+        			/*
+        			 * Filtering for input number of cores.
+        			 */
+        			if (txtValue.toUpperCase().indexOf(filter) > -1){
+        				if (filter1 == 0 && filter2 == 0 && helpMe == true) {
+        					tr[i].style.display = "";
+        					helpMe = true;
+						}if (filter1 != 0 && filter2 == 0 && helpMe == true) {
+							if (filter1 <= coreNumber) {
+								tr[i].style.display = "";
+								helpMe = true;
+							}else {
+								tr[i].style.display = "none";
+								helpMe = false;
+							}
+						}if (filter1 == 0 && filter2 != 0 && helpMe == true) {
+							if (filter2 >= coreNumber) {
+								tr[i].style.display = "";
+								helpMe = true;
+							}else {
+								tr[i].style.display = "none";
+								helpMe = false;
+							}
+						}if (filter1 != 0 && filter2 != 0 && helpMe == true) {
+							if (filter1 <= coreNumber && filter2 >= coreNumber) {
+								tr[i].style.display = "";
+								helpMe = true;
+							}else {
+								tr[i].style.display = "none";
+								helpMe = false;
+							}
+						}
+        				/*
+        				 * Filtering for input RAM
+        				 */
+						if (filter3 == 0 && filter4 == 0 && helpMe == true) {
+        					tr[i].style.display = "";
+							helpMe = true;
+						}if (filter3 != 0 && filter4 == 0 && helpMe == true) {
+							if (filter3 <= ramNumber) {
+								tr[i].style.display = "";
+								helpMe = true;
+							}else {
+								tr[i].style.display = "none";
+								helpMe = false;
+							}
+						}if (filter3 == 0 && filter4 != 0 && helpMe == true) {
+							if (filter4 >= ramNumber) {
+								tr[i].style.display = "";
+								helpMe = true;
+							}else {
+								tr[i].style.display = "none";
+								helpMe = false;
+							}
+						}if (filter3 != 0 && filter4 != 0 && helpMe == true) {
+							if (filter3 <= ramNumber && filter4 >= ramNumber) {
+								tr[i].style.display = "";
+								helpMe = true;
+							}else {
+								tr[i].style.display = "none";
+								helpMe = false;
+							}
+						}
+						/*
+        				 * Filtering for input GPU
+        				 */
+						if (filter5 == 0 && filter6 == 0 && helpMe == true) {
+        					tr[i].style.display = "";
+							helpMe = true;
+						}if (filter5 != 0 && filter6 == 0 && helpMe == true) {
+							if (filter5 <= gpuNumber) {
+								tr[i].style.display = "";
+								helpMe = true;
+							}else {
+								tr[i].style.display = "none";
+								helpMe = false;
+							}
+						}if (filter5 == 0 && filter6 != 0 && helpMe == true) {
+							if (filter6 >= gpuNumber) {
+								tr[i].style.display = "";
+								helpMe = true;
+							}else {
+								tr[i].style.display = "none";
+								helpMe = false;
+							}
+						}if (filter5 != 0 && filter6 != 0 && helpMe == true) {
+							if (filter5 <= gpuNumber && filter6 >= gpuNumber) {
+								tr[i].style.display = "";
+								helpMe = true;
+							}else {
+								tr[i].style.display = "none";
+								helpMe = false;
+							}
+						}
         			}else{
         				tr[i].style.display = "none";
         			}
         		}
         	}
-    	}
+    	},
+    	addNewVM: function() {
+    		router.push({path: "/dodajVM"});
+    	},
     },
     mounted () {  //created 
     	var role = localStorage.getItem("role");
@@ -133,10 +256,5 @@ Vue.component("pregled-vm", {
 		});
     },
 });
-
-
-
-
-
 
 
