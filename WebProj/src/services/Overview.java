@@ -140,7 +140,7 @@ public class Overview {
 			if (utgt.role.toLowerCase().equals("superadmin")) {
 				if (virtuelneMasine.getListaVirtuelnihMasina() != null && !virtuelneMasine.getListaVirtuelnihMasina().isEmpty()) {
 					for (Korisnik korisnik : korisnici.getListaKorisnici()) {
-						for (String vmName : korisnik.getOrganizacija().getListaResursa()) {
+						for (String vmName : korisnik.getOrganizacija().getListaResursa()) { //kroz listu resursa korisnikove organizacije
 							if (!help.contains(vmName)) {
 								VirtuelnaMasina vm = virtuelneMasine.getMapaVirtuelnihMasina().get(vmName);
 								VMToOverview vmto = new VMToOverview();
@@ -159,7 +159,7 @@ public class Overview {
 							}
 						}
 					}
-					
+					System.out.println("Broj VM koje vracam prilikom pregleda je: " + vmsToReturn.size());
 					return vmsToReturn;
 				}else {
 					return null;

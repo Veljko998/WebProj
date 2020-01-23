@@ -14,6 +14,8 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
 import model.KategorijeVM;
+import model.Korisnici;
+import model.Korisnik;
 import model.Organizacija;
 import model.Organizacije;
 import model.VM;
@@ -38,12 +40,26 @@ public class VMService {
 		virtuelneMasine.setPutanja();
 		virtuelneMasine.UcitajVirtuelneMasine();
 		
+		Korisnici korisnici = new Korisnici();
+		korisnici.setPutanja();
+		korisnici.UcitajKorisnike();
+		
+		
 		VirtuelnaMasina vm = new VirtuelnaMasina();
 		
-		if ((vm = virtuelneMasine.getMapaVirtuelnihMasina().get(vmtd.vmName)) != null) {
+		if ((vm = virtuelneMasine.getMapaVirtuelnihMasina().get(vmtd.name)) != null) {
 			virtuelneMasine.getListaVirtuelnihMasina().remove(vm);
 			if (virtuelneMasine.UpisiVirtuelneMasine()) {
 				System.out.println("Masina je uspesno obrisana.");
+				
+				for (Korisnik kor : korisnici.getListaKorisnici()) {
+					if (kor.getOrganizacija().getListaResursa().contains(vmtd.name)) {
+						kor.getOrganizacija().getListaResursa().remove(vmtd.name);
+					}
+				}
+				
+				korisnici.UpisiKorisnike();
+				
 				return true;
 			}
 		}
@@ -69,6 +85,10 @@ public class VMService {
 		organizacije.setPutanja();
 		organizacije.UcitajOrganizacije();
 		
+		Korisnici korisnici = new Korisnici();
+		korisnici.setPutanja();
+		korisnici.UcitajKorisnike();
+		
 		if (virtuelneMasine.getMapaVirtuelnihMasina().get(vma.name) != null) {
 			System.out.println("Vec postoji ova virtuelna masina. Ovde ne bi trebalo da udje. Vracamo false.");
 			return false;
@@ -76,7 +96,17 @@ public class VMService {
 		
 		VM kategorija = kategorijeVM.getMapaKategorijeVM().get(vma.categoryName);
 		Organizacija organizacija = organizacije.getMapaOrganizacije().get(vma.organisationName);
-		//TODO: diskove trebam da ubacim u lsitu.
+		
+		/*
+		 * U korisnike u organizaciju u listu vm upisujemo ime vm koju dodajemo.
+		 */
+		for (Korisnik kor : korisnici.getListaKorisnici()) {
+			if (kor.getOrganizacija().getIme().equals(organizacija.getIme())) {
+				kor.getOrganizacija().getListaResursa().add(vma.name);
+			}
+		}
+		korisnici.UpisiKorisnike();
+		
 		ArrayList<String> diskovi = (ArrayList<String>)vma.disks;
 
 		VirtuelnaMasina vMasina = new VirtuelnaMasina(vma.name, kategorija, diskovi, Integer.parseInt(vma.coreNumber), Integer.parseInt(vma.ram), Integer.parseInt(vma.gpu)); 

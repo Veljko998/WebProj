@@ -88,7 +88,7 @@ Vue.component("pregled-vm", {
 				<td v-if="isSuperAdmin == true">{{ m.organisationName }}</td>
 				<td>
 					<button :id="m.ime" type="button" class="btn btn-sm btn-secondary" v-on:click="editDisk();">Edit</button>
-					<button :id="m.ime" type="button" class="btn btn-sm btn-danger" v-on:click="deleteDisk();">Delete</button>
+					<button :id="m.ime" type="button" class="btn btn-sm btn-danger" v-on:click="deleteDisk(); myFunction();">Delete</button>
 				</td>
 			</tr>
 		</tbody>
@@ -123,20 +123,20 @@ Vue.component("pregled-vm", {
     		
     	},
     	deleteDisk: function(){
-//    		var vmName = event.srcElement.id;
-//    		
-//    		axios
-//    		.post('rest/VMService/deleteVM', {"name": vmName})
-//    		.then(response => {
-//    			var disk_deleted = response.data;
-//    			
-//    			if (disk_deleted == true) {
-//					console.log("Disk is succesfully deleted.");
-//					this.loadDisks();
-//				}else {
-//					console.log("Disk is not deleted.");
-//				}
-//    		});
+    		var vmName = event.srcElement.id;
+    		
+    		axios
+    		.post('rest/VMService/deleteVM', {"name": vmName})
+    		.then(response => {
+    			var disk_deleted = response.data;
+    			
+    			if (disk_deleted == true) {
+					console.log("VM is succesfully deleted.");
+					this.loadVMs();
+				}else {
+					console.log("VM is not deleted.");
+				}
+    		});
     		
     		//console.log('DELETE Disk with id: ' + vmName);
     	},
@@ -288,23 +288,27 @@ Vue.component("pregled-vm", {
     	addNewVM: function() {
     		router.push({path: "/dodajVM"});
     	},
+    	loadVMs: function() {
+    		console.log("CITAMO MASINE.");
+    		axios
+    		.post('rest/overview/getAllVM', {"role": this.role, "email": this.email})
+    		.then(response => {
+    			this.machines = response.data;
+    			if (this.machines === '') {
+    				console.log("Nema masina za ispis kod ovog korisnika.");
+    			}
+    		});
+    	},
     },
     mounted () {  //created 
-    	var role = localStorage.getItem("role");
-    	var email = localStorage.getItem("email");
+    	this.role = localStorage.getItem("role");
+    	this.email = localStorage.getItem("email");
     	
-    	if (role == "superadmin") {
+    	if (this.role == "superadmin") {
 			this.isSuperAdmin = true;
 		}
     	
-    	axios
-		.post('rest/overview/getAllVM', {"role": role, "email": email})
-		.then(response => {
-			this.machines = response.data;
-			if (this.machines === '') {
-				console.log("Nema masina za ispis kod ovog korisnika.");
-			}
-		});
+    	this.loadVMs();
     },
 });
 
