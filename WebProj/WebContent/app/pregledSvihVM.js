@@ -75,6 +75,7 @@ Vue.component("pregled-vm", {
 				<th scope="col">RAM</th>
 				<th scope="col">GPU</th>
 				<th scope="col" v-if="isSuperAdmin == true">Organisation name</th>
+				<th scope="col">Functions</th>
 			</tr>
 		</thead>
 		<tbody>
@@ -85,6 +86,10 @@ Vue.component("pregled-vm", {
 				<td>{{ m.ram }}</td>
 				<td>{{ m.gpu }}</td>
 				<td v-if="isSuperAdmin == true">{{ m.organisationName }}</td>
+				<td>
+					<button :id="m.ime" type="button" class="btn btn-sm btn-secondary" v-on:click="editDisk();">Edit</button>
+					<button :id="m.ime" type="button" class="btn btn-sm btn-danger" v-on:click="deleteDisk();">Delete</button>
+				</td>
 			</tr>
 		</tbody>
 	</table>
@@ -93,8 +98,49 @@ Vue.component("pregled-vm", {
 </div>
     `,
     methods: {
+    	editDisk: function(){
+    		console.log("You pressed edit button.")
+//    		var diskId = event.srcElement.id;
+//    		this.role = localStorage.getItem("role");
+//    		
+//    		axios
+//    		.post('rest/discService/getDiskByName', {"name": diskId})
+//    		.then(response => {
+//    			this.diskToEdit = response.data;
+//    			
+//    			localStorage.setItem("imeDiska", this.diskToEdit.ime);
+//    			localStorage.setItem("tipDiska", this.diskToEdit.tip);
+//    			localStorage.setItem("kapacitetDiska", this.diskToEdit.kapacitet);
+//    			localStorage.setItem("nazivVMDiska", this.diskToEdit.virtuelnaMasina);
+//    			
+//    			if (this.role == "admin" || this.role == "superadmin") {
+//    				router.push({path: "/izmenaDiska"});
+//				}else {
+//					console.log("Ulazi mi u deteljan pregled diska koji nisam jos uradio.");
+////					router.push({path: "/detaljanPregledDiska"});
+//				}
+//    		});
+    		
+    	},
+    	deleteDisk: function(){
+//    		var vmName = event.srcElement.id;
+//    		
+//    		axios
+//    		.post('rest/VMService/deleteVM', {"name": vmName})
+//    		.then(response => {
+//    			var disk_deleted = response.data;
+//    			
+//    			if (disk_deleted == true) {
+//					console.log("Disk is succesfully deleted.");
+//					this.loadDisks();
+//				}else {
+//					console.log("Disk is not deleted.");
+//				}
+//    		});
+    		
+    		//console.log('DELETE Disk with id: ' + vmName);
+    	},
     	myFunction: function() {
-    		console.log("Usaooooooooooo");
     		var input, table, tr, td, i;
     		var txtValue, txtValue2, txtValue3, txtValue4;
     		var filter, filter2, filter3, filter4, filter5;

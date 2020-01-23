@@ -13,7 +13,6 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
-import model.Disk;
 import model.KategorijeVM;
 import model.Organizacija;
 import model.Organizacije;
@@ -21,6 +20,7 @@ import model.VM;
 import model.VirtuelnaMasina;
 import model.VirtuelneMasine;
 import model.kendo.VMToAdd;
+import model.kendo.VMToDelete;
 
 /** 
  * @author Veljko
@@ -28,6 +28,29 @@ import model.kendo.VMToAdd;
  */
 @Path("/VMService")
 public class VMService {
+	
+	@POST
+	@Path("/deleteVM")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+	public boolean deleteVM(VMToDelete vmtd) {
+		VirtuelneMasine virtuelneMasine = new VirtuelneMasine();
+		virtuelneMasine.setPutanja();
+		virtuelneMasine.UcitajVirtuelneMasine();
+		
+		VirtuelnaMasina vm = new VirtuelnaMasina();
+		
+		if ((vm = virtuelneMasine.getMapaVirtuelnihMasina().get(vmtd.vmName)) != null) {
+			virtuelneMasine.getListaVirtuelnihMasina().remove(vm);
+			if (virtuelneMasine.UpisiVirtuelneMasine()) {
+				System.out.println("Masina je uspesno obrisana.");
+				return true;
+			}
+		}
+		
+		System.out.println("Masina nije uspesno obrisana. Ovde ne bi smeo da udje nikada.  /VMService/deleteVM");
+		return false;
+	}
 	
 	@POST
 	@Path("/addVM")
