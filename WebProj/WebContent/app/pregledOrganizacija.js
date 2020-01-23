@@ -43,7 +43,7 @@ Vue.component("pregled-organizacija" ,{
 	mounted () {  
 		this.role = localStorage.getItem('role');
 		this.email = localStorage.getItem('email');
-		var path = 'rest/data/getOrganisations/' + this.role + '/' + this.email
+		var path = 'rest/organisationService/getOrganisations/' + this.role + '/' + this.email
     
 		axios
     		.get(path)
