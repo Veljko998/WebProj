@@ -76,8 +76,8 @@ Vue.component("dodaj-organizaciju" ,{
 	mounted () {   
 		this.role = localStorage.getItem('role');
 		this.email = localStorage.getItem('email');
-		var path1 = 'rest/data/getOrganisations/' + this.role + '/' + this.email;
-		var path2 = 'rest/data/getResources/' + this.role + '/' + this.email
+		var path1 = 'rest/organisationService/getOrganisations/' + this.role + '/' + this.email;
+		var path2 = 'rest/organisationService/getResources/' + this.role + '/' + this.email
 		
 		axios
 		.get(path1)
