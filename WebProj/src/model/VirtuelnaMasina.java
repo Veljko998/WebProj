@@ -114,5 +114,53 @@ public class VirtuelnaMasina {
 		this.diskovi = diskovi;
 	}
 	
+	/**
+	 * 
+	 * @return
+	 */
+	public int getBrojJezgara() {
+		return brojJezgara;
+	}
+	
+	/**
+	 * 
+	 * @param brojJezgara
+	 */
+	public void setBrojJezgara(int brojJezgara) {
+		this.brojJezgara = brojJezgara;
+	}
+	
+	/**
+	 * 
+	 * @return
+	 */
+	public int getRam() {
+		return ram;
+	}
+	
+	/**
+	 * 
+	 * @param ram
+	 */
+	public void setRam(int ram) {
+		this.ram = ram;
+	}
+	
+	/**
+	 * 
+	 * @return
+	 */
+	public int getGpu() {
+		return gpu;
+	}
+	
+	/**
+	 * 
+	 * @param gpu
+	 */
+	public void setGpu(int gpu) {
+		this.gpu = gpu;
+	}
+	
 	
 }

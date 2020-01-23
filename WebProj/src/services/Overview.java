@@ -24,6 +24,7 @@ import model.Organizacije;
 import model.VirtuelnaMasina;
 import model.VirtuelneMasine;
 import model.kendo.UserToGetData;
+import model.kendo.VMToOverview;
 
 /** 
  * @author Veljko
@@ -113,8 +114,9 @@ public class Overview {
 	 * @param utgt
 	 * @return list of organisations
 	 */
-	public List<VirtuelnaMasina> getAllVM(UserToGetData utgt){
+	public List<VMToOverview> getAllVM(UserToGetData utgt){
 		List<VirtuelnaMasina> vms = new ArrayList<>();
+		List<VMToOverview> vmsToReturn = new ArrayList<VMToOverview>();
 		
 		Korisnici korisnici = new Korisnici();
 		korisnici.setPutanja();
@@ -128,24 +130,66 @@ public class Overview {
 		virtuelneMasine.setPutanja();
 		virtuelneMasine.UcitajVirtuelneMasine();
 		
+		/*
+		 * Korisnik ima organizaciju koja ima listu imena VM
+		 * Superadmin lista sve korisnike, njihove organizacije, i masine unutar njih
+		 * admin i korisnik dobijaju masine iz svojih organizacija.
+		 */
 		try { 
+			List<String> help = new ArrayList<String>();
 			if (utgt.role.toLowerCase().equals("superadmin")) {
 				if (virtuelneMasine.getListaVirtuelnihMasina() != null && !virtuelneMasine.getListaVirtuelnihMasina().isEmpty()) {
-					return virtuelneMasine.getListaVirtuelnihMasina();
+					for (Korisnik korisnik : korisnici.getListaKorisnici()) {
+						for (String vmName : korisnik.getOrganizacija().getListaResursa()) {
+							if (!help.contains(vmName)) {
+								VirtuelnaMasina vm = virtuelneMasine.getMapaVirtuelnihMasina().get(vmName);
+								VMToOverview vmto = new VMToOverview();
+								vmto.ime = vm.getIme();
+								vmto.brojJezgara = vm.getBrojJezgara() + "";
+								vmto.diskovi = vm.getDiskovi();
+								vmto.gpu = vm.getGpu() + "";
+								vmto.ram = vm.getGpu() + "";
+								vmto.kategorjiaIme = vm.getKategorjia().getIme();
+								vmto.organisationName = korisnik.getOrganizacija().getIme();
+								System.out.println(korisnik.getOrganizacija().getIme());
+								help.add(vmto.ime);
+								
+								
+								vmsToReturn.add(vmto);
+							}
+						}
+					}
+					
+					return vmsToReturn;
 				}else {
 					return null;
 				}
 			}else { // korisnik i admin
+				System.out.println("Ovde trenutno ne ulazi.");
 				Korisnik korisnik = new Korisnik();
 				korisnik = korisnici.getMapaKorisnici().get(utgt.email);
 				if (korisnik.getOrganizacija().getListaResursa() == null) {
 					return null;
-				}else {
-					vms = getListOfVirtualMachines(korisnik.getOrganizacija().getListaResursa());
-					return vms;
+				}else { //vracam listu masina
+					for (String vmName : korisnik.getOrganizacija().getListaResursa()) {
+						VirtuelnaMasina vm = virtuelneMasine.getMapaVirtuelnihMasina().get(vmName);
+						VMToOverview vmto = new VMToOverview();
+						vmto.ime = vm.getIme();
+						vmto.brojJezgara = vm.getBrojJezgara() + "";
+						vmto.diskovi = vm.getDiskovi();
+						vmto.gpu = vm.getGpu() + "";
+						vmto.ram = vm.getGpu() + "";
+						vmto.kategorjiaIme = vm.getKategorjia().getIme();
+						vmto.organisationName = korisnik.getOrganizacija().getIme();
+						
+						vmsToReturn.add(vmto); 
+					}
+					
+					return vmsToReturn; 
 				}
 			}
 		} catch (Exception e) {
+			System.out.println(e);
 			System.out.println("Vraca null sto se ne bi smelo desiti. Overview/getAllVM");
 			return null;
 		}

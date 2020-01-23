@@ -5,7 +5,8 @@ Vue.component("pregled-vm", {
                 User: {},
                 users: null,
                 role: 'noRule',
-                machines: null
+                machines: null,
+                isSuperAdmin: false
         	}
     },
     template:`
@@ -73,7 +74,7 @@ Vue.component("pregled-vm", {
 				<th scope="col">Core number</th>
 				<th scope="col">RAM</th>
 				<th scope="col">GPU</th>
-				<th scope="col" v-if="this.role === 'superadmin'">Organisation name</th>
+				<th scope="col" v-if="isSuperAdmin == true">Organisation name</th>
 			</tr>
 		</thead>
 		<tbody>
@@ -83,7 +84,7 @@ Vue.component("pregled-vm", {
 				<td>{{ m.brojJezgara }}</td>
 				<td>{{ m.ram }}</td>
 				<td>{{ m.gpu }}</td>
-				<td v-if="this.role == 'superadmin'">{{ m.organisationName }}</td>
+				<td v-if="isSuperAdmin == true">{{ m.organisationName }}</td>
 			</tr>
 		</tbody>
 	</table>
@@ -245,6 +246,10 @@ Vue.component("pregled-vm", {
     mounted () {  //created 
     	var role = localStorage.getItem("role");
     	var email = localStorage.getItem("email");
+    	
+    	if (role == "superadmin") {
+			this.isSuperAdmin = true;
+		}
     	
     	axios
 		.post('rest/overview/getAllVM', {"role": role, "email": email})
