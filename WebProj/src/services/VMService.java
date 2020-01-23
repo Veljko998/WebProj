@@ -3,7 +3,9 @@
  */
 package services;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
@@ -18,6 +20,7 @@ import model.Korisnici;
 import model.Korisnik;
 import model.Organizacija;
 import model.Organizacije;
+import model.Tuple;
 import model.VM;
 import model.VirtuelnaMasina;
 import model.VirtuelneMasine;
@@ -108,8 +111,10 @@ public class VMService {
 		korisnici.UpisiKorisnike();
 		
 		ArrayList<String> diskovi = (ArrayList<String>)vma.disks;
+		
+		ArrayList<Tuple<LocalDateTime, LocalDateTime>> listaAktivnosti = new ArrayList<Tuple<LocalDateTime,LocalDateTime>>();
 
-		VirtuelnaMasina vMasina = new VirtuelnaMasina(vma.name, kategorija, diskovi, Integer.parseInt(vma.coreNumber), Integer.parseInt(vma.ram), Integer.parseInt(vma.gpu)); 
+		VirtuelnaMasina vMasina = new VirtuelnaMasina(vma.name, kategorija, diskovi, Integer.parseInt(vma.coreNumber), Integer.parseInt(vma.ram), Integer.parseInt(vma.gpu), listaAktivnosti); 
 		
 		System.out.println(vMasina);
 		

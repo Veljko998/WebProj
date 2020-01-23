@@ -41,14 +41,11 @@ public class GetData {
 	public boolean getKorisnici() {
 		Korisnici k = new Korisnici();
 		k.setPutanja();
-		List<Tuple<LocalDateTime, LocalDateTime>> lista = new ArrayList<Tuple<LocalDateTime, LocalDateTime>>();
 		//Korisnici k = new Korisnici("C:\\Users\\Ivana\\git\\WebProj\\WebProj\\WebContent\\korisnici.json");
 		Korisnik k1 = new Korisnik("email1", "lozinka1", "ime1", "prezime1",
-				new Organizacija(), Uloga.KORISNIK,
-				lista);
+				new Organizacija(), Uloga.KORISNIK);
 		Korisnik k2 = new Korisnik("email2", "lozinka2", "ime2", "prezime2",
-				new Organizacija(), Uloga.KORISNIK,
-				lista);
+				new Organizacija(), Uloga.KORISNIK);
 		k.dodajKorisnika(k1);
 		k.dodajKorisnika(k2);
 		k.UpisiKorisnike();

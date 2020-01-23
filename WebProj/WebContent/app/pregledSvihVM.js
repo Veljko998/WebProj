@@ -6,7 +6,8 @@ Vue.component("pregled-vm", {
                 users: null,
                 role: 'noRule',
                 machines: null,
-                isSuperAdmin: false
+                isSuperAdmin: false,
+                vmToEdit: null
         	}
     },
     template:`
@@ -44,8 +45,6 @@ Vue.component("pregled-vm", {
 		</div>
 	</div>
 	
-	
-	
 	<div class="row">
 		<div class="col">
 			<label for="inputEmail4">GPU capacity: </label>
@@ -59,8 +58,6 @@ Vue.component("pregled-vm", {
 			<input min="1" type="number" class="form-control" placeholder="To" id="inputGpuTo" v-on:click="myFunction()" v-on:keyup="myFunction()">
 		</div>
 	</div>
-	
-	
 	
 	<br>
 
@@ -87,8 +84,8 @@ Vue.component("pregled-vm", {
 				<td>{{ m.gpu }}</td>
 				<td v-if="isSuperAdmin == true">{{ m.organisationName }}</td>
 				<td>
-					<button :id="m.ime" type="button" class="btn btn-sm btn-secondary" v-on:click="editDisk();">Edit</button>
-					<button :id="m.ime" type="button" class="btn btn-sm btn-danger" v-on:click="deleteDisk(); myFunction();">Delete</button>
+					<button :id="m.ime" type="button" class="btn btn-sm btn-secondary" v-on:click="editVM();">Edit</button>
+					<button :id="m.ime" type="button" class="btn btn-sm btn-danger" v-on:click="deleteVM(); myFunction();">Delete</button>
 				</td>
 			</tr>
 		</tbody>
@@ -98,31 +95,32 @@ Vue.component("pregled-vm", {
 </div>
     `,
     methods: {
-    	editDisk: function(){
+    	editVM: function(){
     		console.log("You pressed edit button.")
-//    		var diskId = event.srcElement.id;
-//    		this.role = localStorage.getItem("role");
-//    		
-//    		axios
-//    		.post('rest/discService/getDiskByName', {"name": diskId})
-//    		.then(response => {
-//    			this.diskToEdit = response.data;
-//    			
-//    			localStorage.setItem("imeDiska", this.diskToEdit.ime);
-//    			localStorage.setItem("tipDiska", this.diskToEdit.tip);
-//    			localStorage.setItem("kapacitetDiska", this.diskToEdit.kapacitet);
-//    			localStorage.setItem("nazivVMDiska", this.diskToEdit.virtuelnaMasina);
-//    			
-//    			if (this.role == "admin" || this.role == "superadmin") {
-//    				router.push({path: "/izmenaDiska"});
-//				}else {
-//					console.log("Ulazi mi u deteljan pregled diska koji nisam jos uradio.");
-////					router.push({path: "/detaljanPregledDiska"});
-//				}
-//    		});
+    		var vmName = event.srcElement.id;
+    		
+    		axios
+    		.post('rest/VMService/getVMByName', {"name": vmName})
+    		.then(response => {
+    			this.vmToEdit = response.data;
+    			
+    			/*
+    			 * Define everything what we will need in /izmenaVM 
+    			 */
+//    			localStorage.setItem("imeVM", this.vmToEdit.ime);
+    			
+    			
+    			
+    			if (this.role == "admin" || this.role == "superadmin") {
+    				router.push({path: "/izmenaVM"});
+				}else {
+					console.log("Ulazi mi u deteljan pregled VM koji nisam jos uradio.");
+//					router.push({path: "/detaljanPregledVM"});
+				}
+    		});
     		
     	},
-    	deleteDisk: function(){
+    	deleteVM: function(){
     		var vmName = event.srcElement.id;
     		
     		axios
