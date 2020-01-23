@@ -3,16 +3,24 @@
  */
 package services;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.ws.rs.Consumes;
+import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
+import model.Disk;
+import model.Diskovi;
 import model.Korisnici;
 import model.Korisnik;
 import model.Organizacija;
 import model.Organizacije;
+import model.VirtuelneMasine;
 import model.enums.Uloga;
 import model.kendo.UserToGetData;
 import model.kendo.UserToRegister;
@@ -90,5 +98,18 @@ public class UserService {
 			System.out.println("Something went wrong in UserService/registerUser. returnniing false.");
 			return false;
 		}
+	}
+	
+	@GET
+	@Path("/getUser/{param}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Korisnik getUser(@PathParam("param") String mejl){
+		Korisnici k = new Korisnici();
+		k.setPutanja();
+		
+		if(k.UcitajKorisnike()){
+			return k.getKorisnik(mejl);
+		}
+		return null;
 	}
 }
