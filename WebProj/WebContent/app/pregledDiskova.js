@@ -54,6 +54,7 @@ Vue.component("pregled-diskova", {
 				<td>
 					<button :id="d.ime" type="button" class="btn btn-sm btn-secondary" v-on:click="editDisk();">Edit</button>
 					<button :id="d.ime" type="button" class="btn btn-sm btn-danger" v-on:click="deleteDisk();">Delete</button>
+					<button :id="d.ime" type="button" class="btn btn-sm btn-secondary" v-on:click="diskDetails();">Details</button>
 				</td>
 			</tr>
 		</tbody>
@@ -63,6 +64,11 @@ Vue.component("pregled-diskova", {
 </div>
     `,
     methods: {
+    	diskDetails: function() {
+    		console.log("Usli smo u pregled diskova. Ako radi obrisati ovaj komentar.");
+    		localStorage.setItem("imeDiska", event.srcElement.id);
+    		router.push({path: "/detaljiDiska"});
+    	},
     	editDisk: function(){
     		var diskId = event.srcElement.id;
     		this.role = localStorage.getItem("role");

@@ -46,7 +46,7 @@ Vue.component("izmena-vm", {
 					<!-- Select disk/s -->
 					<div class="input-group mb-4">
 						<div class="input-group-prepend">
-							<span class="input-group-text" id="inputGroup-sizing-default">Select new disks</span>
+							<span class="input-group-text" id="inputGroup-sizing-default">Available disks</span>
 						</div>
 						<select multiple class="form-control" id="resources" name="inputGroupSelect03" v-model="nis">
 							<option v-for="d in disks" :value="d">{{ d }}</option>

@@ -37,20 +37,87 @@ import model.kendo.VMToEdit;
 @Path("/VMService")
 public class VMService {
 	
-	//editVM
-	
 	@POST
 	@Path("/editVM")
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
 	/**
+	 * If admin:
+	 *   First change KORISNIK => OORGANIZACIJA => listaResursa(list if VM names)
+	 *   
+	 * Superadmin:
+	 *   List all users, their organisations, VM name list and in this list look for old VM name and replace with new.
+	 * 
+	 * Look for disk which is connected to old VM and replace with new.
+	 * Delete VM with old name and replace with new VM.
+	 * 
 	 * @param vme
 	 * @return true if VM is successfully edited and written. Else false.
 	 */
 	public boolean editVM(VMToEdit vme) {
-		//TODO: Do this method.
+		Korisnici korisnici = new Korisnici();
+		korisnici.setPutanja();
+		korisnici.UcitajKorisnike();
 		
-		return false;
+		Diskovi diskovi = new Diskovi();
+		diskovi.setPutanja();
+		diskovi.UcitajDiskove();
+		
+		VirtuelneMasine virtuelneMasine = new VirtuelneMasine();
+		virtuelneMasine.setPutanja();
+		virtuelneMasine.UcitajVirtuelneMasine();
+		
+		KategorijeVM kategorijeVM = new KategorijeVM();
+		kategorijeVM.setPutanja();
+		kategorijeVM.UcitajKategorijeVM();
+		
+		try {
+			if (vme.role.equals("admin")) {
+				for (Korisnik korisnik : korisnici.getListaKorisnici()) {
+					if (korisnik.getIme().equals(vme.email)) {
+						korisnik.getOrganizacija().getListaResursa().remove(vme.oldName);
+						korisnik.getOrganizacija().getListaResursa().add(vme.name);
+						break;
+					}
+				}
+				korisnici.UpisiKorisnike();
+				
+			}else { //superadmin
+				for (Korisnik korisnik : korisnici.getListaKorisnici()) {
+					for (String vmName : korisnik.getOrganizacija().getListaResursa()) {
+						if (vmName.equals(vme.oldName)) {
+							korisnik.getOrganizacija().getListaResursa().remove(vme.oldName);
+							korisnik.getOrganizacija().getListaResursa().add(vme.name);
+						}
+					}
+				}
+				korisnici.UpisiKorisnike();
+			}
+			
+			for (Disk disk : diskovi.getListaDiskovi()) {
+				if (disk.getVirtualnaMasina().equals(vme.oldName)) {
+					disk.setVirtualnaMasina(vme.name);
+					break;
+				}
+			}
+			diskovi.UpisiDiskove();
+			
+			for (VirtuelnaMasina virtuelnaMasina : virtuelneMasine.getListaVirtuelnihMasina()) {
+				if (virtuelnaMasina.getIme().equals(vme.oldName)) {
+					virtuelneMasine.getListaVirtuelnihMasina().remove(virtuelnaMasina);
+					
+					VM kategorija = kategorijeVM.getMapaKategorijeVM().get(vme.category);
+					
+					virtuelneMasine.getListaVirtuelnihMasina().add(new VirtuelnaMasina(vme.name, kategorija, (ArrayList<String>)vme.disks));
+				}
+			}
+			virtuelneMasine.UpisiVirtuelneMasine();
+			
+			return true;
+		} catch (Exception e) {
+			System.out.println("Ovde ne smemo da upadnemo. vmService/editVM. Poruka o gresci: " + e);
+			return false;
+		}
 	}
 	
 	@POST

@@ -86,6 +86,7 @@ Vue.component("pregled-vm", {
 				<td>
 					<button :id="m.ime" type="button" class="btn btn-sm btn-secondary" v-on:click="editVM();">Edit</button>
 					<button :id="m.ime" type="button" class="btn btn-sm btn-danger" v-on:click="deleteVM(); myFunction();">Delete</button>
+					<button :id="m.ime" type="button" class="btn btn-sm btn-secondary" v-on:click="vmDetails();">Details</button>
 				</td>
 			</tr>
 		</tbody>
@@ -95,6 +96,11 @@ Vue.component("pregled-vm", {
 </div>
     `,
     methods: {
+    	vmDetails: function() {
+    		console.log("Usli smo u pregled VM. Ako radi obrisati ovaj komentar.");
+    		localStorage.setItem("imeVM", event.srcElement.id);
+    		router.push({path: "/detaljiVM"});
+    	},
     	editVM: function(){
 //    		console.log("You pressed edit button.")
     		var vmName = event.srcElement.id;
