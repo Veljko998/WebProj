@@ -15,6 +15,8 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
+import model.Disk;
+import model.Diskovi;
 import model.KategorijeVM;
 import model.Korisnici;
 import model.Korisnik;
@@ -26,6 +28,7 @@ import model.VirtuelnaMasina;
 import model.VirtuelneMasine;
 import model.kendo.VMToAdd;
 import model.kendo.VMToDelete;
+import model.kendo.VMToEdit;
 
 /** 
  * @author Veljko
@@ -33,6 +36,75 @@ import model.kendo.VMToDelete;
  */
 @Path("/VMService")
 public class VMService {
+	
+	//editVM
+	
+	@POST
+	@Path("/editVM")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+	/**
+	 * @param vme
+	 * @return true if VM is successfully edited and written. Else false.
+	 */
+	public boolean editVM(VMToEdit vme) {
+		//TODO: Do this method.
+		
+		return false;
+	}
+	
+	@POST
+	@Path("/getDisks")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+	/**
+	 * get all disks from current VM and all disks which has not VM.
+	 * 
+	 * @param vme
+	 * @return
+	 */
+	public List<String> getDisks(VMToDelete vme) {
+		VirtuelneMasine virtuelneMasine = new VirtuelneMasine();
+		virtuelneMasine.setPutanja();
+		virtuelneMasine.UcitajVirtuelneMasine();
+		
+		Diskovi diskovi = new Diskovi();
+		diskovi.setPutanja();
+		diskovi.UcitajDiskove();
+		
+		VirtuelnaMasina vm = virtuelneMasine.getVirtuelnaMasina(vme.name);
+		
+		List<String> disks = new ArrayList<String>();
+		disks.addAll(vm.getDiskovi());
+		
+		for (Disk disk : diskovi.getListaDiskovi()) {
+			if (disk.getVirtualnaMasina() == null) {
+				disks.add(disk.getIme());
+			}
+		}
+		
+		return disks;
+	}
+	
+	@POST
+	@Path("/getVMByName")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+	/**
+	 * @param vme
+	 * @return VirtualMachine if exists. Else return null.
+	 */
+	public VirtuelnaMasina getVMByName(VMToDelete vme) {
+		VirtuelneMasine virtuelneMasine = new VirtuelneMasine();
+		virtuelneMasine.setPutanja();
+		virtuelneMasine.UcitajVirtuelneMasine();
+		
+		VirtuelnaMasina vm = new VirtuelnaMasina();
+		
+		if ((vm = virtuelneMasine.getMapaVirtuelnihMasina().get(vme.name)) != null) {
+			return vm;
+		}return null;
+	}
 	
 	@POST
 	@Path("/deleteVM")
@@ -114,7 +186,7 @@ public class VMService {
 		
 		ArrayList<Tuple<LocalDateTime, LocalDateTime>> listaAktivnosti = new ArrayList<Tuple<LocalDateTime,LocalDateTime>>();
 
-		VirtuelnaMasina vMasina = new VirtuelnaMasina(vma.name, kategorija, diskovi, Integer.parseInt(vma.coreNumber), Integer.parseInt(vma.ram), Integer.parseInt(vma.gpu), listaAktivnosti); 
+		VirtuelnaMasina vMasina = new VirtuelnaMasina(vma.name, kategorija, diskovi, kategorija.getBrojJezgara(), kategorija.getRamMemory(), kategorija.getGpu(), listaAktivnosti); 
 		
 		System.out.println(vMasina);
 		

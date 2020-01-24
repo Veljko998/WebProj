@@ -96,28 +96,28 @@ Vue.component("pregled-vm", {
     `,
     methods: {
     	editVM: function(){
-    		console.log("You pressed edit button.")
-//    		var vmName = event.srcElement.id;
-//    		
-//    		axios
-//    		.post('rest/VMService/getVMByName', {"name": vmName})
-//    		.then(response => {
-//    			this.vmToEdit = response.data;
-//    			
-//    			/*
-//    			 * Define everything what we will need in /izmenaVM 
-//    			 */
-//    			localStorage.setItem("imeVM", this.vmToEdit.ime);
-////    			localStorage.setItem("VM", this.vmToEdit.);
-//    			
-//    			
-//    			if (this.role == "admin" || this.role == "superadmin") {
-//    				router.push({path: "/izmenaVM"});
-//				}else {
-//					console.log("Ulazi mi u deteljan pregled VM koji nisam jos uradio.");
-////					router.push({path: "/detaljanPregledVM"});
-//				}
-//    		});
+//    		console.log("You pressed edit button.")
+    		var vmName = event.srcElement.id;
+   		
+    		axios
+    		.post('rest/VMService/getVMByName', {"name": vmName})
+    		.then(response => {
+    			this.vmToEdit = response.data;
+    			
+    			/*
+    			 * Define everything what we will need in /izmenaVM 
+    			 */
+    			localStorage.setItem("imeVM", this.vmToEdit.ime);
+//    			localStorage.setItem("VM", this.vmToEdit.);
+    			
+    			
+    			if (this.role == "admin" || this.role == "superadmin") {
+    				router.push({path: "/izmenaVM"});
+				}else {
+					console.log("Ulazi mi u deteljan pregled VM koji nisam jos uradio.");
+//					router.push({path: "/detaljanPregledVM"});
+				}
+    		});
     		
     	},
     	deleteVM: function(){

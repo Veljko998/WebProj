@@ -196,11 +196,12 @@ public class DiscService {
 	@GET
 	@Path("/checkIfDiscExist/{param1}")
 	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
 	/**
 	 * @param discName
-	 * @return true if there is no disc with name discName
+	 * @return true if there is disc with name discName
 	 */
-	public boolean getJustUsers2(@PathParam("param1") String discName){
+	public boolean checkIfDiscExist(@PathParam("param1") String discName){
 		Diskovi diskovi = new Diskovi();
 		diskovi.setPutanja();
 		diskovi.UcitajDiskove();
@@ -220,6 +221,7 @@ public class DiscService {
 		diskovi.UcitajDiskove();
 		
 		Disk disk = new Disk();
+		
 		disk.setIme(dta.name);
 		disk.setKapacitet(Integer.parseInt(dta.capacity));
 		disk.setTip(TipDiska.valueOf(dta.type));

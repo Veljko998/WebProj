@@ -68,7 +68,7 @@ Vue.component("izmena-diska", {
 					<p class="errorMessageDiscExists" v-if="this.showErrorDiscExists == true">Disk sa tim imenom vec postoji !!!</br></p>
 					
 					<div class="form-group ">
-						<button type="button" class="btn btn-primary btn-lg btn-block login-button" v-on:click="emptyField(); discAlreadyExists();">Edit Disc</button>
+						<button type="button" class="btn btn-primary btn-lg btn-block login-button" v-on:click="emptyField();">Edit Disc</button>
 					</div>
 				</div>
 			</div>
@@ -95,27 +95,33 @@ Vue.component("izmena-diska", {
 			this.showErrorDiscExists = false;
 			this.canAddDisc = false;
 			
-			console.log("Printujemo sve");
-			console.log(this.Disc.name);
-			console.log(this.Disc.capacity);
-			console.log(this.Disc.VMName);
-			console.log(this.Disc.type);
-			
 			if((this.Disc.name !== '' && this.Disc.name != undefined) && 
 					(this.Disc.capacity !== '' && this.Disc.capacity != undefined && this.Disc.capacity > 0) &&
-					(this.Disc.VMName !== '' && this.Disc.VMName != undefined && this.Disc.VMName !== 'Choose...') &&
 					(this.Disc.type !== '' && this.Disc.type != undefined && this.Disc.type !== 'Choose...')){
 					this.showErrorEmptyField = false;
 					console.log("Sva polja su popunjena.");
+					this.canAddDisc = true;
+					this.discAlreadyExists.call();
 				}else{
 					console.log("Nisu sva polja popunjena.");
 					this.showErrorEmptyField = true;
+					this.canAddDisc = false;
 				}
 		},
-		discAlreadyExists: function(){
-			this.canAddDisc = true;
-			this.editDisc.call();
-		},
+//		discAlreadyExists: function(){
+////			this.canAddDisc = true;
+//			var path = "rest/discService/checkIfDiscExist/" + this.Disc.VMName;
+//			axios
+//			.get(path)
+//			.then(response => {
+//				console.log("Smem li menjati disk ->" + response.data);
+//				if (response.data == false) {
+//					console.log("Ne postoji sa datim nazivom pa mozemo ici dalje.")
+//					this.editDisc.call();
+//				}
+//			})
+//			
+//		},
 		//SAME AS addDisk()
 		editDisc: function(){
 			console.log("Dosli smo i dovde: " + this.canAddDisc );

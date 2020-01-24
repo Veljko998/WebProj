@@ -34,7 +34,8 @@ Vue.component("dodaj-vm" ,{
 						</div>
 						<input type="text" class="form-control" name="name" id="name" placeholder="Enter Name" v-model="VM.name"/>
 					</div>
-
+					
+					<!--
 					<!-- input field for core number -->
 					<div class="input-group mb-4">
 						<div class="input-group-prepend">
@@ -58,6 +59,7 @@ Vue.component("dodaj-vm" ,{
 						</div>
 						<input type="number" min="1" class="form-control" name="coreNumber" id="coreNumber" placeholder="Enter GPU" v-model="VM.gpu"/>
 					</div>
+					-->
 					
 					<!-- select category from drop down menu -->
 					<div class="input-group mb-4">
@@ -165,9 +167,10 @@ Vue.component("dodaj-vm" ,{
 			this.canAddVM = false;
 			
 			if((this.VM.name !== '' && this.VM.name != undefined) && 
-			(this.VM.coreNumber !== '' && this.VM.coreNumber != undefined && this.VM.coreNumber > 0) &&
-			(this.VM.ram !== '' && this.VM.ram != undefined && this.VM.ram > 0) &&
-			(this.VM.gpu !== '' && this.VM.gpu != undefined && this.VM.gpu > 0) &&
+//			(this.VM.coreNumber !== '' && this.VM.coreNumber != undefined && this.VM.coreNumber > 0) &&
+//			(this.VM.ram !== '' && this.VM.ram != undefined && this.VM.ram > 0) &&
+//			(this.VM.gpu !== '' && this.VM.gpu != undefined && this.VM.gpu > 0) &&
+			(this.VM.vmCategory !== '' && this.VM.vmCategory != undefined && this.VM.vmCategory > 0 && this.VM.vmCategory != null) &&		
 			(this.VM.vmOrganisationName !== '' && this.VM.vmOrganisationName != undefined && this.VM.vmOrganisationName !== 'Choose...')) 
 			{
 				if (this.role == "superadmin" && this.VM.vmOrganisationName !== '' && this.VM.vmOrganisationName != undefined && this.VM.vmOrganisationName !== 'Choose...') {
@@ -217,7 +220,7 @@ Vue.component("dodaj-vm" ,{
 				}
 				
 				axios
-            	.post('rest/VMService/addVM', {"name": this.VM.name, "coreNumber": this.VM.coreNumber, "ram": this.VM.ram, "gpu": this.VM.gpu, "categoryName": this.VM.vmCategory, "organisationName": this.VM.vmOrganisationName, "disks": this.nis})
+            	.post('rest/VMService/addVM', {"name": this.VM.name, "categoryName": this.VM.vmCategory, "organisationName": this.VM.vmOrganisationName, "disks": this.nis})
             	.then(response => {
             		var VMSuccesfullyRegistered = response.data;
             		console.log("VM uspesno upisan? : " + VMSuccesfullyRegistered);
