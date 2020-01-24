@@ -15,8 +15,10 @@ Vue.component("korisnik-page", {
 			<button class="btn btn-sm btn-outline-secondary" type="button"  v-on:click="showPregledKor();">Pregled korisnika</button>
 			<button class="btn btn-sm btn-outline-secondary" type="button"  v-on:click="showPregledDiskova();">Pregled diskova</button>
 		</div>
-		
-		<button class="btn btn-outline-success my-2 my-sm-0" type="button" v-on:click="removeRole();">Logout</button>
+		<div class="div-inline">
+			<button class="btn btn-outline-success my-2 my-sm-0" type="button" v-on:click="showPersonalInfo();">Moj profil</button>
+			<button class="btn btn-outline-success my-2 my-sm-0" type="button" v-on:click="removeRole();">Logout</button>
+		</div>
 	</nav>
 	</br>
 </div>
@@ -38,6 +40,9 @@ Vue.component("korisnik-page", {
 		},
 		showPregledDiskova: function(){
 			router.push({path: "/pregledDiskova"});
+		},
+		showPersonalInfo: function(){
+			router.push({path: "/izmeniLicnePodatke"});
 		}
 		
 	},

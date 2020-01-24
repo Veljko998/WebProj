@@ -19,8 +19,10 @@ Vue.component("superadministrator-page", {
 			<button class="btn btn-sm btn-outline-secondary" type="button"  v-on:click="showOrganisations();">Pregled organizacija</button>
 			
 		</div>
-		
-		<button class="btn btn-outline-success my-2 my-sm-0" type="button" v-on:click="removeRole();">Logout</button>
+		<div class="div-inline">
+			<button class="btn btn-outline-success my-2 my-sm-0" type="button" v-on:click="showPersonalInfo();">Moj profil</button>
+			<button class="btn btn-outline-success my-2 my-sm-0" type="button" v-on:click="removeRole();">Logout</button>
+		</div>
 	</nav>
 	</br>
 	<pregled-korisnika v-if="showUsersTable"></pregled-korisnika>
@@ -48,6 +50,9 @@ Vue.component("superadministrator-page", {
 		},
 		showOrganisations: function(){
 			this.showOrganisationsTable = !this.showOrganisationsTable;
+		},
+		showPersonalInfo: function(){
+			router.push({path: "/izmeniLicnePodatke"});
 		}
 	},
 });

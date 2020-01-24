@@ -11,6 +11,7 @@ const DodajDisk = {template: '<dodaj-disk></dodaj-disk>'}
 const DodajOrganizaciju = {template: '<dodaj-organizaciju></dodaj-organizaciju>'}
 const IzmenaDiska = {template: '<izmena-diska></izmena-diska>'}
 const DodajVM = {template: '<dodaj-vm></dodaj-vm>'}
+const IzmeniPodatke = {template: '<izmeni-podatke></izmeni-podatke>'}
 
 const router = new VueRouter({
 	  mode: 'hash',
@@ -27,7 +28,8 @@ const router = new VueRouter({
 	    { path: '/dodajDisk', component: DodajDisk},
 	    { path: '/dodajOrganizaciju', component: DodajOrganizaciju},
 	    { path: '/izmenaDiska', component: IzmenaDiska},
-	    { path: '/dodajVM', component: DodajVM}
+	    { path: '/dodajVM', component: DodajVM},
+	    { path: '/izmeniLicnePodatke', component: IzmeniPodatke}
 //	    { path: '/', component: }
 	  ]
 });
