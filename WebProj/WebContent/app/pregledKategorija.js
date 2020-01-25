@@ -3,7 +3,7 @@ Vue.component("pregled-kategorija", {
         	return {
         		title: 'Pregled kategorija',
                 categories: null,
-                vmToEdit: null
+                catToEdit: null
         	}
     },
     template:`
@@ -86,7 +86,7 @@ Vue.component("pregled-kategorija", {
 		</tbody>
 	</table>
 	
-	<button type="button" class="btn btn-lg btn-primary" v-on:click="addNewCategory();">Add VM</button>
+	<button type="button" class="btn btn-lg btn-primary" v-on:click="addNewCategory();">Add Category</button>
 </div>
     `,
     methods: {
@@ -98,27 +98,23 @@ Vue.component("pregled-kategorija", {
     	editCategory: function(){
     		//TODO: 
     		console.log("You pressed edit button.")
-//    		var vmName = event.srcElement.id;
-//   		
-//    		axios
-//    		.post('rest/VMService/getVMByName', {"name": vmName})
-//    		.then(response => {
-//    			this.vmToEdit = response.data;
-//    			
-//    			/*
-//    			 * Define everything what we will need in /izmenaVM 
-//    			 */
-//    			localStorage.setItem("imeVM", this.vmToEdit.ime);
-////    			localStorage.setItem("VM", this.vmToEdit.);
-//    			
-//    			
-//    			if (this.role == "admin" || this.role == "superadmin") {
-//    				router.push({path: "/izmenaVM"});
-//				}else {
-//					console.log("Ulazi mi u deteljan pregled VM koji nisam jos uradio.");
-////					router.push({path: "/detaljanPregledVM"});
-//				}
-//    		});
+    		var catName = event.srcElement.id;
+   		
+    		axios
+    		.post('rest/categoryService/getCategoryByName', {"name": catName})
+    		.then(response => {
+    			this.catToEdit = response.data;
+    			
+    			/*
+    			 * Define everything what we will need in /izmenaKategorije
+    			 */
+    			localStorage.setItem("imeKategorije", this.catToEdit.ime);
+    			localStorage.setItem("jezgraKategorije", this.catToEdit.brojJezgara);
+    			localStorage.setItem("ramKategorije", this.catToEdit.ramMemory);
+    			localStorage.setItem("gpuKategorije", this.catToEdit.gpu);
+    			
+				router.push({path: "/izmenaKategorije"});
+    		});
     		
     	},
     	deleteCategory: function(){
@@ -287,8 +283,7 @@ Vue.component("pregled-kategorija", {
         	}
     	},
     	addNewCategory: function() {
-    		//TODO:
-//    		router.push({path: "/dodajKategoriju"});
+    		router.push({path: "/dodajKategoriju"});
     	},
     	loadCategories: function() {
     		console.log("CITAMO KATEGORIJE.");

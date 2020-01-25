@@ -107,4 +107,10 @@ public class Disk {
 	public void setVirtualnaMasina(String virtualnaMasina) {
 		this.virtualnaMasina = virtualnaMasina;
 	}
+	
+	@Override
+	public String toString() {
+		return "Disk [ime=" + ime + ", tip=" + tip + ", kapacitet=" + kapacitet + ", virtualnaMasina=" + virtualnaMasina
+				+ "]";
+	}
 }

@@ -187,5 +187,9 @@ public class VirtuelnaMasina {
 		this.listaAktivnosti = listaAktivnosti;
 	}
 	
-	
+	@Override
+	public String toString() {
+		return "VirtuelnaMasina [ime=" + ime + ", kategorjia=" + kategorjia + ", brojJezgara=" + brojJezgara + ", ram="
+				+ ram + ", gpu=" + gpu + ", diskovi=" + diskovi + ", listaAktivnosti=" + listaAktivnosti + "]";
+	}
 }

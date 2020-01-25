@@ -88,5 +88,10 @@ public class Korisnik {
 	public void setUloga(Uloga uloga) {
 		this.uloga = uloga;
 	}
-	
+
+	@Override
+	public String toString() {
+		return "Korisnik [email=" + email + ", lozinka=" + lozinka + ", ime=" + ime + ", prezime=" + prezime
+				+ ", organizacija=" + organizacija + ", uloga=" + uloga + "]";
+	}
 }

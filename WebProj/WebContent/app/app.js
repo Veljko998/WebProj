@@ -17,6 +17,8 @@ const DetaljiDiska = {template: '<detalji-diska></detalji-diska>'}
 const DetaljiVM = {template: "<detalji-vm></detalji-vm>"}
 const DetaljiKategorije = {template: "<detalji-kategorije></detalji-kategorije>"}
 const PregledKategorija = {template: '<pregled-kategorija></pregled-kategorija>'}
+const DodajKategoriju = {template: '<dodaj-kategoriju></dodaj-kategoriju>'}
+const IzmenaKategorije = {template: '<izmena-kategorije></izmena-kategorije>'}
 
 const router = new VueRouter({
 	  mode: 'hash',
@@ -39,7 +41,9 @@ const router = new VueRouter({
 	    { path: '/detaljiDiska', component: DetaljiDiska},
 	    { path: '/detaljiVM', component: DetaljiVM},
 	    { path: '/detaljiKategorije', component: DetaljiKategorije},
-	    { path: '/pregledKategorija', component: PregledKategorija}
+	    { path: '/pregledKategorija', component: PregledKategorija},
+	    { path: '/dodajKategoriju', component: DodajKategoriju},
+	    { path: '/izmenaKategorije', component: IzmenaKategorije}
 //	    { path: '/', component: }
 	  ]
 });

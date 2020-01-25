@@ -75,4 +75,10 @@ public class Organizacija {
 	public void setListaResursa(List<String> listaResursa) {
 		this.listaResursa = listaResursa;
 	}
+
+	@Override
+	public String toString() {
+		return "Organizacija [ime=" + ime + ", opis=" + opis + ", logo=" + logo + ", listaKorisnika=" + listaKorisnika
+				+ ", listaResursa=" + listaResursa + "]";
+	}
 }

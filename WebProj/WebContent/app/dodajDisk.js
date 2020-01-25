@@ -79,15 +79,8 @@ Vue.component("dodaj-disk" ,{
 			this.showErrorDiscExists = false;
 			this.canAddDisc = false;
 			
-			console.log("Printujemo sve");
-			console.log(this.Disc.name);
-			console.log(this.Disc.capacity);
-			console.log(this.Disc.VMName);
-			console.log(this.Disc.type);
-			
 			if((this.Disc.name !== '' && this.Disc.name != undefined) && 
 					(this.Disc.capacity !== '' && this.Disc.capacity != undefined && this.Disc.capacity > 0) &&
-//					(this.Disc.VMName !== '' && this.Disc.VMName != undefined && this.Disc.VMName !== 'Choose...') &&
 					(this.Disc.type !== '' && this.Disc.type != undefined && this.Disc.type !== 'Choose...')){
 					this.showErrorEmptyField = false;
 					console.log("Sva polja su popunjena.");
@@ -106,7 +99,7 @@ Vue.component("dodaj-disk" ,{
 				.then(response => {
 					if (response.data == false || response.data == 'false') {
 						this.canAddDisc = true;
-						console.log("Dodajemo novog korisnika");
+						console.log("Dodajemo novi disk..");
 						this.addDisc.call();
 					}
 				});

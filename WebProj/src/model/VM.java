@@ -119,4 +119,9 @@ public class VM {
 	public void setGpu(int gpu) {
 		this.gpu = gpu;
 	}
+	
+	@Override
+	public String toString() {
+		return "VM [ime=" + ime + ", brojJezgara=" + brojJezgara + ", ramMemory=" + ramMemory + ", gpu=" + gpu + "]";
+	}
 }
