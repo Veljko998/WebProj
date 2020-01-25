@@ -5,7 +5,8 @@ Vue.component("superadministrator-page", {
 			loading: true,
             errored: false,
             showUsersTable: false,
-            showOrganisationsTable: false
+            showOrganisationsTable: false,
+            showCategoriesTable: false
 		}
 	},
 	template:
@@ -17,6 +18,7 @@ Vue.component("superadministrator-page", {
 			<button class="btn btn-sm btn-outline-secondary" type="button"  v-on:click="showPregledKor();">Pregled korisnika</button>
 			<button class="btn btn-sm btn-outline-secondary" type="button"  v-on:click="showPregledDiskova();">Pregled diskova</button>
 			<button class="btn btn-sm btn-outline-secondary" type="button"  v-on:click="showOrganisations();">Pregled organizacija</button>
+			<button class="btn btn-sm btn-outline-secondary" type="button"  v-on:click="showCategories();">Pregled Kategorija</button>
 			
 		</div>
 		<div class="div-inline">
@@ -27,10 +29,14 @@ Vue.component("superadministrator-page", {
 	</br>
 	<pregled-korisnika v-if="showUsersTable"></pregled-korisnika>
 	<pregled-organizacija v-if="showOrganisationsTable"></pregled-organizacija>
+	<pregled-kategorija v-if="showCategoriesTable"></pregled-kategorija>
 	
 </div>
 		`,
 	methods: {
+		showCategories: function() {
+			this.showCategoriesTable = !this.showCategoriesTable;
+		},
 		doNothing: function(){
 			someMessage = localStorage.getItem('role');
 			console.log(someMessage);

@@ -15,6 +15,8 @@ const IzmeniPodatke = {template: '<izmeni-podatke></izmeni-podatke>'}
 const IzmenaVM = {template: '<izmena-vm></izmena-vm>'}
 const DetaljiDiska = {template: '<detalji-diska></detalji-diska>'}
 const DetaljiVM = {template: "<detalji-vm></detalji-vm>"}
+const DetaljiKategorije = {template: "<detalji-kategorije></detalji-kategorije>"}
+const PregledKategorija = {template: '<pregled-kategorija></pregled-kategorija>'}
 
 const router = new VueRouter({
 	  mode: 'hash',
@@ -35,7 +37,9 @@ const router = new VueRouter({
 	    { path: '/izmeniLicnePodatke', component: IzmeniPodatke},
 	    { path: '/izmenaVM', component: IzmenaVM},
 	    { path: '/detaljiDiska', component: DetaljiDiska},
-	    { path: '/detaljiVM', component: DetaljiVM}
+	    { path: '/detaljiVM', component: DetaljiVM},
+	    { path: '/detaljiKategorije', component: DetaljiKategorije},
+	    { path: '/pregledKategorija', component: PregledKategorija}
 //	    { path: '/', component: }
 	  ]
 });
