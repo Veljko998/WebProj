@@ -8,6 +8,7 @@ Vue.component("izmeni-podatke" ,{
 			User: {},
 			showErrorEmptyField: false,
 			showErrorPassword: false,
+			showErrorEmailExists: false,
 			loaded: false,
 			lozinka1: '',
 			lozinka2: ''
@@ -69,11 +70,12 @@ Vue.component("izmeni-podatke" ,{
 						<div class="input-group-prepend">
 							<span class="input-group-text" id="inputGroup-sizing-default">Confirm password</span>
 						</div>
-						<input type="password" class="form-control" name="password" id="password" placeholder="Potvrdite lozinku" v-model="lozinka2"/>
+						<input type="password" class="form-control" name="passwordConf" id="passwordConf" placeholder="Potvrdite lozinku" v-model="lozinka2"/>
 					</div>
 					
 					<p class="errorMessageRegisterUser" v-if="this.showErrorEmptyField === true">Sva polja moraju biti popunjena!</br></p>
 					<p class="errorMessageRegisterUser" v-if="this.showErrorPassword === true">Lozinka nije ista!</p>
+					<p class="errorMessageRegisterUser" v-if="this.showErrorEmailExists === true">Korisnik sa ovim mejlom vec postoji!</p>
 					
 					<div class="form-group ">
 						<button type="button" class="btn btn-primary btn-lg btn-block login-button" v-on:click="changeData()">Izmeni podatke</button>
@@ -85,30 +87,48 @@ Vue.component("izmeni-podatke" ,{
 </div>
 	`,
 	methods: {
-		changeData: function(){
+		userExists: function(){
+			this.role = localStorage.getItem('role');
+			this.email = localStorage.getItem('email');
+			var path = 'rest/userService/userAlreadyExists/' + this.email + '/' + this.User.email
+	    
+			axios
+	    		.get(path)
+	    		.then(response => {
+	    			this.showErrorEmailExists = response.data
+	    		});
+		},
+		
+		checkData: function(){
 			if((this.User.ime !== '' && this.User.ime !== undefined) && 
-				(this.User.prezime !== '' && this.User.prezime !== undefined) &&
-				(this.User.email !== '' && this.User.email !== undefined) &&
-				(this.lozinka1 !== '' && this.lozinka1 !== undefined) &&
-				(this.lozinka2 !== '' && this.lozinka2 !== undefined)){
-				this.showErrorEmptyField = false;
-				
-				if(this.lozinka2 !== this.lozinka1){
-					this.showErrorPassword = true;
-					this.lozinka1 = '';
-					this.lozinka2 = '';
+					(this.User.prezime !== '' && this.User.prezime !== undefined) &&
+					(this.User.email !== '' && this.User.email !== undefined) &&
+					(this.lozinka1 !== '' && this.lozinka1 !== undefined) &&
+					(this.lozinka2 !== '' && this.lozinka2 !== undefined)){
+					this.showErrorEmptyField = false;
+					
+					this.userExists.call();
+					
+					if(this.lozinka2 !== this.lozinka1){
+						this.showErrorPassword = true;
+						this.lozinka1 = '';
+						this.lozinka2 = '';
+					}
+					else{
+						this.showErrorPassword = false;
+					}
 				}
 				else{
-					this.showErrorPassword = false;
+					this.showErrorEmptyField = true;
 				}
-			}
-			else{
-				this.showErrorEmptyField = true;
-			}
-				
-			if(this.showErrorPassword === false && this.showErrorEmptyField === false){
-				console.log("evo radi");
-			}
+					
+				if(this.showErrorPassword === false && this.showErrorEmptyField === false && this.showErrorEmailExists === false){
+					console.log("evo ovo moze");
+				}
+		},
+		
+		changeData: function(){
+			this.checkData.call();
 
 		}
 	},

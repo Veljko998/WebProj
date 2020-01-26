@@ -112,4 +112,23 @@ public class UserService {
 		}
 		return null;
 	}
+	
+	@GET
+	@Path("/userAlreadyExists/{param1}/{param2}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public boolean userAlreadyExists(@PathParam("param1") String mejl, @PathParam("param2") String unetiMejl){
+		if(mejl.equals(unetiMejl)){
+			return false; //korisnik je ostavio svoj mejl
+		}
+		Korisnici k = new Korisnici();
+		k.setPutanja();
+		
+		if(k.UcitajKorisnike()){
+			if(k.getMapaKorisnici().containsKey(unetiMejl)){
+				return true;
+			}
+		}
+		return false;
+		
+	}
 }
