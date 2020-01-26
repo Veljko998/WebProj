@@ -9,7 +9,8 @@ Vue.component("izmeni-podatke" ,{
 			showErrorEmptyField: false,
 			showErrorPassword: false,
 			loaded: false,
-			lozinkaPonovo: ''
+			lozinka1: '',
+			lozinka2: ''
 		}
 	},
 	template: 
@@ -19,7 +20,7 @@ Vue.component("izmeni-podatke" ,{
 		<div class="col-md-8">
 			<div class="card">
 				<div class="card-header">
-					Register
+					Moj profil
 				</div>
 				<div class="card-body">
 
@@ -60,7 +61,7 @@ Vue.component("izmeni-podatke" ,{
 						<div class="input-group-prepend">
 							<span class="input-group-text" id="inputGroup-sizing-default">Lozinka:</span>
 						</div>
-						<input type="password" class="form-control" name="password" id="password" v-model:value="User.lozinka"/>
+						<input type="password" class="form-control" name="password" id="password" placeholder="Unesite staru ili novu lozinku" v-model="lozinka1"/>
 					</div>
 
 					<!-- confirm password -->
@@ -68,11 +69,11 @@ Vue.component("izmeni-podatke" ,{
 						<div class="input-group-prepend">
 							<span class="input-group-text" id="inputGroup-sizing-default">Confirm password</span>
 						</div>
-						<input type="confirm_password" class="form-control" name="password" id="password" v-model:value="lozinkaPonovo"/>
+						<input type="password" class="form-control" name="password" id="password" placeholder="Potvrdite lozinku" v-model="lozinka2"/>
 					</div>
 					
 					<p class="errorMessageRegisterUser" v-if="this.showErrorEmptyField === true">Sva polja moraju biti popunjena!</br></p>
-					<p class="errorMessageRegisterUser" v-if="this.showErrorPassword === true">Password nije isti!</p>
+					<p class="errorMessageRegisterUser" v-if="this.showErrorPassword === true">Lozinka nije ista!</p>
 					
 					<div class="form-group ">
 						<button type="button" class="btn btn-primary btn-lg btn-block login-button" v-on:click="changeData()">Izmeni podatke</button>
@@ -85,13 +86,33 @@ Vue.component("izmeni-podatke" ,{
 	`,
 	methods: {
 		changeData: function(){
-			
-			console.log("pass	" + this.User.lozinka);
-			console.log("ponov	" + this.lozinkaPonovo);
+			if((this.User.ime !== '' && this.User.ime !== undefined) && 
+				(this.User.prezime !== '' && this.User.prezime !== undefined) &&
+				(this.User.email !== '' && this.User.email !== undefined) &&
+				(this.lozinka1 !== '' && this.lozinka1 !== undefined) &&
+				(this.lozinka2 !== '' && this.lozinka2 !== undefined)){
+				this.showErrorEmptyField = false;
+				
+				if(this.lozinka2 !== this.lozinka1){
+					this.showErrorPassword = true;
+					this.lozinka1 = '';
+					this.lozinka2 = '';
+				}
+				else{
+					this.showErrorPassword = false;
+				}
+			}
+			else{
+				this.showErrorEmptyField = true;
+			}
+				
+			if(this.showErrorPassword === false && this.showErrorEmptyField === false){
+				console.log("evo radi");
+			}
 
 		}
 	},
-	mounted () {  //created 
+	mounted () {  
 		this.role = localStorage.getItem('role');
 		this.email = localStorage.getItem('email');
 		var path = 'rest/userService/getUser/' + this.email
@@ -103,6 +124,6 @@ Vue.component("izmeni-podatke" ,{
     		});
 		
 		this.loaded = true;
-		this.lozinkaPonovo = this.User.lozinka;
+		
     },
 });
