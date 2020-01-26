@@ -16,12 +16,15 @@ import javax.ws.rs.core.MediaType;
 
 import model.Disk;
 import model.Diskovi;
+import model.KategorijeVM;
 import model.Korisnici;
 import model.Korisnik;
 import model.Organizacija;
 import model.Organizacije;
+import model.VM;
 import model.VirtuelneMasine;
 import model.enums.Uloga;
+import model.kendo.CategoryToAdd;
 import model.kendo.UserToGetData;
 import model.kendo.UserToRegister;
 
@@ -130,5 +133,31 @@ public class UserService {
 		}
 		return false;
 		
+	}
+	
+	@POST
+	@Path("/addUser")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+	public boolean addUser(UserToRegister newUser) {
+		Korisnici k = new Korisnici();
+		k.setPutanja();
+		if(!k.UcitajKorisnike()){
+			return false;
+		}
+		
+		Organizacije organizacije = new Organizacije();
+		organizacije.setPutanja();
+		if(!organizacije.UcitajOrganizacije()){
+			return false;
+		}
+		
+		Organizacija organizacija = organizacije.getMapaOrganizacije().get(newUser.organisationName);
+		Korisnik noviKorisnik = new Korisnik(newUser.email, newUser.password, newUser.name, newUser.surname, organizacija, Uloga.valueOf(newUser.role.toUpperCase()));
+		
+		k.dodajKorisnika(noviKorisnik);
+		k.UpisiKorisnike();
+		
+		return true;
 	}
 }

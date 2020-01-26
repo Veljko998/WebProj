@@ -11,7 +11,8 @@ Vue.component("izmeni-podatke" ,{
 			showErrorEmailExists: false,
 			loaded: false,
 			lozinka1: '',
-			lozinka2: ''
+			lozinka2: '',
+			showErrorFailAdd: false
 		}
 	},
 	template: 
@@ -76,9 +77,10 @@ Vue.component("izmeni-podatke" ,{
 					<p class="errorMessageRegisterUser" v-if="this.showErrorEmptyField === true">Sva polja moraju biti popunjena!</br></p>
 					<p class="errorMessageRegisterUser" v-if="this.showErrorPassword === true">Lozinka nije ista!</p>
 					<p class="errorMessageRegisterUser" v-if="this.showErrorEmailExists === true">Korisnik sa ovim mejlom vec postoji!</p>
+					<p class="errorMessageRegisterUser" v-if="this.showErrorFailAdd === true">Izmena podataka nije uspela!</p>
 					
 					<div class="form-group ">
-						<button type="button" class="btn btn-primary btn-lg btn-block login-button" v-on:click="changeData()">Izmeni podatke</button>
+						<button type="button" class="btn btn-primary btn-lg btn-block login-button" v-on:click="checkData()">Izmeni podatke</button>
 					</div>
 				</div>
 			</div>
@@ -124,11 +126,23 @@ Vue.component("izmeni-podatke" ,{
 					
 				if(this.showErrorPassword === false && this.showErrorEmptyField === false && this.showErrorEmailExists === false){
 					console.log("evo ovo moze");
+					this.changeData.call();
 				}
 		},
 		
 		changeData: function(){
-			this.checkData.call();
+			localStorage.setItem('email', this.User.email);
+			
+			axios
+        	.post('rest/userService/addUser', {"name": this.User.ime, "surname": this.User.prezime, "email": this.User.email, "password": this.lozinka1, "organisationName": this.User.organizacija, "role": this.role})
+        	.then(response => {
+        		this.showErrorFailAdd = response.data;
+        		
+        		if(showErrorFailAdd){
+        			console.log("Podaci su uspesno izmenjeni");
+        			router.push({path: "/"}); // vrati me negde? u zavisnosti od uloge 
+        		}
+        	});
 
 		}
 	},
