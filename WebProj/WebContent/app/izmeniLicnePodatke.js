@@ -12,7 +12,8 @@ Vue.component("izmeni-podatke" ,{
 			loaded: false,
 			lozinka1: '',
 			lozinka2: '',
-			showAddingSucceed: false
+			showAddingSucceed: false,
+			organizacijaIme: ''
 		}
 	},
 	template: 
@@ -31,7 +32,7 @@ Vue.component("izmeni-podatke" ,{
 						<div class="input-group-prepend">
 							<span class="input-group-text" id="inputGroup-sizing-default">Organizacija:</span>
 						</div>
-						<input type="text" class="form-control" name="organisation" id="organisation" v-bind:placeholder="User.organizacija" readonly="readonly"/>
+						<input type="text" class="form-control" name="organisation" id="organisation" v-bind:placeholder="organizacijaIme" readonly="readonly"/>
 					</div>
 				
 					<!-- first name -->
@@ -163,7 +164,10 @@ Vue.component("izmeni-podatke" ,{
 		axios
     		.get(path)
     		.then(response => {
-    			this.User = response.data
+    			this.User = response.data;
+    			if(this.role !== 'superadmin'){
+    				this.organizacijaIme = this.User.organizacija.ime;
+    			}
     		});
 		
 		this.loaded = true;
