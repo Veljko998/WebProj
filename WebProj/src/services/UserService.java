@@ -148,6 +148,7 @@ public class UserService {
 		
 		Organizacije organizacije = new Organizacije();
 		organizacije.setPutanja();
+		
 		if(!organizacije.UcitajOrganizacije()){
 			return false;
 		}

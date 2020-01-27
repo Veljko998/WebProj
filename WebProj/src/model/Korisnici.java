@@ -67,15 +67,15 @@ public class Korisnici {
 	
 	/* Funkcija vraca false ukoliko korisnik postoji,
 	 * u suprotnom dodaje novog korisnika.*/
-	public boolean dodajKorisnika(Korisnik korisnik){
+	public boolean dodajKorisnika(Korisnik korisnik){/*
 		if(mapaKorisnici.containsKey(korisnik.getEmail())){
 			System.out.println("Postoji korisnik sa tim mejlom. Korisnici/dodajKorisnika");
 			return false;
 		}
-		else{
+		else{*/
 			listaKorisnici.add(korisnik);
 			mapaKorisnici.put(korisnik.getEmail(), korisnik);
-		}
+		
 		return true;
 	}
 	
