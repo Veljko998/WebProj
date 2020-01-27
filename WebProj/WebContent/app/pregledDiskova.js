@@ -67,7 +67,23 @@ Vue.component("pregled-diskova", {
     	diskDetails: function() {
     		console.log("Usli smo u pregled diskova. Ako radi obrisati ovaj komentar.");
     		localStorage.setItem("imeDiska", event.srcElement.id);
-    		router.push({path: "/detaljiDiska"});
+    		var help = null;
+    		
+    		axios
+    		.post('rest/discService/getDiskByName', {"name": event.srcElement.id})
+    		.then(response => {
+    			localStorage.setItem('storeObj', JSON.stringify(response.data));
+    			help = response.data;
+    			
+    			axios
+            	.post("rest/VMService/getVMByName" , {"name": help.virtualnaMasina})
+            	.then(response => {
+            		localStorage.setItem('storeObj2', JSON.stringify(response.data));
+            		
+            		router.push({path: "/detaljiDiska"});
+            	});
+    		});
+    		
     	},
     	editDisk: function(){
     		var diskId = event.srcElement.id;

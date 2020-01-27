@@ -169,6 +169,7 @@ public class DiscService {
 		diskovi.UcitajDiskove();
 		
 		try {
+			System.out.println(diskovi.getMapaDiskovi().get(dtd.name));
 			return diskovi.getMapaDiskovi().get(dtd.name);
 		} catch (Exception e) {
 			System.out.println("Usao u catch prilikom vracanja diska iz mape '/editDisk'..");
