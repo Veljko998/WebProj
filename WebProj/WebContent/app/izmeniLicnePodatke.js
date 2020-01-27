@@ -12,7 +12,7 @@ Vue.component("izmeni-podatke" ,{
 			loaded: false,
 			lozinka1: '',
 			lozinka2: '',
-			showErrorFailAdd: false
+			showAddingSucceed: false
 		}
 	},
 	template: 
@@ -77,7 +77,7 @@ Vue.component("izmeni-podatke" ,{
 					<p class="errorMessageRegisterUser" v-if="this.showErrorEmptyField === true">Sva polja moraju biti popunjena!</br></p>
 					<p class="errorMessageRegisterUser" v-if="this.showErrorPassword === true">Lozinka nije ista!</p>
 					<p class="errorMessageRegisterUser" v-if="this.showErrorEmailExists === true">Korisnik sa ovim mejlom vec postoji!</p>
-					<p class="errorMessageRegisterUser" v-if="this.showErrorFailAdd === true">Izmena podataka nije uspela!</p>
+					
 					
 					<div class="form-group ">
 						<button type="button" class="btn btn-primary btn-lg btn-block login-button" v-on:click="checkData()">Izmeni podatke</button>
@@ -131,19 +131,28 @@ Vue.component("izmeni-podatke" ,{
 		},
 		
 		changeData: function(){
-			localStorage.setItem('email', this.User.email);
 			
 			axios
-        	.post('rest/userService/addUser', {"name": this.User.ime, "surname": this.User.prezime, "email": this.User.email, "password": this.lozinka1, "organisationName": this.User.organizacija, "role": this.role})
+        	.post('rest/userService/addUser', {"name": this.User.ime, "surname": this.User.prezime, "email": this.User.email, "password": this.lozinka1, "organisationName": this.User.organizacija.ime, "role": this.role})
         	.then(response => {
-        		this.showErrorFailAdd = response.data;
+        		 this.showAddingSucceed = response.data;
+        		 
+        		 if(this.showAddingSucceed){
+         			console.log("Podaci su uspesno izmenjeni");
+         			localStorage.setItem('email', this.User.email);
+         			if(this.role === 'admin'){
+         				router.push({path: "/administrator"});
+         			}
+         			else if(this.role === 'superadmin'){
+         				router.push({path: "/superadministrator"});
+         			}
+         			else{
+         				router.push({path: "/korisnik"});
+         			}
+         		}
         		
-        		if(showErrorFailAdd){
-        			console.log("Podaci su uspesno izmenjeni");
-        			router.push({path: "/"}); // vrati me negde? u zavisnosti od uloge 
-        		}
         	});
-
+			
 		}
 	},
 	mounted () {  
