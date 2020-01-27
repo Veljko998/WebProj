@@ -4,7 +4,8 @@ Vue.component("pregled-korisnika" ,{
 			title: "Pregled korisnika",
 			users: null,
 			role: '',
-			email: ''
+			email: '',
+			nista: true
 		}
 	},
 	template: 
@@ -20,19 +21,37 @@ Vue.component("pregled-korisnika" ,{
 		      <th scope="col">Email</th>
 		      <th scope="col">Name</th>
 		      <th scope="col">Surname</th>
-		      <th scope="col" v-if="this.role === 'admin'">Organisation</th>
+		      <th scope="col" v-if="this.role === 'superadmin'">Organisation</th>
+		      <th scope="col" v-if="this.role === 'superadmin'">Functions</th>
 		    </tr>
 		  </thead>
-		  <tbody>
-	
-		  	<tr v-for="(u, index) in users">
+		  <tbody v-if="this.role === 'superadmin'">
+		  	<tr v-for="(u, index) in users" >
 				<th scope="row">{{ index+1 }}</th>
 				<td>{{ u.email }}</td>
 				<td>{{ u.ime }}</td>
 				<td>{{ u.prezime }}</td>
-				<td  v-if="this.role === 'admin'">{{ u.organizacija.ime }}</td>
+				<td>{{ u.organizacija.ime }}</td>
+				<td>
+					<button :id="u.email" type="button" class="btn btn-sm btn-secondary" v-on:click="editUser();">Edit</button>
+					<button :id="u.email" type="button" class="btn btn-sm btn-danger" v-on:click="deleteUser();">Delete</button>
+					<button :id="u.email" type="button" class="btn btn-sm btn-secondary" v-on:click="userDetails();">Details</button>
+				</td>
 		  	</tr>
-		  	
+		  </tbody>
+		  <!-- Isto sto i super admin samo bez org. v-if ne radi unutar v-for petlje.  -->
+		  <tbody v-if="this.role === 'admin'">
+		  	<tr v-for="(u, index) in users" >
+				<th scope="row">{{ index+1 }}</th>
+				<td>{{ u.email }}</td>
+				<td>{{ u.ime }}</td>
+				<td>{{ u.prezime }}</td>
+				<td>
+					<button :id="u.email" type="button" class="btn btn-sm btn-secondary" v-on:click="editUser();">Edit</button>
+					<button :id="u.email" type="button" class="btn btn-sm btn-danger" v-on:click="deleteUser();">Delete</button>
+					<button :id="u.email" type="button" class="btn btn-sm btn-secondary" v-on:click="userDetails();">Details</button>
+				</td>
+		  	</tr>
 		  </tbody>
 		</table>
 	</div>
@@ -42,12 +61,28 @@ Vue.component("pregled-korisnika" ,{
 
 	`,
 	methods: {
+		editUser: function() {
+			
+		},
+		deleteUser: function() {
+			
+		},
+		userDetails: function() {
+			var path = "rest/userService/getUser/" + event.srcElement.id;
+    		axios
+    		.get(path)
+    		.then(response => {
+    			localStorage.setItem('storeObjUser', JSON.stringify(response.data));
+    			router.push({path: "/detaljiKorisnika"});
+    		});
+		},
 		changeRouter: function(){
 			router.push({path: '/dodajKorisnika'});
 		}
 	},
 	mounted () {  //created 
 		this.role = localStorage.getItem('role');
+		console.log("ULOGA: " + this.role);
 		this.email = localStorage.getItem('email');
 		var path = 'rest/overview/getJustUsers/' + this.role + '/' + this.email
     

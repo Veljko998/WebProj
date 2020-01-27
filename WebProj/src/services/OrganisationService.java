@@ -30,6 +30,21 @@ import model.VirtuelneMasine;
 @Path("/organisationService")
 public class OrganisationService {
 
+	@GET
+	@Path("/getOrganisationByName/{param1}")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	/**
+	 * @return list of names of all organisations.
+	 */
+	public Organizacija getOrganisationByName(@PathParam("param1") String name) {
+		Organizacije organizacije = new Organizacije();
+		organizacije.setPutanja();
+		organizacije.UcitajOrganizacije();
+		
+		return organizacije.getOrganizacija(name);
+	}
+	
 	@POST
 	@Path("/getAllOrganisations")
 	@Consumes(MediaType.APPLICATION_JSON)

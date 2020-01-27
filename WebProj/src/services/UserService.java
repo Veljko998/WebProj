@@ -106,6 +106,10 @@ public class UserService {
 	@GET
 	@Path("/getUser/{param}")
 	@Produces(MediaType.APPLICATION_JSON)
+	/**
+	 * @param mejl
+	 * @return user by mail
+	 */
 	public Korisnik getUser(@PathParam("param") String mejl){
 		Korisnici k = new Korisnici();
 		k.setPutanja();
@@ -115,6 +119,8 @@ public class UserService {
 		}
 		return null;
 	}
+	
+	
 	
 	@GET
 	@Path("/userAlreadyExists/{param1}/{param2}")
