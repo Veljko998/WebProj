@@ -25,6 +25,7 @@ import model.VM;
 import model.VirtuelneMasine;
 import model.enums.Uloga;
 import model.kendo.CategoryToAdd;
+import model.kendo.UserToAdd;
 import model.kendo.UserToGetData;
 import model.kendo.UserToRegister;
 
@@ -145,7 +146,7 @@ public class UserService {
 	@Path("/addUser")
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
-	public boolean addUser(UserToRegister newUser) {
+	public boolean addUser(UserToAdd newUser) {
 		Korisnici k = new Korisnici();
 		k.setPutanja();
 		if(!k.UcitajKorisnike()){
@@ -162,7 +163,7 @@ public class UserService {
 		Organizacija organizacija = organizacije.getMapaOrganizacije().get(newUser.organisationName);
 		Korisnik noviKorisnik = new Korisnik(newUser.email, newUser.password, newUser.name, newUser.surname, organizacija, Uloga.valueOf(newUser.role.toUpperCase()));
 		
-		k.dodajKorisnika(noviKorisnik);
+		k.dodajKorisnika(noviKorisnik, newUser.previousEmail);
 		k.UpisiKorisnike();
 		
 		return true;

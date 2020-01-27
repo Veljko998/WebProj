@@ -67,16 +67,31 @@ public class Korisnici {
 	
 	/* Funkcija vraca false ukoliko korisnik postoji,
 	 * u suprotnom dodaje novog korisnika.*/
-	public boolean dodajKorisnika(Korisnik korisnik){/*
+	public boolean dodajKorisnika(Korisnik korisnik){
 		if(mapaKorisnici.containsKey(korisnik.getEmail())){
 			System.out.println("Postoji korisnik sa tim mejlom. Korisnici/dodajKorisnika");
 			return false;
 		}
-		else{*/
+		else{
 			listaKorisnici.add(korisnik);
 			mapaKorisnici.put(korisnik.getEmail(), korisnik);
-		
+		}
 		return true;
+	}
+	
+	public boolean dodajKorisnika(Korisnik korisnik, String stariEmail){
+		//dodati u mapu
+		mapaKorisnici.remove(stariEmail);
+		mapaKorisnici.put(korisnik.getEmail(), korisnik);
+		//dodati u listu
+		for(Korisnik k : listaKorisnici){
+			if(k.getEmail().equals(stariEmail)){
+				listaKorisnici.remove(k);
+				listaKorisnici.add(korisnik);
+				return true;
+			}
+		}
+		return false;
 	}
 	
 	/* Upisuje korisnike u fajl u json formatu.*/

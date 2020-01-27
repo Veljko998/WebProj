@@ -133,7 +133,7 @@ Vue.component("izmeni-podatke" ,{
 		changeData: function(){
 			
 			axios
-        	.post('rest/userService/addUser', {"name": this.User.ime, "surname": this.User.prezime, "email": this.User.email, "password": this.lozinka1, "organisationName": this.User.organizacija.ime, "role": this.role})
+        	.post('rest/userService/addUser', {"name": this.User.ime, "surname": this.User.prezime, "email": this.User.email, "password": this.lozinka1, "organisationName": this.User.organizacija.ime, "role": this.role, "previousEmail": this.email})
         	.then(response => {
         		 this.showAddingSucceed = response.data;
         		 
