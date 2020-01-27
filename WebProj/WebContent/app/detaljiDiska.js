@@ -8,8 +8,8 @@ Vue.component("detalji-diska", {
         	}
     },
     template:`
-<div class="container-fluid" v-if="this.showTemplate == true">
-	<h1 align="center">Pregled Diska</h1></br></br>
+<div class="container-fluid">
+	<h1 align="center">{{ this.title }}</h1></br></br>
 	<h3>
 		<ul>
 			<li><label style="color:red">Name:&nbsp; </label>{{ this.Disk.ime }}</li>
@@ -41,6 +41,9 @@ Vue.component("detalji-diska", {
     		this.Disk = JSON.parse(localStorage.getItem('storeObj'));
         	
         	this.VM = JSON.parse(localStorage.getItem('storeObj2'));
+        	
+        	localStorage.removeItem("storeObj");
+        	localStorage.removeItem("storeObj2");
         	
         	this.showTemplate = true;
     	}

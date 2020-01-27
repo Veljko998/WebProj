@@ -97,9 +97,24 @@ Vue.component("pregled-vm", {
     `,
     methods: {
     	vmDetails: function() {
-    		console.log("Usli smo u pregled VM. Ako radi obrisati ovaj komentar.");
-    		localStorage.setItem("imeVM", event.srcElement.id);
-    		router.push({path: "/detaljiVM"});
+    		var help = null;
+    		
+    		axios
+    		.post('rest/VMService/getVMByName', {"name": event.srcElement.id})
+    		.then(response => {
+    			localStorage.setItem('storeObj3', JSON.stringify(response.data));
+//    			help = response.data;
+    			
+    			router.push({path: "/detaljiVM"});
+    			
+//    			axios
+//            	.post("rest/VMService/getVMByName" , {"name": help.virtualnaMasina})
+//            	.then(response => {
+//            		localStorage.setItem('storeObj4', JSON.stringify(response.data));
+//            		
+//            	});
+    		});
+    		
     	},
     	editVM: function(){
 //    		console.log("You pressed edit button.")

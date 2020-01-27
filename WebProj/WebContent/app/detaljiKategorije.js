@@ -7,6 +7,10 @@ Vue.component("detalji-kategorije", {
     },
     template:`
     <p>{{this.title}}</p>
+    <h1 align="center">OVO OBRISATI</h1>
+    <h1 align="center">OVO OBRISATI</h1>
+    <h1 align="center">OVO OBRISATI</h1>
+    <h1 align="center">OVO OBRISATI</h1>
     `,
     methods: {
     	loadCategory: function() {
