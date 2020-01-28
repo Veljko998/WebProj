@@ -254,4 +254,31 @@ public class UserService {
 		return true;
 	}
 	
+	@GET
+	@Path("/test/{param}")
+	@Produces(MediaType.APPLICATION_JSON)
+	/**
+	 * @param mejl
+	 * @return user by mail
+	 */
+	public Organizacija test(@PathParam("param") String mejl){
+		Korisnici k = new Korisnici();
+		k.setPutanja();
+		
+		if(k.UcitajKorisnike()){
+			String ime = k.getKorisnik(mejl).getOrganizacija().getIme();
+			Organizacije o = new Organizacije();
+			o.setPutanja();
+			if(o.UcitajOrganizacije()){
+				Organizacija novaOrg = new Organizacija();
+				if((novaOrg = o.getMapaOrganizacije().get(ime)) != null){
+					return novaOrg;
+				}
+			}
+			return null;
+			
+		}
+		return null;
+	}
+	
 }

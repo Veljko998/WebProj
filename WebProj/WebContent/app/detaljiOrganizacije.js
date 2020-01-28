@@ -37,17 +37,23 @@ Vue.component("detalji-organizacije", {
     	loadOrganisation: function() {
     		this.Organizacija = JSON.parse(localStorage.getItem('organisationDetails'));
     		
-    		var i;
-    		for (i = 0; i < this.Organizacija.listaKorisnika.length; i++) {
-    			var path = 'rest/userService/getUser/' + this.Organizacija.listaKorisnika[i]
-    			axios
-    	    		.get(path)
-    	    		.then(response => {
-    	    			this.temp = response.data;
-    	    			this.korisnici.push(this.temp);
-    	    			this.temp = {};
-    	    		});
+    		try{
+    			var i;
+        		for (i = 0; i < this.Organizacija.listaKorisnika.length; i++) {
+        			var path = 'rest/userService/getUser/' + this.Organizacija.listaKorisnika[i]
+        			axios
+        	    		.get(path)
+        	    		.then(response => {
+        	    			this.temp = response.data;
+        	    			this.korisnici.push(this.temp);
+        	    			this.temp = {};
+        	    		});
+        		}
     		}
+    		catch(error){
+    			
+    		}
+    		
     		
         	localStorage.removeItem("organisationDetails");
         	this.showTemplate = true;

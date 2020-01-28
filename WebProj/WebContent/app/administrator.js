@@ -5,7 +5,9 @@ Vue.component("administrator-page", {
 			loading: true,
             errored: false,
             showUsersTable: false,
-            someMessage: ''
+            someMessage: '',
+            organisations: null,
+            organizacija: {}
 		}
 	},
 	template:
@@ -16,6 +18,7 @@ Vue.component("administrator-page", {
 			<button class="btn btn-light" type="button" v-on:click="GoToPregledVM();">Pregled VM</button>
 			<button class="btn btn-sm btn-outline-secondary" type="button"  v-on:click="showPregledKor();">Pregled korisnika</button>
 			<button class="btn btn-sm btn-outline-secondary" type="button"  v-on:click="showPregledDiskova();">Pregled diskova</button>
+			<button class="btn btn-sm btn-outline-secondary" type="button"  v-on:click="showPregledOrganizacije();">Pregled organizacije</button>
 		</div>
 		<div class="div-inline">
 			<button class="btn btn-outline-success my-2 my-sm-0" type="button" v-on:click="showPersonalInfo();">Moj profil</button>
@@ -45,6 +48,17 @@ Vue.component("administrator-page", {
 		},
 		showPersonalInfo: function(){
 			router.push({path: "/izmeniLicnePodatke"});
+		},
+		showPregledOrganizacije: function(){		
+			var role = localStorage.getItem('role');
+			var email = localStorage.getItem('email');
+			var path = 'rest/userService/test/' + email
+			axios
+    		.get(path)
+    		.then(response => {
+    		localStorage.setItem('organisationDetails', JSON.stringify(response.data));
+			router.push({path: "/detaljiOrganizacije"});
+    		});
 		}
 		
 	},
