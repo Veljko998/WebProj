@@ -100,20 +100,24 @@ public class Login {
 	 * @param u is UserToVerify object with email and password as attributes.
 	 * @return Boolean
 	 */
-	public boolean verifyUser(UserToVerify u) {
+	public String verifyUser(UserToVerify u) {
 		Korisnici k = new Korisnici();
 		k.setPutanja(); 
 		// TODO: Add verification for password, because we don't have password attribute in Korisnik.
 		if (k.UcitajKorisnike()) {
 			for (Korisnik korisnik : k.getListaKorisnici()) {
 				if (korisnik.getEmail().equals(u.email)) {
-					return true;
+					if(korisnik.getLozinka().equals(u.password)){
+						return "yes";
+					}
+					else{
+						return "password";
+					}
 				}
 			}
-			System.out.println("Nema korisnik sa tim email-om.");
-			return false;
+			return "username";
 		}
-		return false;
+		return null;
 	}
 	
 	@POST

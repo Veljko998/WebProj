@@ -8,11 +8,14 @@ Vue.component("log-in", {
                 role: 'nema uloge',
                 loading: true,
                 errored: false,
-                verified: false,
+                verified: '',
                 errors: [],
                 permition: false,
                 un: '',
-                pw: ''
+                pw: '',
+                showErrorEmptyField: false,
+                showErrorUsername: false,
+                showErrorPassword: false
         	}
     },
     template:`
@@ -23,22 +26,29 @@ Vue.component("log-in", {
     		
     			<input type="email" class="form-control" name="username" placeholder="Username" required="" autofocus="" v-model="User.username"/>
 				<input type="password" class="form-control" name="password" placeholder="Password" required="" v-model="User.password"/>  
-				<button class="btn btn-lg btn-primary btn-block" v-on:click="getInputValue(); login(User);">Login</button>		
+				<button class="btn btn-lg btn-primary btn-block" v-on:click="getInputValue(); login(User);">Login</button>
+				<p class="errorMessageRegisterUser" v-if="this.showErrorEmptyField === true">All fields must be filled out!</br></p>
+				<p class="errorMessageRegisterUser" v-if="this.showErrorUsername === true">Wrong email!</br></p>
+				<p class="errorMessageRegisterUser" v-if="this.showErrorPassword === true">Wrong password!</br></p>
 		</div>
 	</div>
 </div>
     `,
     methods: {
     	getInputValue: function(){
+    		this.showErrorEmptyField = false;
+            this.showErrorUsername = false;
+            this.showErrorPassword = false;
+            
     		this.permition = false;
     		un = this.User.username;
     		pw = this.User.password;
     		if((un != '' && pw != '') && (un !== undefined && pw !== undefined )){
     			this.permition = true;
     		}
-//    		else{
-//    			console.log("permition je false");
-//    		}
+    		else{
+    			this.showErrorEmptyField = true;
+    		}
     	},
         login: function(User){
         	if(this.permition === true){
@@ -46,7 +56,7 @@ Vue.component("log-in", {
             	.post('rest/webproj/verifyUser', {"email": this.User.username, "password": this.User.password})
             	.then(response => {
             		this.verified = response.data;
-            		if(this.verified){  //user inputs email and password correctly.
+            		if(this.verified === 'yes'){  //user inputs email and password correctly.
             			axios
     	            		.post('rest/webproj/checkRole', {"email": this.User.username, "password": this.User.password})
     	            		.then(response => {
@@ -65,7 +75,12 @@ Vue.component("log-in", {
     	            		});
             		}
             		else {
-                        toast("Wrong email or password. Please try again.");
+                        if(this.verified === 'username'){
+                        	this.showErrorUsername = true;
+                        }
+                        else if (this.verified === 'password'){
+                        	this.showErrorPassword = true;
+                        }
                         this.User.username = '';
                         this.User.password = '';
                     }
