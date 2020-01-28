@@ -12,7 +12,6 @@ Vue.component("korisnik-page", {
 	<nav class="navbar navbar-dark bg-dark">
 		<div class="div-inline">
 			<button class="btn btn-light" type="button" v-on:click="GoToPregledVM();">Pregled VM</button>
-			<button class="btn btn-sm btn-outline-secondary" type="button"  v-on:click="showPregledKor();">Pregled korisnika</button>
 			<button class="btn btn-sm btn-outline-secondary" type="button"  v-on:click="showPregledDiskova();">Pregled diskova</button>
 		</div>
 		<div class="div-inline">
@@ -34,9 +33,6 @@ Vue.component("korisnik-page", {
 		},
 		GoToPregledVM: function(){
 			router.push({path: "/pregledVM"});
-		},
-		showPregledKor: function(){
-			this.showUsersTable = !this.showUsersTable;
 		},
 		showPregledDiskova: function(){
 			router.push({path: "/pregledDiskova"});

@@ -27,15 +27,12 @@ Vue.component("superadministrator-page", {
 		</div>
 	</nav>
 	</br>
-	<pregled-korisnika v-if="showUsersTable"></pregled-korisnika>
-	<pregled-organizacija v-if="showOrganisationsTable"></pregled-organizacija>
-	<pregled-kategorija v-if="showCategoriesTable"></pregled-kategorija>
 	
 </div>
 		`,
 	methods: {
 		showCategories: function() {
-			this.showCategoriesTable = !this.showCategoriesTable;
+			router.push({path: "/pregledKategorija"});
 		},
 		doNothing: function(){
 			someMessage = localStorage.getItem('role');
@@ -49,13 +46,13 @@ Vue.component("superadministrator-page", {
 			router.push({path: "/pregledVM"});
 		},
 		showPregledKor: function(){
-			this.showUsersTable = !this.showUsersTable;
+			router.push({path: "/pregledKorisnika"});
 		},
 		showPregledDiskova: function(){
 			router.push({path: "/pregledDiskova"});
 		},
 		showOrganisations: function(){
-			this.showOrganisationsTable = !this.showOrganisationsTable;
+			router.push({path: "/pregledOrganizacija"});
 		},
 		showPersonalInfo: function(){
 			router.push({path: "/izmeniLicnePodatke"});

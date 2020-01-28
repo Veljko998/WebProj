@@ -23,7 +23,6 @@ Vue.component("administrator-page", {
 		</div>
 	</nav>
 	</br>
-	<pregled-korisnika v-if="this.showUsersTable"></pregled-korisnika>
 </div>
 		`,
 	methods: {
@@ -39,7 +38,7 @@ Vue.component("administrator-page", {
 			router.push({path: "/pregledVM"});
 		},
 		showPregledKor: function(){
-			this.showUsersTable = !this.showUsersTable;
+			router.push({path: "/pregledKorisnika"});
 		},
 		showPregledDiskova: function(){
 			router.push({path: "/pregledDiskova"});
