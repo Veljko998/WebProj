@@ -18,6 +18,7 @@ Vue.component("pregled-organizacija" ,{
 		      <th scope="col">Ime</th>
 		      <th scope="col">Opis</th>
 		      <th scope="col">Logo</th>
+		      <th scope="col">Funkcije</th>
 		    </tr>
 		  </thead>
 		  <tbody>
@@ -27,6 +28,10 @@ Vue.component("pregled-organizacija" ,{
 				<td>{{ o.ime }}</td>
 				<td>{{ o.opis }}</td>
 				<td><img style="height: 50px; width: 50px; text-align: left;" v-bind:src="o.logo"/></td>
+				<td>
+				<button :id="o.ime" type="button" class="btn btn-sm btn-secondary" v-on:click="edit();">Edit</button>
+				<button :id="o.ime" type="button" class="btn btn-sm btn-secondary" v-on:click="details();">Details</button>
+			</td>
 		  	</tr>
 		  </tbody>
 		</table>
@@ -34,6 +39,21 @@ Vue.component("pregled-organizacija" ,{
 </div>
 	`,
 	methods: {
+		edit: function(){
+			
+			
+		},
+		
+		details: function() {
+    		
+    		axios
+    		.post('rest/organisationService/getOrganisation', {"name": event.srcElement.id})
+    		.then(response => {
+    			localStorage.setItem('organisationDetails', JSON.stringify(response.data));
+
+    			router.push({path: "/detaljiOrganizacije"});
+    		});
+		},
 		
 		goToAddPage: function(){
 			router.push({path: "/dodajOrganizaciju"});		

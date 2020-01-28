@@ -22,6 +22,8 @@ import model.Organizacija;
 import model.Organizacije;
 import model.VirtuelnaMasina;
 import model.VirtuelneMasine;
+import model.kendo.OrganisationDetails;
+import model.kendo.VMToDelete;
 
 /** 
  * @author Veljko
@@ -118,5 +120,21 @@ public class OrganisationService {
 			}
 		}
 		return resources;
+	}
+	
+	@POST
+	@Path("/getOrganisation")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+	public Organizacija getOrganisation(OrganisationDetails org) {
+		Organizacije o = new Organizacije();
+		o.setPutanja();
+		if(o.UcitajOrganizacije()){
+			Organizacija novaOrg = new Organizacija();
+			if((novaOrg = o.getMapaOrganizacije().get(org.name)) != null){
+				return novaOrg;
+			}
+		}
+		return null;
 	}
 }
