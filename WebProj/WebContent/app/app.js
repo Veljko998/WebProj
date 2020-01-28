@@ -20,6 +20,7 @@ const PregledKategorija = {template: '<pregled-kategorija></pregled-kategorija>'
 const DodajKategoriju = {template: '<dodaj-kategoriju></dodaj-kategoriju>'}
 const IzmenaKategorije = {template: '<izmena-kategorije></izmena-kategorije>'}
 const DetaljiKorisnika = {template: '<detalji-korisnika></detalji-korisnika>'}
+const IzmenaKorisnika = {template: '<izmena-korisnika></izmena-korisnika>'}
 
 const router = new VueRouter({
 	  mode: 'hash',
@@ -45,7 +46,8 @@ const router = new VueRouter({
 	    { path: '/pregledKategorija', component: PregledKategorija},
 	    { path: '/dodajKategoriju', component: DodajKategoriju},
 	    { path: '/izmenaKategorije', component: IzmenaKategorije},
-	    { path: '/detaljiKorisnika', component: DetaljiKorisnika}
+	    { path: '/detaljiKorisnika', component: DetaljiKorisnika},
+	    { path: '/izmenaKorisnika', component: IzmenaKorisnika}
 //	    { path: '/', component: }
 	  ]
 });

@@ -39,9 +39,6 @@ Vue.component("detalji-korisnika", {
     		
     		localStorage.removeItem("storeObjUser");
     		
-//    		var path = "rest/organisationService/getOrganisationByName/" + this.User.
-//    		axios
-//    		.get()
         	this.showTemplate = true;
     	}
     },

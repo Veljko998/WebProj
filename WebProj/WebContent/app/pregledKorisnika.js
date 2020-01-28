@@ -61,11 +61,54 @@ Vue.component("pregled-korisnika" ,{
 
 	`,
 	methods: {
-		editUser: function() {
+		loadUsers() {
+			var path = 'rest/overview/getJustUsers/' + this.role + '/' + this.email
 			
+			axios
+    		.get(path)
+    		.then(response => {
+    			this.users = response.data
+    		});
+		},
+		editUser: function() {
+			console.log("Editovanje korisnika");
+			
+			localStorage.setItem("oldEmail", event.srcElement.id);
+			
+			/*
+			 * Get old password
+			 */
+			var path = "rest/userService/getPassword/" + event.srcElement.id;
+			axios
+			.get(path)
+			.then(response => {
+				localStorage.setItem("oldPassword", response.data);
+				
+				router.push({path: "/izmenaKorisnika"});
+			});
 		},
 		deleteUser: function() {
+			var path2 = "rest/userService/deleteUser/" + event.srcElement.id;
+			console.log(path2);
 			
+			axios
+    		.get(path2)
+    		.then(response => {
+    			console.log("USAO BRTTTT");
+    			if (response.data == true) {
+					console.log("Korisnik je uspesno obrisan");
+//					this.loadUsers.call();
+				}
+    		});
+			
+//			axios
+//    		.post("rest/userService/deleteUser", {"name": event.srcElement.id})
+//    		.then(response => {
+//    			if (response.data == true) {
+//					console.log("Korisnik je uspesno obrisan");
+//					this.loadUsers.call();
+//				}
+//    		});
 		},
 		userDetails: function() {
 			var path = "rest/userService/getUser/" + event.srcElement.id;
@@ -82,12 +125,12 @@ Vue.component("pregled-korisnika" ,{
 	},
 	mounted () {  //created 
 		this.role = localStorage.getItem('role');
-		console.log("ULOGA: " + this.role);
 		this.email = localStorage.getItem('email');
-		var path = 'rest/overview/getJustUsers/' + this.role + '/' + this.email
+//		var path = 'rest/overview/getJustUsers/' + this.role + '/' + this.email
     
-		axios
-    		.get(path)
-    		.then(response => (this.users = response.data))
+		this.loadUsers();
+//		axios
+//    		.get(path)
+//    		.then(response => (this.users = response.data));
     },
 });

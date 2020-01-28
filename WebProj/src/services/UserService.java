@@ -3,9 +3,6 @@
  */
 package services;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -14,18 +11,13 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
-import model.Disk;
-import model.Diskovi;
-import model.KategorijeVM;
 import model.Korisnici;
 import model.Korisnik;
 import model.Organizacija;
 import model.Organizacije;
-import model.VM;
-import model.VirtuelneMasine;
 import model.enums.Uloga;
-import model.kendo.CategoryToAdd;
 import model.kendo.UserToAdd;
+import model.kendo.UserToEdit;
 import model.kendo.UserToGetData;
 import model.kendo.UserToRegister;
 
@@ -36,6 +28,99 @@ import model.kendo.UserToRegister;
 @Path("/userService")
 public class UserService {
 	
+	//getOrgs
+	@POST
+	@Path("/editUser")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+	/**
+	 * @param mejl
+	 * @return password of user with forwarded email.
+	 */
+	public boolean getOrgs(UserToEdit ute) {
+		Korisnici korisnici = new Korisnici();
+		korisnici.setPutanja();
+		korisnici.UcitajKorisnike();
+
+		if (!ute.password.equals(ute.passwordToConfirm)) {
+			System.out.println("Nemoguce... //editUser");
+			return false;
+		}
+		
+		for (Korisnik korisnik : korisnici.getListaKorisnici()) {
+			if (korisnik.getEmail().equals(ute.oldEmail)) {
+				korisnik.setIme(ute.name);
+				korisnik.setLozinka(ute.password);
+				korisnik.setPrezime(ute.surname);
+				korisnik.setUloga(Uloga.valueOf(ute.role));
+				korisnici.UpisiKorisnike();
+				break;
+			}
+		}
+		return true;
+	}
+	
+	@GET
+	@Path("/getPassword/{param1}")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+	/**
+	 * @param mejl
+	 * @return password of user with forwarded email.
+	 */
+	public String getPassword(@PathParam("param1") String mejl) {
+		Korisnici korisnici = new Korisnici();
+		korisnici.setPutanja();
+		korisnici.UcitajKorisnike();
+
+		try {
+			return korisnici.getMapaKorisnici().get(mejl).getLozinka();
+		} catch (Exception e) {
+			System.out.println("Ovde ne ulazi. userService/getPassword");
+			return null;
+		}
+		
+	}
+	
+	@GET
+	@Path("/deleteUser/{param1}")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+	/**
+	 * Zapamtimo ime organizacije korisnika
+	 * Brisemo korisnika iz korisnika
+	 * Brisemo mejl korisnika iz liste korisnike u organizaciji koja je korisnikova
+	 * 
+	 * @param mejl
+	 * @return true if user is deleted.
+	 */
+	public boolean deleteUser(@PathParam("param1") String mejl) {
+		Korisnici korisnici = new Korisnici();
+		korisnici.setPutanja();
+		korisnici.UcitajKorisnike();
+
+		Organizacije organizacije = new Organizacije();
+		organizacije.setPutanja();
+		organizacije.UcitajOrganizacije();
+		
+		Organizacija org = korisnici.getKorisnik(mejl).getOrganizacija();
+
+		Korisnik userToDel = korisnici.getKorisnik(mejl);
+		
+		korisnici.getListaKorisnici().remove(userToDel);
+		korisnici.UpisiKorisnike();
+		
+		for (Organizacija organizacija : organizacije.getListaOrganizacije()) {
+			for (String korIme : organizacija.getListaKorisnika()) {
+				if (korIme.equals(mejl)) {
+					organizacija.getListaKorisnika().remove(mejl);
+				}
+			}
+		}
+		organizacije.UpisiOrganizacije();
+		
+		return true;
+	}
 	
 	@POST
 	@Path("/getUserOrganisationName")
