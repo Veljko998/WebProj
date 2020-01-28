@@ -1,11 +1,12 @@
 Vue.component("detalji-organizacije", {
 	data: function () {
         	return {
-        		title: 'Organisation Details',
+        		title: 'Detalji organizacije',
         		Organizacija: null,
         		showTemplate: false,
         		temp: {},
-        		korisnici: []
+        		korisnici: [],
+        		role: ''
         	}
     },
     template:`
@@ -28,9 +29,14 @@ Vue.component("detalji-organizacije", {
 			</li>
 		</ul>
 	</h3>
+	<button v-if="role==='admin'" type="button" class="btn btn-lg btn-primary" v-on:click="izmeniOrganizaciju();">Izmeni organizaciju</button>
 </div>
     `,
     methods: {
+    	
+    	izmeniOrganizaciju: function(){
+    		
+    	},
     	/*
     	 * Load Disk and Virtual Machine of disk.
     	 */
@@ -61,6 +67,7 @@ Vue.component("detalji-organizacije", {
     },
     mounted () {
     	this.showTemplate = false;
+    	this.role = localStorage.getItem('role');
     	this.loadOrganisation();
     },
 });
