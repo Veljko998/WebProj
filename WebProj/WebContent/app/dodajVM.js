@@ -35,7 +35,7 @@ Vue.component("dodaj-vm" ,{
 						<input type="text" class="form-control" name="name" id="name" placeholder="Enter Name" v-model="VM.name"/>
 					</div>
 					
-					<!--
+					
 					<!-- input field for core number -->
 					<div class="input-group mb-4">
 						<div class="input-group-prepend">
@@ -59,7 +59,7 @@ Vue.component("dodaj-vm" ,{
 						</div>
 						<input type="number" min="1" class="form-control" name="coreNumber" id="coreNumber" placeholder="Enter GPU" v-model="VM.gpu"/>
 					</div>
-					-->
+					
 					
 					<!-- select category from drop down menu -->
 					<div class="input-group mb-4">

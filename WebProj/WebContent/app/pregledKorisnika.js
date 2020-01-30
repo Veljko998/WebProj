@@ -97,7 +97,7 @@ Vue.component("pregled-korisnika" ,{
     			console.log("USAO BRTTTT");
     			if (response.data == true) {
 					console.log("Korisnik je uspesno obrisan");
-//					this.loadUsers.call();
+					this.loadUsers.call();
 				}
     		});
 			

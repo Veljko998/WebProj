@@ -20,13 +20,21 @@ Vue.component("dodaj-korisnika" ,{
 					Register
 				</div>
 				<div class="card-body">
+					<!-- input field for email -->
+					<div class="input-group mb-4">
+						<div class="input-group-prepend">
+							<span class="input-group-text" id="inputGroup-sizing-default">Enter email</span>
+						</div>
+						<input type="text" class="form-control" name="email" id="email" placeholder="Enter your Email" v-model="User.email"/>
+					</div>
+
 
 					<!-- input field for first name -->
 					<div class="input-group mb-4">
 						<div class="input-group-prepend">
 							<span class="input-group-text" id="inputGroup-sizing-default">Your name</span>
 						</div>
-						<input type="text" class="form-control" name="name" id="name" placeholder="Enter your Name" v-model="User.name"/>
+						<input type="text" class="form-control" name="name" id="name" placeholder="Enter Name" v-model="User.name"/>
 					</div>
 
 					<!-- input field for last name -->
@@ -34,21 +42,13 @@ Vue.component("dodaj-korisnika" ,{
 						<div class="input-group-prepend">
 							<span class="input-group-text" id="inputGroup-sizing-default">Your surname</span>
 						</div>
-						<input type="text" class="form-control" name="surname" id="surname" placeholder="Enter your Surname" v-model="User.surname"/>
-					</div>
-
-					<!-- input field for email -->
-					<div class="input-group mb-4">
-						<div class="input-group-prepend">
-							<span class="input-group-text" id="inputGroup-sizing-default">Your email</span>
-						</div>
-						<input type="text" class="form-control" name="email" id="email" placeholder="Enter your Email" v-model="User.email"/>
+						<input type="text" class="form-control" name="surname" id="surname" placeholder="Enter Surname" v-model="User.surname"/>
 					</div>
 
 					<!-- input field for password -->
 					<div class="input-group mb-4">
 						<div class="input-group-prepend">
-							<span class="input-group-text" id="inputGroup-sizing-default">Users password</span>
+							<span class="input-group-text" id="inputGroup-sizing-default">Enter password</span>
 						</div>
 						<input type="password" class="form-control" name="password" id="password" placeholder="Enter your Password" v-model="User.password"/>
 					</div>
@@ -58,7 +58,7 @@ Vue.component("dodaj-korisnika" ,{
 						<div class="input-group-prepend">
 							<span class="input-group-text" id="inputGroup-sizing-default">Confirm password</span>
 						</div>
-						<input type="confirm_password" class="form-control" name="password" id="password" placeholder="Confirm your Password" v-model="User.passwordToConfirm"/>
+						<input type="password" class="form-control" name="passwordConfirm" id="passwordConfirm" placeholder="Confirm your Password" v-model="User.passwordToConfirm"/>
 					</div>
 
 					<!-- select role from drop down menu -->
@@ -68,8 +68,8 @@ Vue.component("dodaj-korisnika" ,{
 						</div>
 						<select class="custom-select" id="inputGroupSelect01" v-model="User.role">
 							<option selected>Choose...</option>
-							<option value="1">User</option>
-							<option value="2">Admin</option>
+							<option value="KORISNIK">User</option>
+							<option value="ADMIN">Admin</option>
 						</select>
 					</div>
 					
@@ -80,8 +80,7 @@ Vue.component("dodaj-korisnika" ,{
 						</div>
 						<select class="custom-select" id="inputGroupSelect01" v-model="User.organisationName">
 							<option selected>Choose...</option>
-							
-							<option v-for="o in organisations" :value="o">{{ o.ime }}</option>
+							<option v-for="o in organisations" :value="o.ime">{{ o.ime }}</option>
 						</select>
 					</div>
 					
@@ -105,7 +104,7 @@ Vue.component("dodaj-korisnika" ,{
 				(this.User.password !== '' && this.User.password != undefined) &&
 				(this.User.passwordToConfirm !== '' && this.User.passwordToConfirm != undefined) &&
 				(this.User.organisationName !== '' && this.User.organisationName != undefined && this.User.organisationName !== 'Choose...') &&
-				(this.User.password !== this.User.passwordToConfirm)){
+				(this.User.password == this.User.passwordToConfirm)){
 				this.showErrorEmptyField = false;
 				if(this.User.password !== this.User.passwordToConfirm){
 					this.showErrorPassword = true;
@@ -113,7 +112,6 @@ Vue.component("dodaj-korisnika" ,{
 				}else {
 					
 				}
-				console.log("Sva polja su popunjena.");
 				
 				axios
             	.post('rest/userService/registerUser', {"name": this.User.name, "surname": this.User.surname, "email": this.User.email, "password": this.User.password, "organisationName": this.User.organisationName, "role": this.User.role})
@@ -123,11 +121,12 @@ Vue.component("dodaj-korisnika" ,{
             		if(userSuccesfullyRegistered){
             			console.log("Korisnik je uspesno registrovan.");
             			var currentRole = localStorage.getItem("role");
-            			if(currentRole === 'administrator'){
-            				router.push({path: "/administrator"});
-            			}else if (currentRole === 'superadministrator') {
-            				router.push({path: "/superadministrator"});
-						}
+//            			if(currentRole === 'administrator'){
+//            				router.push({path: "/administrator"});
+//            			}else if (currentRole === 'superadmin') {
+//            				router.push({path: "/superadministrator"});
+//						}
+            			router.push({path: "/pregledKorisnika"});
             		}else{
             			console.log("Korisnik nije registrovan.");
             		}

@@ -1,14 +1,15 @@
 Vue.component("izmena-korisnika", {
 	data: function () {
         	return {
-        		title: 'Izmena Korisnika',
+        		title: 'Edit User',
                 role: 'noRule',
                 email: '',
                 showErrorEmptyField: false,
     			showErrorUserExists: false,
     			User: {},
     			machines: null,
-                oldEmail: ''
+                oldEmail: '',
+                canAddUser: false
                 
         	}
     },
@@ -18,7 +19,7 @@ Vue.component("izmena-korisnika", {
 		<div class="col-md-8">
 			<div class="card">
 				<div class="card-header">
-					Register
+					{{ this.title }}
 				</div>
 				<div class="card-body">
 
@@ -61,16 +62,15 @@ Vue.component("izmena-korisnika", {
 						</div>
 						<select class="custom-select" id="inputGroupSelect01" v-model="User.role">
 							<option selected>Choose...</option>
-							<option value="1">User</option>
-							<option value="2">Admin</option>
+							<option value="KORISNIK">User</option>
+							<option value="ADMIN">Admin</option>
 						</select>
 					</div>
 					
 					<p class="errorMessageRegisterUser" v-if="this.showErrorEmptyField == true">Sva polja moraju biti popunjena!!!</br></p>
-					<p class="errorMessageRegisterUser" v-if="this.showErrorsurname == true">surname nije isti!!!!!!</p>
 					
 					<div class="form-group ">
-						<button type="button" class="btn btn-primary btn-lg btn-block login-button" v-on:click="editUser();">Edit user</button>
+						<button type="button" class="btn btn-primary btn-lg btn-block login-button" v-on:click="emptyField(); editUser();">Edit user</button>
 					</div>
 				</div>
 			</div>
@@ -97,13 +97,12 @@ Vue.component("izmena-korisnika", {
 			(this.User.password !== '' && this.User.password != undefined) &&
 			(this.User.passwordToConfirm !== '' && this.User.passwordToConfirm != undefined) &&
 			(this.User.role !== '' && this.User.role != undefined && this.User.role !== 'Choose...')){
-				if (this.password != this.passwordToConfirm) {
+				if (this.User.password != this.User.passwordToConfirm) {
 					console.log("Lozinke se ne podudaraju.")
 				}else {
 					this.showErrorEmptyField = false;
 					console.log("Sva polja su popunjena.");
 					this.canAddUser = true;
-					this.UserAlreadyExists.call();
 				}
 			}else{
 				console.log("Nisu sva polja popunjena.");
@@ -116,7 +115,7 @@ Vue.component("izmena-korisnika", {
 			if (this.canAddUser == true || this.canAddUser === true) {
 
 				axios
-            	.post('rest/UserService/editUser', {"oldEmail": this.oldEmail, "role": this.User.role, "name": this.User.name, 
+            	.post('rest/userService/editUser', {"oldEmail": this.oldEmail, "role": this.User.role, "name": this.User.name, 
             		"surname": this.User.surname, "password": this.User.password, "passwordToConfirm": this.User.passwordToConfirm})
             	.then(response => {
             		var UserSuccesfullyRegistered = response.data;
@@ -124,7 +123,7 @@ Vue.component("izmena-korisnika", {
             		
             		if(UserSuccesfullyRegistered){
             			console.log("korisnik je uspesno izmenjen.");
-            			router.push({path: "/pregledkorisnikova"}); // Bring user back to pregledkorisnikova
+            			router.push({path: "/pregledKorisnika"}); // Bring user back to pregledkorisnikova
             		}else{
             			console.log("korisnik nije upisan.");
             		}

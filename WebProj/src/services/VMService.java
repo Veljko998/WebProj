@@ -43,13 +43,14 @@ public class VMService {
 	@Consumes(MediaType.APPLICATION_JSON)
 	/**
 	 * If admin:
-	 *   First change KORISNIK => OORGANIZACIJA => listaResursa(list if VM names)
+	 *   Change KORISNIK => OORGANIZACIJA => listaResursa(list if VM names) ... because admin can change just from his organisation.
 	 *   
 	 * Superadmin:
 	 *   List all users, their organisations, VM name list and in this list look for old VM name and replace with new.
 	 * 
 	 * Look for disk which is connected to old VM and replace with new.
 	 * Delete VM with old name and replace with new VM.
+	 * change VM name in list in organisations
 	 * 
 	 * @param vme
 	 * @return true if VM is successfully edited and written. Else false.
@@ -70,6 +71,10 @@ public class VMService {
 		KategorijeVM kategorijeVM = new KategorijeVM();
 		kategorijeVM.setPutanja();
 		kategorijeVM.UcitajKategorijeVM();
+		
+		Organizacije organizacije = new Organizacije();
+		organizacije.setPutanja();
+		organizacije.UcitajOrganizacije();
 		
 		try {
 			if (vme.role.equals("admin")) {
@@ -113,6 +118,16 @@ public class VMService {
 			}
 			virtuelneMasine.UpisiVirtuelneMasine();
 			
+			for (Organizacija organizacija : organizacije.getListaOrganizacije()) {
+				for (String vmName : organizacija.getListaResursa()) {
+					if (vmName.equals(vme.oldName)) {
+						organizacija.getListaResursa().remove(vme.oldName);
+						organizacija.getListaResursa().add(vme.name);
+					}
+				}
+			}
+			organizacije.UpisiOrganizacije();
+			
 			return true;
 		} catch (Exception e) {
 			System.out.println("Ovde ne smemo da upadnemo. vmService/editVM. Poruka o gresci: " + e);
@@ -131,6 +146,10 @@ public class VMService {
 	 * @return
 	 */
 	public List<String> getDisks(VMToDelete vme) {
+		if (vme.name == null) { // because of click to go forward
+			return null;
+		}
+		
 		VirtuelneMasine virtuelneMasine = new VirtuelneMasine();
 		virtuelneMasine.setPutanja();
 		virtuelneMasine.UcitajVirtuelneMasine();
@@ -140,6 +159,7 @@ public class VMService {
 		diskovi.UcitajDiskove();
 		
 		VirtuelnaMasina vm = virtuelneMasine.getVirtuelnaMasina(vme.name);
+		System.out.println(vm);
 		
 		List<String> disks = new ArrayList<String>();
 		disks.addAll(vm.getDiskovi());

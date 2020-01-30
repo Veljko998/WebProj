@@ -28,16 +28,15 @@ import model.kendo.UserToRegister;
 @Path("/userService")
 public class UserService {
 	
-	//getOrgs
 	@POST
 	@Path("/editUser")
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
 	/**
-	 * @param mejl
-	 * @return password of user with forwarded email.
+	 * @param ute
+	 * @return
 	 */
-	public boolean getOrgs(UserToEdit ute) {
+	public boolean editUser(UserToEdit ute) {
 		Korisnici korisnici = new Korisnici();
 		korisnici.setPutanja();
 		korisnici.UcitajKorisnike();
@@ -46,7 +45,6 @@ public class UserService {
 			System.out.println("Nemoguce... //editUser");
 			return false;
 		}
-		
 		for (Korisnik korisnik : korisnici.getListaKorisnici()) {
 			if (korisnik.getEmail().equals(ute.oldEmail)) {
 				korisnik.setIme(ute.name);
@@ -161,14 +159,15 @@ public class UserService {
 		try {
 			Korisnici korisnici = new Korisnici();
 			korisnici.setPutanja();
+			korisnici.UcitajKorisnike();
+			
 			
 			Organizacije organizacije = new Organizacije();
 			organizacije.setPutanja();
-			
+			organizacije.UcitajOrganizacije();
+
 			Organizacija organizacija = organizacije.getMapaOrganizacije().get(utr.organisationName);
-			organizacije.getMapaOrganizacije().get(utr.organisationName).getListaKorisnika().add(utr.email);
-			organizacije.UpisiOrganizacije();
-			
+
 			Korisnik korisnik = new Korisnik();
 			korisnik.setEmail(utr.email);
 			korisnik.setIme(utr.name);
@@ -176,8 +175,14 @@ public class UserService {
 			korisnik.setPrezime(utr.surname);
 			korisnik.setUloga(Uloga.valueOf(utr.role.toUpperCase()));
 			korisnik.setOrganizacija(organizacija);
-			
+
 			if (korisnici.dodajKorisnika(korisnik)) {
+				/*
+				 * First handle organisation then user
+				 */
+				organizacije.getMapaOrganizacije().get(utr.organisationName).getListaKorisnika().add(utr.email);
+				organizacije.UpisiOrganizacije();
+				
 				korisnici.UpisiKorisnike();
 				System.out.println("Korisnik je uspesno upisan");
 				return true;
@@ -185,6 +190,7 @@ public class UserService {
 			return false;
 		} catch (Exception e) {
 			System.out.println("Something went wrong in UserService/registerUser. returnniing false.");
+			System.out.println(e);
 			return false;
 		}
 	}
