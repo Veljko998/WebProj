@@ -9,6 +9,7 @@ import java.util.HashMap;
 import java.util.List;
 
 
+
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonMappingException;
@@ -69,6 +70,21 @@ public class Organizacije {
 			mapaOrganizacije.put(organizacija.getIme(), organizacija);
 		}
 		return true;
+	}
+	
+	public boolean dodajOrganizaciju(Organizacija organizacija, String staroIme){
+		//dodati u mapu
+		mapaOrganizacije.remove(staroIme);
+		mapaOrganizacije.put(organizacija.getIme(), organizacija);
+		//dodati u listu
+		for(Organizacija o : listaOrganizacije){
+			if(o.getIme().equals(staroIme)){
+				listaOrganizacije.remove(o);
+				listaOrganizacije.add(organizacija);
+				return true;
+			}
+		}
+		return false;
 	}
 	
 	/* Upisuje organizacije u fajl u json formatu.*/

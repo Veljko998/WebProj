@@ -22,7 +22,11 @@ import model.Organizacija;
 import model.Organizacije;
 import model.VirtuelnaMasina;
 import model.VirtuelneMasine;
+import model.enums.Uloga;
 import model.kendo.OrganisationDetails;
+import model.kendo.OrganisationToAdd;
+import model.kendo.OrganisationToEdit;
+import model.kendo.UserToAdd;
 import model.kendo.VMToDelete;
 
 /** 
@@ -136,5 +140,98 @@ public class OrganisationService {
 			}
 		}
 		return null;
+	}
+	
+	@GET
+	@Path("/organisationAlreadyExists/{param1}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public boolean organisationAlreadyExsists(@PathParam("param1") String imeOrg){
+		Organizacije o = new Organizacije();
+		o.setPutanja();
+		if(o.UcitajOrganizacije()){
+			if(o.getMapaOrganizacije().containsKey(imeOrg)){
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	@POST
+	@Path("/addOrganisation")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+	public boolean addOrganisation(OrganisationToAdd newOrg) {
+		
+		Organizacije organizacije = new Organizacije();
+		organizacije.setPutanja();
+		
+		if(!organizacije.UcitajOrganizacije()){
+			return false;
+		}
+		ArrayList<String> listaKorisnika = new ArrayList<String>();
+		ArrayList<String> listaResursa = new ArrayList<String>();
+		String logo = "logos/default.jpg";
+		
+		if(newOrg.logo != null){
+			//ovde se namesta druga slika
+		}
+		
+		Organizacija org = new Organizacija(newOrg.name, newOrg.details, logo, listaKorisnika, listaResursa);
+				
+		organizacije.dodajOrganizaciju(org);
+		organizacije.UpisiOrganizacije();
+		
+		return true;
+	}
+	
+	@POST
+	@Path("/editOrganisation")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	/**
+	 * 
+	 * @param ote
+	 * @return true if organisation is edited successfully.
+	 */
+	public boolean editOrganisation(OrganisationToEdit ote) {
+		if (ote.details == null) {
+			
+		}else if (ote.details.equals("")) {
+			ote.details = null;
+		}
+		
+		//TODO: Ivana za logo...
+		if (ote.logo == null) {
+			//TODO: Stavljas valjda default kako si rekla dok ne uradis da se moze ucitati...
+		}else if (ote.logo.equals("")) {
+			//TODO: Isto sto i iznad  --||--  ...
+			ote.logo = null; // Ovo obrises kada stavis ono tvoje.
+		}
+		
+		Organizacije organizacije = new Organizacije();
+		organizacije.setPutanja();
+		organizacije.UcitajOrganizacije();
+		
+		Korisnici korisnici = new Korisnici();
+		korisnici.setPutanja();
+		korisnici.UcitajKorisnike();
+		
+		Organizacija orgToAdd = new Organizacija(ote.name, ote.details, ote.logo, new ArrayList<String>(), new ArrayList<String>());
+		
+		Organizacija oldOrg = organizacije.getMapaOrganizacije().get(ote.oldName);
+		
+		organizacije.getListaOrganizacije().remove(oldOrg);
+		organizacije.getListaOrganizacije().add(orgToAdd);
+		organizacije.UpisiOrganizacije();
+		
+		for (Korisnik kor : korisnici.getListaKorisnici()) {
+			if (kor.getOrganizacija().getIme().equals(oldOrg.getIme())) {
+				kor.setOrganizacija(orgToAdd);
+			}
+		}
+		
+		korisnici.UpisiKorisnike();
+		
+		return true;
 	}
 }

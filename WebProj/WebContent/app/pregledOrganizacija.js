@@ -40,7 +40,13 @@ Vue.component("pregled-organizacija" ,{
 	`,
 	methods: {
 		edit: function(){
-			
+			axios
+    		.post('rest/organisationService/getOrganisation', {"name": event.srcElement.id})
+    		.then(response => {
+    			localStorage.setItem('organisationDetails', JSON.stringify(response.data));
+
+    			router.push({path: "/izmenaOrganizacije"});
+    		});
 			
 		},
 		

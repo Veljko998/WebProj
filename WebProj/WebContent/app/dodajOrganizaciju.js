@@ -9,7 +9,7 @@ Vue.component("dodaj-organizaciju" ,{
 			Organisation: {},
 			showErrorEmptyField: false,
 			showErrorOrganisationExists: false,
-			canAddDisc: false
+			showAddingSucceed: false
 		}
 	},
 	template: 
@@ -19,49 +19,39 @@ Vue.component("dodaj-organizaciju" ,{
 		<div class="col-md-8">
 			<div class="card">
 				<div class="card-header">
-					Add organisation
+					Dodavanje organizacije
 				</div>
 				<div class="card-body">
 
 					<!-- Dodavanje imena organizacije -->
 					<div class="input-group mb-4">
 						<div class="input-group-prepend">
-							<span class="input-group-text" id="inputGroup-sizing-default">Organisation name:</span>
+							<span class="input-group-text" id="inputGroup-sizing-default">Ime organizacije:</span>
 						</div>
-						<input type="text" class="form-control" name="name" id="name" placeholder="Enter Organisation Name" v-model="Organisation.name"/>
+						<input type="text" class="form-control" name="name" id="name" placeholder="Unesite ime organizacije" v-model="Organisation.name"/>
 					</div>
 
 					<!-- Dodavanje opisa organizacije -->
 					<div class="input-group mb-4">
 						<div class="input-group-prepend">
-							<span class="input-group-text" id="inputGroup-sizing-default">Organisation description:</span>
+							<span class="input-group-text" id="inputGroup-sizing-default">Opis organizacije:</span>
 						</div>
-						<textarea class="form-control" id="description" name="description" placeholder="Enter description for organisation" v-model="Organisation.description" rows="3"></textarea>
+						<textarea class="form-control" id="description" name="description" placeholder="Unesite opis organizacije" v-model="Organisation.description" rows="3"></textarea>
 					</div>
 
 					<!-- Dodavanje upload-a slike -->
 					<div class="input-group mb-4">
 						<div class="input-group-prepend">
-							<span class="input-group-text" id="inputGroup-sizing-default">Organisation logo:</span>
+							<span class="input-group-text" id="inputGroup-sizing-default">Logo:</span>
 						</div>
 						<input type="file" class="form-control-file" name="logo" id="logo"/>
 					</div>
 					
-					<!-- Dodavanje resursa -->
-					<div class="input-group mb-4">
-					<div class="input-group-prepend">
-						<span class="input-group-text" id="inputGroup-sizing-default">Organisation resources: </span>
-					</div>
-					<select multiple class="form-control" id="resources" name="resources" v-model="Organisation.resources">
-						<option v-for="r in resources" :value="r">{{ r }}</option>
-					</select>
-					</div>
-					
-					<p class="errorMessageRegisterDisc" v-if="this.showErrorEmptyField == true">Sva polja moraju biti popunjena !!!</br></p>
-					<p class="errorMessageOrganisationExists" v-if="this.showErrorOrganisationExists == true">Organizacija sa tim imenom vec postoji !!!</br></p>
+					<p class="errorMessageRegisterDisc" v-if="this.showErrorEmptyField == true">Polje sa imenom organizacije je obavezno!</br></p>
+					<p class="errorMessageOrganisationExists" v-if="this.showErrorOrganisationExists == true">Organizacija sa tim imenom vec postoji!</br></p>
 					
 					<div class="form-group ">
-						<button type="button" class="btn btn-primary btn-lg btn-block login-button" >Add new organisation</button>
+						<button type="button" class="btn btn-primary btn-lg btn-block login-button" v-on:click="checkData()">Dodaj novu organizaciju</button>
 					</div>
 				</div>
 			</div>
@@ -70,21 +60,56 @@ Vue.component("dodaj-organizaciju" ,{
 </div>
 	`,
 	methods: {
+		organisationExists: function(){
+			var path = 'rest/organisationService/organisationAlreadyExists/' + this.Organisation.name;
+	    
+			axios
+	    		.get(path)
+	    		.then(response => {
+	    			this.showErrorOrganisationExists = response.data
+	    		});
+		},
+		
+		checkData: function(){
+			if((this.Organisation.name !== '' && this.Organisation.name !== undefined)){
+					this.showErrorEmptyField = false;
+					
+					this.organisationExists.call();
+					
+					
+				}
+				else{
+					this.showErrorEmptyField = true;
+				}
+					
+				if(this.showErrorOrganisationExists === false && this.showErrorEmptyField === false){
+					console.log("evo ovo moze");
+					this.changeData.call();
+				}
+		},
+		
+		changeData: function(){
+			
+			axios
+        	.post('rest/organisationService/addOrganisation', {"name": this.Organisation.name, "details": this.Organisation.details, "logo": null})
+        	.then(response => {
+        		 this.showAddingSucceed = response.data;
+        		 
+        		 if(this.showAddingSucceed){
+         			console.log("Podaci su uspesno izmenjeni");
+         			router.push({path: "/pregledOrganizacija"});
+         		}
+        		
+        	});
+			
+		}
 		
 		
 	},
 	mounted () {   
 		this.role = localStorage.getItem('role');
 		this.email = localStorage.getItem('email');
-		var path1 = 'rest/organisationService/getOrganisations/' + this.role + '/' + this.email;
-		var path2 = 'rest/organisationService/getResources/' + this.role + '/' + this.email
 		
-		axios
-		.get(path1)
-		.then(response => (this.organisations = response.data));
-		axios
-		.get(path2)
-		.then(response => (this.resources = response.data))
     		
     },
 });

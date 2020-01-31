@@ -35,7 +35,13 @@ Vue.component("detalji-organizacije", {
     methods: {
     	
     	izmeniOrganizaciju: function(){
-    		
+    		axios
+    		.post('rest/organisationService/getOrganisation', {"name": this.Organizacija.ime})
+    		.then(response => {
+    			localStorage.setItem('organisationDetails', JSON.stringify(response.data));
+
+    			router.push({path: "/izmenaOrganizacije"});
+    		});
     	},
     	/*
     	 * Load Disk and Virtual Machine of disk.
