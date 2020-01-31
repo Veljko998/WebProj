@@ -10,7 +10,8 @@ Vue.component("izmena-organizacije" ,{
 			Organizacija: {},
 			showErrorEmptyField: false,
 			showErrorOrganisationExists: false,
-			showTemplate: false
+			showTemplate: false,
+			prethodnoIme: ''
 		}
 	},
 	template: 
@@ -63,7 +64,7 @@ Vue.component("izmena-organizacije" ,{
 	methods: {
 		loadOrganisation: function() {
     		this.Organizacija = JSON.parse(localStorage.getItem('organisationDetails'));
-    		
+    		this.prethodnoIme = this.Organizacija.ime;
         	localStorage.removeItem("organisationDetails");
         	this.showTemplate = true;
     	},
@@ -92,7 +93,17 @@ Vue.component("izmena-organizacije" ,{
 					
 				if(this.showErrorOrganisationExists === false && this.showErrorEmptyField === false){
 					console.log("evo ovo moze");
-					
+					axios
+		        	.post('rest/organisationService/editOrganisation', {"name": this.Organisation.name, "details": this.Organisation.details, "logo": null, "oldName": this.prethodnoIme})
+		        	.then(response => {
+		        		 this.showAddingSucceed = response.data;
+		        		 
+		        		 if(this.showAddingSucceed){
+		         			console.log("Podaci su uspesno izmenjeni");
+		         			router.push({path: "/detaljiOrganizacija"});
+		         		}
+		        		
+		        	});
 				}
 		}
 		

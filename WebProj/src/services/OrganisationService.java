@@ -150,7 +150,6 @@ public class OrganisationService {
 		o.setPutanja();
 		if(o.UcitajOrganizacije()){
 			if(o.getMapaOrganizacije().containsKey(imeOrg)){
-				System.out.println("pa postoji");
 				return true;
 			}
 		}
@@ -167,7 +166,6 @@ public class OrganisationService {
 		organizacije.setPutanja();
 		
 		if(!organizacije.UcitajOrganizacije()){
-			System.out.println("odje");
 			return false;
 		}
 		ArrayList<String> listaKorisnika = new ArrayList<String>();
@@ -182,7 +180,6 @@ public class OrganisationService {
 				
 		organizacije.dodajOrganizaciju(org);
 		organizacije.UpisiOrganizacije();
-		System.out.println("dno");
 		return true;
 	}
 	
@@ -203,11 +200,8 @@ public class OrganisationService {
 		}
 		
 		//TODO: Ivana za logo...
-		if (ote.logo == null) {
-			//TODO: Stavljas valjda default kako si rekla dok ne uradis da se moze ucitati...
-		}else if (ote.logo.equals("")) {
-			//TODO: Isto sto i iznad  --||--  ...
-			ote.logo = null; // Ovo obrises kada stavis ono tvoje.
+		if (ote.logo == null || ote.logo.equals("")) {
+			ote.logo = "logos/default.jpg";
 		}
 		
 		Organizacije organizacije = new Organizacije();
@@ -224,6 +218,8 @@ public class OrganisationService {
 		
 		organizacije.getListaOrganizacije().remove(oldOrg);
 		organizacije.getListaOrganizacije().add(orgToAdd);
+		organizacije.getMapaOrganizacije().remove(ote.oldName);
+		organizacije.getMapaOrganizacije().put(orgToAdd.getIme(), orgToAdd);
 		organizacije.UpisiOrganizacije();
 		
 		for (Korisnik kor : korisnici.getListaKorisnici()) {
