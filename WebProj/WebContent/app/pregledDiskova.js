@@ -65,8 +65,8 @@ Vue.component("pregled-diskova", {
     `,
     methods: {
     	diskDetails: function() {
-    		console.log("Usli smo u pregled diskova. Ako radi obrisati ovaj komentar.");
-    		localStorage.setItem("imeDiska", event.srcElement.id);
+    		console.log("Usli smo u metodu detalji diska. Ako radi obrisati ovaj komentar.");
+//    		localStorage.setItem("imeDiska", event.srcElement.id);
     		var help = null;
     		
     		axios

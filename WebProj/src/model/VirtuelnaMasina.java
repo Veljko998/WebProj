@@ -192,4 +192,56 @@ public class VirtuelnaMasina {
 		return "VirtuelnaMasina [ime=" + ime + ", kategorjia=" + kategorjia + ", brojJezgara=" + brojJezgara + ", ram="
 				+ ram + ", gpu=" + gpu + ", diskovi=" + diskovi + ", listaAktivnosti=" + listaAktivnosti + "]";
 	}
+	
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + brojJezgara;
+		result = prime * result + ((diskovi == null) ? 0 : diskovi.hashCode());
+		result = prime * result + gpu;
+		result = prime * result + ((ime == null) ? 0 : ime.hashCode());
+		result = prime * result + ((kategorjia == null) ? 0 : kategorjia.hashCode());
+		result = prime * result + ((listaAktivnosti == null) ? 0 : listaAktivnosti.hashCode());
+		result = prime * result + ram;
+		return result;
+	}
+	
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		VirtuelnaMasina other = (VirtuelnaMasina) obj;
+		if (brojJezgara != other.brojJezgara)
+			return false;
+		if (diskovi == null) {
+			if (other.diskovi != null)
+				return false;
+		} else if (!diskovi.equals(other.diskovi))
+			return false;
+		if (gpu != other.gpu)
+			return false;
+		if (ime == null) {
+			if (other.ime != null)
+				return false;
+		} else if (!ime.equals(other.ime))
+			return false;
+		if (kategorjia == null) {
+			if (other.kategorjia != null)
+				return false;
+		} else if (!kategorjia.equals(other.kategorjia))
+			return false;
+		if (listaAktivnosti == null) {
+			if (other.listaAktivnosti != null)
+				return false;
+		} else if (!listaAktivnosti.equals(other.listaAktivnosti))
+			return false;
+		if (ram != other.ram)
+			return false;
+		return true;
+	}
 }

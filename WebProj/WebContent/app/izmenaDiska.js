@@ -96,17 +96,18 @@ Vue.component("izmena-diska", {
 			this.canAddDisc = false;
 			
 			if((this.Disc.name !== '' && this.Disc.name != undefined) && 
-					(this.Disc.capacity !== '' && this.Disc.capacity != undefined && this.Disc.capacity > 0) &&
-					(this.Disc.type !== '' && this.Disc.type != undefined && this.Disc.type !== 'Choose...')){
-					this.showErrorEmptyField = false;
-					console.log("Sva polja su popunjena.");
-					this.canAddDisc = true;
-					this.discAlreadyExists.call();
-				}else{
-					console.log("Nisu sva polja popunjena.");
-					this.showErrorEmptyField = true;
-					this.canAddDisc = false;
-				}
+			(this.Disc.capacity !== '' && this.Disc.capacity != undefined && this.Disc.capacity > 0) &&
+			(this.Disc.type !== '' && this.Disc.type != undefined && this.Disc.type !== 'Choose...')
+			){
+				this.showErrorEmptyField = false;
+				console.log("Sva polja su popunjena.");
+				this.canAddDisc = true;
+				this.editDisc();
+			}else{
+				console.log("Nisu sva polja popunjena.");
+				this.showErrorEmptyField = true;
+				this.canAddDisc = false;
+			}
 		},
 //		discAlreadyExists: function(){
 ////			this.canAddDisc = true;

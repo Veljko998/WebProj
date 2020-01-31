@@ -16,6 +16,8 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
+import org.graalvm.compiler.hotspot.nodes.VMErrorNode;
+
 import model.Disk;
 import model.Diskovi;
 import model.Korisnici;
@@ -86,53 +88,75 @@ public class DiscService {
 		diskovi.setPutanja();
 		diskovi.UcitajDiskove();
 		
-		if (diskovi.getMapaDiskovi().containsKey(dte.name) && !dte.name.equals(dte.oldName)) {
-			System.out.println("Disk sa ovim nazivom vec postoji.");
-			return false;
-		}
-		
 		VirtuelneMasine virtuelneMasine = new VirtuelneMasine();
 		virtuelneMasine.setPutanja();
 		virtuelneMasine.UcitajVirtuelneMasine();
 		
-		if (virtuelneMasine.getMapaVirtuelnihMasina().get(dte.name) != null) {
-			System.out.println("Dodajemo disk ali postoji masina sa ovim nazivom i vracamo false. /editDisk");
-			return false;
+		Organizacije organizacije = new Organizacije();
+		organizacije.setPutanja();
+		organizacije.UcitajOrganizacije();
+		
+		Korisnici korisnici = new Korisnici();
+		korisnici.setPutanja();
+		korisnici.UcitajKorisnike();
+		
+		if (dte.VMName == null) {
+
+		}else if (dte.VMName.equalsIgnoreCase("Choose...")) {
+			dte.VMName = null;
 		}
 		
-		Disk oldDisk = diskovi.getMapaDiskovi().get(dte.oldName);
-		Disk editedDisk = new Disk(dte.name, TipDiska.valueOf(dte.type), Integer.parseInt(dte.capacity), dte.VMName);
+		Disk newDisk = new Disk(dte.name, TipDiska.valueOf(dte.type), Integer.parseInt(dte.capacity), dte.VMName);
 		
-		if (oldDisk.equals(editedDisk)) {
-			System.out.println("Isti disk hocemo da menjamo sto nema smisla. Vracam false.");
-			return false;
-		}else {
-			//stari disk brisemo i dodajemo novi
-			Collections.replaceAll(diskovi.getListaDiskovi(), oldDisk, editedDisk);
-			diskovi.UpisiDiskove();
-		}
-		
-		//ako diskovi imaju isti naziv, nista ne diramo jer vm imaju listu naziva diskova. 
-		//Disk ce se svakako ucitati iz diskovi.json sto je vec promenjeno
-		if (dte.oldName.equals(dte.name)) {
-			System.out.println("Diskovi imaju isti naziv i ne diram nista kod vir. masina.");
+		if (diskovi.getMapaDiskovi().get(dte.oldName).equals(newDisk)) {
+			System.out.println("Nema smisa da menjam disk istim diskom. vracam true svakako.");
 			return true;
 		}
 		
 		/*
-		 * Stari disk pokazuje na odredjenu VM.
-		 * Iz liste naziva diskova te VM brisemo naziv starog diska.
-		 * 
-		 * Sada novi disk pokazuje na odredjenu VM.
-		 * U listu te vm mi ubacujemo naziv novog diska(bio on isti kao stari ili ne).
-		 * Upisujemo sve VM.
+		 * Ako imaju ista imena onda nema potrebe da menjam unutar masina i organizacija
 		 */
-		virtuelneMasine.getListaVirtuelnihMasina().get(virtuelneMasine.getListaVirtuelnihMasina().indexOf(virtuelneMasine.getMapaVirtuelnihMasina().get(oldDisk.getVirtualnaMasina()))).getDiskovi().remove(oldDisk.getIme());  
-		virtuelneMasine.getListaVirtuelnihMasina().get(virtuelneMasine.getListaVirtuelnihMasina().indexOf(virtuelneMasine.getMapaVirtuelnihMasina().get(editedDisk.getVirtualnaMasina()))).getDiskovi().add(editedDisk.getIme());
-		virtuelneMasine.UpisiVirtuelneMasine();
-		System.out.println("Uspesno smo upisali i virtuelne masine. vracamo true");
-		return true;
+		if (!dte.oldName.equals(dte.name)) {
+			if (!dte.oldName.equals(dte.name)) {
+				for (VirtuelnaMasina vm : virtuelneMasine.getListaVirtuelnihMasina()) {
+					if (vm.getDiskovi().contains(dte.oldName)) {
+						vm.getDiskovi().remove(dte.oldName);
+						vm.getDiskovi().add(dte.name);
+					}
+				}
+			}
+			
+			virtuelneMasine.UpisiVirtuelneMasine();
+			
+			String orgName = "";
+			
+			for (Organizacija org : organizacije.getListaOrganizacije()) {
+				if (org.getListaResursa().contains(dte.oldName) && diskovi.getMapaDiskovi().containsKey(dte.oldName)) { //Ovde ce samo jednom da udje
+					org.getListaResursa().remove(dte.oldName);
+					org.getListaResursa().add(dte.name);
+					orgName = org.getIme();
+				}
+			}
+			
+			organizacije.UpisiOrganizacije();
+			System.out.println("Naziv organizacije je: " + orgName);
+			
+			for (Korisnik kor : korisnici.getListaKorisnici()) {
+				if (kor.getOrganizacija().getIme().equals(orgName)) {
+					kor.getOrganizacija().getListaResursa().remove(dte.oldName);
+					kor.getOrganizacija().getListaResursa().add(dte.name);
+				}
+			}
+			
+			korisnici.UpisiKorisnike();
+		}
 		
+		diskovi.getListaDiskovi().remove(diskovi.getMapaDiskovi().get(dte.oldName));
+		diskovi.getListaDiskovi().add(newDisk);
+		
+		diskovi.UpisiDiskove();
+		
+		return true;
 	}
 
 	@POST
@@ -167,13 +191,65 @@ public class DiscService {
 		Diskovi diskovi = new Diskovi();
 		diskovi.setPutanja();
 		diskovi.UcitajDiskove();
-		Disk diskToDelete;
 		
-		if ((diskToDelete = diskovi.getMapaDiskovi().get(dtd.name)) != null) {
-			diskovi.getListaDiskovi().remove(diskToDelete);
-			diskovi.UpisiDiskove();
-			return true;
-		}return false;
+		Organizacije organizacije = new Organizacije();
+		organizacije.setPutanja();
+		organizacije.UcitajOrganizacije();
+		
+		VirtuelneMasine virtuelneMasine = new VirtuelneMasine();
+		virtuelneMasine.setPutanja();
+		virtuelneMasine.UcitajVirtuelneMasine();
+		
+		Korisnici korisnici = new Korisnici();
+		korisnici.setPutanja();
+		korisnici.UcitajKorisnike();
+		
+		Disk diskToDelete = diskovi.getMapaDiskovi().get(dtd.name);
+		String diskName = dtd.name;
+		
+		/*
+		 * Delete disk from disks.
+		 */
+		diskovi.getListaDiskovi().remove(diskToDelete);
+		diskovi.UpisiDiskove();
+		
+		String orgName = "";
+		
+		/*
+		 * Delete disk from organisations.
+		 */
+		for (Organizacija org : organizacije.getListaOrganizacije()) {
+			if (org.getListaResursa().contains(diskName)) {
+				org.getListaResursa().remove(diskName);
+				orgName = org.getIme();
+			}
+		}
+		
+		organizacije.UpisiOrganizacije();
+		
+		/*
+		 * Delete disk from VMs.
+		 */
+		for (VirtuelnaMasina vm : virtuelneMasine.getListaVirtuelnihMasina()) {
+			if (vm.getDiskovi().contains(diskName)) {
+				vm.getDiskovi().remove(diskName);
+			}
+		}
+		
+		virtuelneMasine.UpisiVirtuelneMasine();
+		
+		/*
+		 * Delete disk from users.
+		 */
+		for (Korisnik kor : korisnici.getListaKorisnici()) {
+			if (kor.getOrganizacija().getIme().equals(orgName)) {
+				kor.getOrganizacija().getListaResursa().remove(diskName);
+			}
+		}
+		
+		korisnici.UpisiKorisnike();
+		
+		return true;
 	}
 	
 	@GET
@@ -209,6 +285,12 @@ public class DiscService {
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
 	public boolean addDisc(DiscToAdd dta) {
+		if (dta.VMName == null) {
+			
+		}else if (dta.VMName.equalsIgnoreCase("Choose...")) {
+			dta.VMName = null;
+		}
+		
 		Diskovi diskovi = new Diskovi();
 		diskovi.setPutanja();
 		diskovi.UcitajDiskove();
@@ -221,16 +303,27 @@ public class DiscService {
 		korisnici.setPutanja();
 		korisnici.UcitajKorisnike();
 		
+		String orgName = korisnici.getMapaKorisnici().get(dta.email).getOrganizacija().getIme();
+		
 		Organizacije organizacije = new Organizacije();
 		organizacije.setPutanja();
 		organizacije.UcitajOrganizacije();
 		
-		String orgName = "";
+		VirtuelneMasine virtuelneMasine = new VirtuelneMasine();
+		virtuelneMasine.setPutanja();
+		virtuelneMasine.UcitajVirtuelneMasine();
+		
+		for (VirtuelnaMasina vm : virtuelneMasine.getListaVirtuelnihMasina()) {
+			if (vm.getIme().equals(dta.VMName)) {
+					vm.getDiskovi().add(dta.name);
+			}
+		}
+		
+		virtuelneMasine.UpisiVirtuelneMasine();
 		
 		for (Korisnik kor : korisnici.getListaKorisnici()) {
-			if (kor.getEmail().equals(dta.email)) {
+			if (kor.getOrganizacija().getIme().equals(orgName)) {
 				kor.getOrganizacija().getListaResursa().add(dta.name);
-				orgName = kor.getOrganizacija().getIme();
 			}
 		}
 		

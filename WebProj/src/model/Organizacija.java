@@ -81,4 +81,53 @@ public class Organizacija {
 		return "Organizacija [ime=" + ime + ", opis=" + opis + ", logo=" + logo + ", listaKorisnika=" + listaKorisnika
 				+ ", listaResursa=" + listaResursa + "]";
 	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((ime == null) ? 0 : ime.hashCode());
+		result = prime * result + ((listaKorisnika == null) ? 0 : listaKorisnika.hashCode());
+		result = prime * result + ((listaResursa == null) ? 0 : listaResursa.hashCode());
+		result = prime * result + ((logo == null) ? 0 : logo.hashCode());
+		result = prime * result + ((opis == null) ? 0 : opis.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Organizacija other = (Organizacija) obj;
+		if (ime == null) {
+			if (other.ime != null)
+				return false;
+		} else if (!ime.equals(other.ime))
+			return false;
+		if (listaKorisnika == null) {
+			if (other.listaKorisnika != null)
+				return false;
+		} else if (!listaKorisnika.equals(other.listaKorisnika))
+			return false;
+		if (listaResursa == null) {
+			if (other.listaResursa != null)
+				return false;
+		} else if (!listaResursa.equals(other.listaResursa))
+			return false;
+		if (logo == null) {
+			if (other.logo != null)
+				return false;
+		} else if (!logo.equals(other.logo))
+			return false;
+		if (opis == null) {
+			if (other.opis != null)
+				return false;
+		} else if (!opis.equals(other.opis))
+			return false;
+		return true;
+	}
 }

@@ -94,4 +94,56 @@ public class Korisnik {
 		return "Korisnik [email=" + email + ", lozinka=" + lozinka + ", ime=" + ime + ", prezime=" + prezime
 				+ ", organizacija=" + organizacija + ", uloga=" + uloga + "]";
 	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((email == null) ? 0 : email.hashCode());
+		result = prime * result + ((ime == null) ? 0 : ime.hashCode());
+		result = prime * result + ((lozinka == null) ? 0 : lozinka.hashCode());
+		result = prime * result + ((organizacija == null) ? 0 : organizacija.hashCode());
+		result = prime * result + ((prezime == null) ? 0 : prezime.hashCode());
+		result = prime * result + ((uloga == null) ? 0 : uloga.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Korisnik other = (Korisnik) obj;
+		if (email == null) {
+			if (other.email != null)
+				return false;
+		} else if (!email.equals(other.email))
+			return false;
+		if (ime == null) {
+			if (other.ime != null)
+				return false;
+		} else if (!ime.equals(other.ime))
+			return false;
+		if (lozinka == null) {
+			if (other.lozinka != null)
+				return false;
+		} else if (!lozinka.equals(other.lozinka))
+			return false;
+		if (organizacija == null) {
+			if (other.organizacija != null)
+				return false;
+		} else if (!organizacija.equals(other.organizacija))
+			return false;
+		if (prezime == null) {
+			if (other.prezime != null)
+				return false;
+		} else if (!prezime.equals(other.prezime))
+			return false;
+		if (uloga != other.uloga)
+			return false;
+		return true;
+	}
 }

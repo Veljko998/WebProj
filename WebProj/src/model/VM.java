@@ -124,4 +124,38 @@ public class VM {
 	public String toString() {
 		return "VM [ime=" + ime + ", brojJezgara=" + brojJezgara + ", ramMemory=" + ramMemory + ", gpu=" + gpu + "]";
 	}
+	
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + brojJezgara;
+		result = prime * result + gpu;
+		result = prime * result + ((ime == null) ? 0 : ime.hashCode());
+		result = prime * result + ramMemory;
+		return result;
+	}
+	
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		VM other = (VM) obj;
+		if (brojJezgara != other.brojJezgara)
+			return false;
+		if (gpu != other.gpu)
+			return false;
+		if (ime == null) {
+			if (other.ime != null)
+				return false;
+		} else if (!ime.equals(other.ime))
+			return false;
+		if (ramMemory != other.ramMemory)
+			return false;
+		return true;
+	}
 }

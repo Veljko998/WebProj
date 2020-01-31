@@ -81,8 +81,7 @@ Vue.component("dodaj-disk" ,{
 			
 			if((this.Disc.name !== '' && this.Disc.name != undefined) && 
 			(this.Disc.capacity !== '' && this.Disc.capacity != undefined && this.Disc.capacity > 0) &&
-			(this.Disc.type !== '' && this.Disc.type != undefined && this.Disc.type !== 'Choose...') &&
-			(this.Disc.VMName !== 'Choose...')
+			(this.Disc.type !== '' && this.Disc.type != undefined && this.Disc.type !== 'Choose...')
 			){
 				this.showErrorEmptyField = false;
 				console.log("Sva polja su popunjena.");
