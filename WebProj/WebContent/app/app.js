@@ -22,6 +22,7 @@ const IzmenaKategorije = {template: '<izmena-kategorije></izmena-kategorije>'}
 const DetaljiKorisnika = {template: '<detalji-korisnika></detalji-korisnika>'}
 const IzmenaKorisnika = {template: '<izmena-korisnika></izmena-korisnika>'}
 const DetaljiOrganizacije = {template: '<detalji-organizacije></detalji-organizacije>'}
+const IzmenaOrganizacije = {template: '<izmena-organizacije></izmena-organizacije>'}
 
 const router = new VueRouter({
 	  mode: 'hash',
@@ -49,7 +50,8 @@ const router = new VueRouter({
 	    { path: '/izmenaKategorije', component: IzmenaKategorije},
 	    { path: '/detaljiKorisnika', component: DetaljiKorisnika},
 	    { path: '/izmenaKorisnika', component: IzmenaKorisnika},
-	    { path: '/detaljiOrganizacije', component: DetaljiOrganizacije}
+	    { path: '/detaljiOrganizacije', component: DetaljiOrganizacije},
+	    { path: '/izmenaOrganizacije', component: IzmenaOrganizacije}
 //	    { path: '/', component: }
 	  ]
 });
