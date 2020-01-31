@@ -150,6 +150,7 @@ public class OrganisationService {
 		o.setPutanja();
 		if(o.UcitajOrganizacije()){
 			if(o.getMapaOrganizacije().containsKey(imeOrg)){
+				System.out.println("pa postoji");
 				return true;
 			}
 		}
@@ -166,6 +167,7 @@ public class OrganisationService {
 		organizacije.setPutanja();
 		
 		if(!organizacije.UcitajOrganizacije()){
+			System.out.println("odje");
 			return false;
 		}
 		ArrayList<String> listaKorisnika = new ArrayList<String>();
@@ -180,7 +182,7 @@ public class OrganisationService {
 				
 		organizacije.dodajOrganizaciju(org);
 		organizacije.UpisiOrganizacije();
-		
+		System.out.println("dno");
 		return true;
 	}
 	

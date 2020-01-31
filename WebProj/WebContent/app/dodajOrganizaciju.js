@@ -61,31 +61,32 @@ Vue.component("dodaj-organizaciju" ,{
 	`,
 	methods: {
 		organisationExists: function(){
-			var path = 'rest/organisationService/organisationAlreadyExists/' + this.Organisation.name;
+			
 	    
-			axios
-	    		.get(path)
-	    		.then(response => {
-	    			this.showErrorOrganisationExists = response.data
-	    		});
+			
 		},
 		
 		checkData: function(){
 			if((this.Organisation.name !== '' && this.Organisation.name !== undefined)){
 					this.showErrorEmptyField = false;
-					
-					this.organisationExists.call();
-					
-					
-				}
-				else{
-					this.showErrorEmptyField = true;
-				}
-					
-				if(this.showErrorOrganisationExists === false && this.showErrorEmptyField === false){
-					console.log("evo ovo moze");
-					this.changeData.call();
-				}
+			}
+			else{
+				this.showErrorEmptyField = true;
+			}
+				
+			var path = 'rest/organisationService/organisationAlreadyExists/' + this.Organisation.name;
+			
+			axios
+    		.get(path)
+    		.then(response => {
+    			this.showErrorOrganisationExists = response.data;
+    			if(this.showErrorOrganisationExists === false && this.showErrorEmptyField === false){
+    				console.log("evo ovo moze");
+    				this.changeData.call();
+    			}
+    		});
+			
+			
 		},
 		
 		changeData: function(){
