@@ -12,4 +12,5 @@ public class DiscToAdd {
 	public String capacity;
 	public String VMName;
 	public String type;
+	public String email;
 }

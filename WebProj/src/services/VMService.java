@@ -76,6 +76,12 @@ public class VMService {
 		organizacije.setPutanja();
 		organizacije.UcitajOrganizacije();
 		
+		if (!vme.oldName.equals(vme.name)) {
+			if (diskovi.getMapaDiskovi().containsKey(vme.name)) {
+				System.out.println("Pokusavamo da promenimo masinu sa novim imenom koje je vec rezervisano kod diska. /editVM");
+			}
+		}
+		
 		try {
 			if (vme.role.equals("admin")) {
 				for (Korisnik korisnik : korisnici.getListaKorisnici()) {
@@ -206,6 +212,17 @@ public class VMService {
 		korisnici.setPutanja();
 		korisnici.UcitajKorisnike();
 		
+		Organizacije organizacije = new Organizacije();
+		organizacije.setPutanja();
+		organizacije.UcitajOrganizacije();
+		
+		for (Organizacija organizacija : organizacije.getListaOrganizacije()) {
+			if (organizacija.getListaResursa().contains(vmtd.name)) {
+				organizacija.getListaResursa().remove(vmtd.name);
+			}
+		}
+		
+		organizacije.UpisiOrganizacije();
 		
 		VirtuelnaMasina vm = new VirtuelnaMasina();
 		
@@ -224,6 +241,8 @@ public class VMService {
 				
 				return true;
 			}
+		}else {
+			System.out.println("Ovde ne sme da udje, nema smisla. //deleteVM");
 		}
 		
 		System.out.println("Masina nije uspesno obrisana. Ovde ne bi smeo da udje nikada.  /VMService/deleteVM");
@@ -235,6 +254,15 @@ public class VMService {
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
 	public boolean addVM(VMToAdd vma) {
+		Diskovi ddd = new Diskovi();
+		ddd.setPutanja();
+		ddd.UcitajDiskove();
+		
+		if (ddd.getMapaDiskovi().containsKey(vma.name)) {
+			System.out.println("Pokusavamo da dodamo VM a vec postoji disk sa tim imenom");
+			return false;
+		}
+		
 		VirtuelneMasine virtuelneMasine = new VirtuelneMasine();
 		virtuelneMasine.setPutanja();
 		virtuelneMasine.UcitajVirtuelneMasine();

@@ -20,6 +20,7 @@ import model.Disk;
 import model.Diskovi;
 import model.Korisnici;
 import model.Korisnik;
+import model.Organizacija;
 import model.Organizacije;
 import model.VirtuelnaMasina;
 import model.VirtuelneMasine;
@@ -41,10 +42,10 @@ public class DiscService {
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
 	/**
-	 * Take just disks from users organisation if admin
-	 * Else take disks from picked organisation
+	 * Take just disks from users organisation if admin and if not connected on Vm
+	 * Else take disks from picked organisation if not connected on Vm
 	 * 
-	 * @param ugt
+	 * @param ugt - role, email, orgName
 	 * @return list of name of disks
 	 */
 	public List<String> getAllDisks(UserToGetData2 ugt) {
@@ -56,42 +57,19 @@ public class DiscService {
 		organizacije.setPutanja();
 		organizacije.UcitajOrganizacije();
 		
-		if (organizacije.getMapaOrganizacije().get(ugt.orgName) == null) {
-			System.out.println("Ne postoji organizacija sa imenom: " + ugt.orgName);
-			return null;
-		}
+		Organizacija org = organizacije.getMapaOrganizacije().get(ugt.orgName);
 		
-		VirtuelneMasine virtuelneMasine = new VirtuelneMasine();
-		virtuelneMasine.setPutanja();
-		virtuelneMasine.UcitajVirtuelneMasine();
-		
-		organizacije.getMapaOrganizacije().get(ugt.orgName);
-		
-		List<VirtuelnaMasina> masine = new ArrayList<VirtuelnaMasina>();
 		List<String> imenaDiskova = new ArrayList<String>();
 		
-		try {
-			for (String vmName : organizacije.getMapaOrganizacije().get(ugt.orgName).getListaResursa()) {
-				if (virtuelneMasine.getMapaVirtuelnihMasina().get(vmName) == null) {
-					System.out.println("Ne postoji VM sa nazivom: " + vmName);
-				}else {
-					masine.add(virtuelneMasine.getMapaVirtuelnihMasina().get(vmName));
+		if (org != null) {
+			for (String str : org.getListaResursa()) {
+				if (diskovi.getMapaDiskovi().containsKey(str) && diskovi.getMapaDiskovi().get(str).getVirtualnaMasina() == null) {
+					imenaDiskova.add(str);
 				}
 			}
-			
-			for (VirtuelnaMasina vm : masine) {
-				for (String diskName : vm.getDiskovi()) {
-					imenaDiskova.add(diskName);
-				}
-			}
-			
-			System.out.println("Velicina liste koju vracam je: " + imenaDiskova.size());
-			return imenaDiskova;
-		} catch (Exception e) {
-			System.out.println("Nesto ne valja prilikom vracanja diskova. /discService/getAllDisks");
-			return null;
 		}
 		
+		return imenaDiskova;
 	}
 	
 	@POST
@@ -107,9 +85,8 @@ public class DiscService {
 		Diskovi diskovi = new Diskovi();
 		diskovi.setPutanja();
 		diskovi.UcitajDiskove();
-		HashMap<String, Disk> mapaDiskova = diskovi.getMapaDiskovi();
 		
-		if (mapaDiskova.containsKey(dte.name) && !dte.name.equals(dte.oldName)) {
+		if (diskovi.getMapaDiskovi().containsKey(dte.name) && !dte.name.equals(dte.oldName)) {
 			System.out.println("Disk sa ovim nazivom vec postoji.");
 			return false;
 		}
@@ -118,7 +95,12 @@ public class DiscService {
 		virtuelneMasine.setPutanja();
 		virtuelneMasine.UcitajVirtuelneMasine();
 		
-		Disk oldDisk = mapaDiskova.get(dte.oldName);
+		if (virtuelneMasine.getMapaVirtuelnihMasina().get(dte.name) != null) {
+			System.out.println("Dodajemo disk ali postoji masina sa ovim nazivom i vracamo false. /editDisk");
+			return false;
+		}
+		
+		Disk oldDisk = diskovi.getMapaDiskovi().get(dte.oldName);
 		Disk editedDisk = new Disk(dte.name, TipDiska.valueOf(dte.type), Integer.parseInt(dte.capacity), dte.VMName);
 		
 		if (oldDisk.equals(editedDisk)) {
@@ -207,7 +189,17 @@ public class DiscService {
 		diskovi.setPutanja();
 		diskovi.UcitajDiskove();
 		
+		VirtuelneMasine masine = new VirtuelneMasine();
+		masine.setPutanja();
+		masine.UcitajVirtuelneMasine();
+		
+		if (masine.getMapaVirtuelnihMasina().containsKey(discName)) {
+			System.out.println("Pokusavamo da dodamo disk a vec postoji masina sa tim nazivom.");
+			return true;
+		}
+		
 		if (diskovi.getMapaDiskovi().containsKey(discName)) {
+			System.out.println("Postoji disk sa nazivom: " + discName);
 			return true;
 		} return false;
 	}
@@ -221,12 +213,43 @@ public class DiscService {
 		diskovi.setPutanja();
 		diskovi.UcitajDiskove();
 		
+		System.out.println(dta.name);
+		System.out.println(dta.email);
+		System.out.println(dta.VMName);
+		
+		Korisnici korisnici = new Korisnici();
+		korisnici.setPutanja();
+		korisnici.UcitajKorisnike();
+		
+		Organizacije organizacije = new Organizacije();
+		organizacije.setPutanja();
+		organizacije.UcitajOrganizacije();
+		
+		String orgName = "";
+		
+		for (Korisnik kor : korisnici.getListaKorisnici()) {
+			if (kor.getEmail().equals(dta.email)) {
+				kor.getOrganizacija().getListaResursa().add(dta.name);
+				orgName = kor.getOrganizacija().getIme();
+			}
+		}
+		
+		for (Organizacija organizacija : organizacije.getListaOrganizacije()) {
+			if (organizacija.getIme().equals(orgName)) {
+				organizacija.getListaResursa().add(dta.name);
+			}
+		}
+		
+		organizacije.UpisiOrganizacije();
+		
+		korisnici.UpisiKorisnike();
+		
 		Disk disk = new Disk();
 		
 		disk.setIme(dta.name);
 		disk.setKapacitet(Integer.parseInt(dta.capacity));
 		disk.setTip(TipDiska.valueOf(dta.type));
-		disk.setVirtualnaMasina(dta.VMName); // Name of virtual machine
+		disk.setVirtualnaMasina(dta.VMName); // Name of virtual machine, or null if not VM
 
 		diskovi.dodajDisk(disk);
 		

@@ -13,7 +13,7 @@ public class Organizacija {
 	private String opis;
 	private String logo; //putanja ili samo naziv fajla 
 	private List<String> listaKorisnika; // mejlovi
-	private List<String> listaResursa; // imena virtuelnih masina
+	private List<String> listaResursa; // imena virtuelnih masina i diskova
 	
 	public Organizacija(){}
 	

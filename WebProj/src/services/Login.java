@@ -70,7 +70,7 @@ public class Login {
 		if (k.UcitajKorisnike()) {
 			return k.getListaKorisnici();
 		}else {
-			System.out.println("Nije ucitao ni jendog korisnika.");
+			System.out.println("Nije ucitao ni jendog korisnika. /getJustUsers");
 		}
 		return null;
 	}

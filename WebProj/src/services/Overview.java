@@ -132,16 +132,16 @@ public class Overview {
 		
 		/*
 		 * Korisnik ima organizaciju koja ima listu imena VM
-		 * Superadmin lista sve korisnike, njihove organizacije, i masine unutar njih
+		 * Superadmin lista sve korisnike, njihove organizacije, i masine I DISKOVE unutar njih
 		 * admin i korisnik dobijaju masine iz svojih organizacija.
 		 */
-		try { 
+//		try { 
 			List<String> help = new ArrayList<String>();
 			if (utgt.role.toLowerCase().equals("superadmin")) {
 				if (virtuelneMasine.getListaVirtuelnihMasina() != null && !virtuelneMasine.getListaVirtuelnihMasina().isEmpty()) {
 					for (Korisnik korisnik : korisnici.getListaKorisnici()) {
 						for (String vmName : korisnik.getOrganizacija().getListaResursa()) { //kroz listu resursa korisnikove organizacije
-							if (!help.contains(vmName)) {
+							if (!help.contains(vmName) && virtuelneMasine.getMapaVirtuelnihMasina().containsKey(vmName)) {
 								VirtuelnaMasina vm = virtuelneMasine.getMapaVirtuelnihMasina().get(vmName);
 								VMToOverview vmto = new VMToOverview();
 								vmto.ime = vm.getIme();
@@ -188,11 +188,11 @@ public class Overview {
 					return vmsToReturn; 
 				}
 			}
-		} catch (Exception e) {
-			System.out.println(e);
-			System.out.println("Vraca null sto se ne bi smelo desiti. Overview/getAllVM");
-			return null;
-		}
+//		} catch (Exception e) {
+//			System.out.println(e);
+//			System.out.println("Vraca null sto se ne bi smelo desiti. Overview/getAllVM");
+//			return null;
+//		}
 	}
 	
 	

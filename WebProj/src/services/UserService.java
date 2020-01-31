@@ -88,6 +88,7 @@ public class UserService {
 	 * Zapamtimo ime organizacije korisnika
 	 * Brisemo korisnika iz korisnika
 	 * Brisemo mejl korisnika iz liste korisnike u organizaciji koja je korisnikova
+	 * I to isto iz korisnika
 	 * 
 	 * @param mejl
 	 * @return true if user is deleted.
@@ -101,20 +102,21 @@ public class UserService {
 		organizacije.setPutanja();
 		organizacije.UcitajOrganizacije();
 		
-		Organizacija org = korisnici.getKorisnik(mejl).getOrganizacija();
-
-		Korisnik userToDel = korisnici.getKorisnik(mejl);
+		System.out.println(mejl);
 		
-		korisnici.getListaKorisnici().remove(userToDel);
+		String orgName = korisnici.getKorisnik(mejl).getOrganizacija().getIme();
+		Organizacija organizacija = korisnici.getKorisnik(mejl).getOrganizacija();
+		System.out.println(organizacija.getIme());
+		
+		korisnici.getListaKorisnici().remove(korisnici.getMapaKorisnici().get(mejl));
 		korisnici.UpisiKorisnike();
 		
-		for (Organizacija organizacija : organizacije.getListaOrganizacije()) {
-			for (String korIme : organizacija.getListaKorisnika()) {
-				if (korIme.equals(mejl)) {
-					organizacija.getListaKorisnika().remove(mejl);
-				}
+		for (Organizacija org : organizacije.getListaOrganizacije()) {
+			if (org.getListaKorisnika().contains(mejl)) {
+				org.getListaKorisnika().remove(mejl);
 			}
 		}
+		
 		organizacije.UpisiOrganizacije();
 		
 		return true;

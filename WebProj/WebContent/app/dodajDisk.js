@@ -80,14 +80,16 @@ Vue.component("dodaj-disk" ,{
 			this.canAddDisc = false;
 			
 			if((this.Disc.name !== '' && this.Disc.name != undefined) && 
-					(this.Disc.capacity !== '' && this.Disc.capacity != undefined && this.Disc.capacity > 0) &&
-					(this.Disc.type !== '' && this.Disc.type != undefined && this.Disc.type !== 'Choose...')){
-					this.showErrorEmptyField = false;
-					console.log("Sva polja su popunjena.");
-				}else{
-					console.log("Nisu sva polja popunjena.");
-					this.showErrorEmptyField = true;
-				}
+			(this.Disc.capacity !== '' && this.Disc.capacity != undefined && this.Disc.capacity > 0) &&
+			(this.Disc.type !== '' && this.Disc.type != undefined && this.Disc.type !== 'Choose...') &&
+			(this.Disc.VMName !== 'Choose...')
+			){
+				this.showErrorEmptyField = false;
+				console.log("Sva polja su popunjena.");
+			}else{
+				console.log("Nisu sva polja popunjena.");
+				this.showErrorEmptyField = true;
+			}
 		},
 		discAlreadyExists: function(){
 			if (this.showErrorEmptyField == false) {
@@ -115,7 +117,7 @@ Vue.component("dodaj-disk" ,{
 				console.log(this.Disc.type);
 				
 				axios
-            	.post('rest/discService/addDisc', {"name": this.Disc.name, "capacity": this.Disc.capacity, "VMName": this.Disc.VMName, "type": this.Disc.type})
+            	.post('rest/discService/addDisc', {"name": this.Disc.name, "capacity": this.Disc.capacity, "VMName": this.Disc.VMName, "type": this.Disc.type, "email": this.email})
             	.then(response => {
             		var discSuccesfullyRegistered = response.data;
             		console.log("disk uspesno upisan? : "+discSuccesfullyRegistered);

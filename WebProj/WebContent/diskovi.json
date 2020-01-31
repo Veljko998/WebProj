@@ -1,1 +1,1 @@
-[{"ime":"disk1","tip":"HDD","kapacitet":1,"virtualnaMasina":"vm1"},{"ime":"disk2","tip":"SSD","kapacitet":2,"virtualnaMasina":"vm4"},{"ime":"disk5","tip":"HDD","kapacitet":6,"virtualnaMasina":"vm2"}]
+[{"ime":"disk1","tip":"SSD","kapacitet":1,"virtualnaMasina":null},{"ime":"disk2","tip":"HDD","kapacitet":2,"virtualnaMasina":null}]
