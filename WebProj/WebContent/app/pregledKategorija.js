@@ -91,9 +91,18 @@ Vue.component("pregled-kategorija", {
     `,
     methods: {
     	categoryDetails: function() {
-    		console.log("Usli smo u pregled Kategorija. Ako radi obrisati ovaj komentar.");
-    		localStorage.setItem("imeKategorije", event.srcElement.id);
-    		router.push({path: "/detaljiKategorije"});
+//    		console.log("Usli smo u pregled Kategorija. Ako radi obrisati ovaj komentar.");
+//    		localStorage.setItem("imeKategorije", event.srcElement.id);
+//    		router.push({path: "/detaljiKategorije"});
+    		
+    		
+    		axios
+    		.post('rest/categoryService/getCategoryByName', {"name": event.srcElement.id})
+    		.then(response => {
+    			localStorage.setItem('storeObj4', JSON.stringify(response.data));
+    			
+    			router.push({path: "/detaljiKategorije"});
+    		});
     	},
     	editCategory: function(){
     		//TODO: 
