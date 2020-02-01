@@ -99,18 +99,19 @@ Vue.component("dodaj-korisnika" ,{
 	methods: {
 		addUser: function(){
 			if((this.User.name !== '' && this.User.name != undefined) && 
-				(this.User.surname !== '' && this.User.surname != undefined) &&
-				(this.User.email !== '' && this.User.email != undefined) &&
-				(this.User.password !== '' && this.User.password != undefined) &&
-				(this.User.passwordToConfirm !== '' && this.User.passwordToConfirm != undefined) &&
-				(this.User.organisationName !== '' && this.User.organisationName != undefined && this.User.organisationName !== 'Choose...') &&
-				(this.User.password == this.User.passwordToConfirm)){
+			(this.User.surname !== '' && this.User.surname != undefined) &&
+			(this.User.email !== '' && this.User.email != undefined) &&
+			(this.User.password !== '' && this.User.password != undefined) &&
+			(this.User.passwordToConfirm !== '' && this.User.passwordToConfirm != undefined) &&
+			(this.User.organisationName !== '' && this.User.organisationName != undefined && this.User.organisationName !== 'Choose...') &&
+			(this.User.role !== '' && this.User.role != undefined && this.User.role !== 'Choose...') &&
+			(this.User.password == this.User.passwordToConfirm)){
 				this.showErrorEmptyField = false;
 				if(this.User.password !== this.User.passwordToConfirm){
 					this.showErrorPassword = true;
 					console.log("Sifre se ne podudaraju.");
 				}else {
-					
+					this.showErrorPassword = false;
 				}
 				
 				axios
@@ -121,11 +122,6 @@ Vue.component("dodaj-korisnika" ,{
             		if(userSuccesfullyRegistered){
             			console.log("Korisnik je uspesno registrovan.");
             			var currentRole = localStorage.getItem("role");
-//            			if(currentRole === 'administrator'){
-//            				router.push({path: "/administrator"});
-//            			}else if (currentRole === 'superadmin') {
-//            				router.push({path: "/superadministrator"});
-//						}
             			router.push({path: "/pregledKorisnika"});
             		}else{
             			console.log("Korisnik nije registrovan.");

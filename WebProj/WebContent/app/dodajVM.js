@@ -141,15 +141,21 @@ Vue.component("dodaj-vm" ,{
 			this.canAddVM = false;
 			
 			if((this.VM.name !== '' && this.VM.name != undefined) && 
-			(this.VM.vmCategory !== '' && this.VM.vmCategory != undefined && this.VM.vmCategory != null) &&		
-			(this.VM.vmOrganisationName !== '' && this.VM.vmOrganisationName != undefined && this.VM.vmOrganisationName !== 'Choose...')) 
-			{
-				if (this.role == "superadmin" && this.VM.vmOrganisationName !== '' && this.VM.vmOrganisationName != undefined && this.VM.vmOrganisationName !== 'Choose...') {
-					this.showErrorEmptyField = false;
-					console.log("Sva polja su popunjena.");
+			(this.VM.vmCategory !== '' && this.VM.vmCategory != undefined && this.VM.vmCategory != null && this.VM.vmCategory != 'Choose...')	
+//			(this.VM.vmOrganisationName !== '' && this.VM.vmOrganisationName != undefined && this.VM.vmOrganisationName !== 'Choose...')
+			){
+				if (this.role == "superadmin") {
+					console.log("Ovde treba da udjem samo ako sam superadmin ----- ORG NAME: " + this.VM.vmOrganisationName)
+					
+					if (this.VM.vmOrganisationName !== '' && this.VM.vmOrganisationName != undefined && this.VM.vmOrganisationName != 'Choose...') {
+						this.showErrorEmptyField = false;
+						console.log("jeste popunjeno polje za organizacije.");
+					}else {
+						this.showErrorEmptyField = true;
+						console.log("Nije popunjeno polje za organizacije.");
+					}
 				}else {
-					console.log("Nije popunjeno polje za organizacije.");
-					this.showErrorEmptyField = true;
+					this.showErrorEmptyField = false;
 				}
 			}else{
 				console.log("Nisu sva polja popunjena.");
@@ -166,14 +172,14 @@ Vue.component("dodaj-vm" ,{
 				.then(response => {
 					if (response.data == false || response.data == 'false') {
 						this.canAddVM = true;
-						console.log("Dodajemo novu virtuelnu masinu.");
+						console.log("Idemo na dodavanje nove vm.");
 						this.addVM.call();
 					}
 				});
 			}
 		},
 		addVM: function() {
-			console.log("Dosli smo i dovde: " + this.canAddVM );
+			console.log("Dosli smo i dovde da dodamo masinu : " + this.canAddVM );
 			if (this.canAddVM == true || this.canAddVM === true) {
 
 				

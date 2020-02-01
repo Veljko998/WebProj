@@ -102,13 +102,17 @@ public class UserService {
 		organizacije.setPutanja();
 		organizacije.UcitajOrganizacije();
 		
-		System.out.println(mejl);
-		
 		String orgName = korisnici.getKorisnik(mejl).getOrganizacija().getIme();
-		Organizacija organizacija = korisnici.getKorisnik(mejl).getOrganizacija();
-		System.out.println(organizacija.getIme());
+//		Organizacija organizacija = korisnici.getKorisnik(mejl).getOrganizacija();
 		
 		korisnici.getListaKorisnici().remove(korisnici.getMapaKorisnici().get(mejl));
+		
+		for (Korisnik korisnik : korisnici.getListaKorisnici()) {
+			if (korisnik.getOrganizacija().getIme().equals(orgName)) {
+				korisnik.getOrganizacija().getListaKorisnika().remove(mejl);
+			}
+		}
+		
 		korisnici.UpisiKorisnike();
 		
 		for (Organizacija org : organizacije.getListaOrganizacije()) {
@@ -163,33 +167,44 @@ public class UserService {
 			korisnici.setPutanja();
 			korisnici.UcitajKorisnike();
 			
-			
 			Organizacije organizacije = new Organizacije();
 			organizacije.setPutanja();
 			organizacije.UcitajOrganizacije();
-
-			Organizacija organizacija = organizacije.getMapaOrganizacije().get(utr.organisationName);
-
+			
+			Organizacija org = null;
+			
+			/*
+			 * Add user in organisation and remember this organisation
+			 */
+			for (Organizacija organizacija : organizacije.getListaOrganizacije()) {
+				if (organizacija.getIme().equals(utr.organisationName)) {
+					organizacija.getListaKorisnika().add(utr.email);
+					org = organizacija;
+				}
+			}
+			organizacije.UpisiOrganizacije();
+			
+			for (Korisnik korisnik : korisnici.getListaKorisnici()) {
+				if (korisnik.getOrganizacija().getIme().equals(utr.organisationName)) {
+					korisnik.getOrganizacija().getListaKorisnika().add(utr.email);
+				}
+			}
+			
+			/*
+			 * Create user to add.
+			 */
 			Korisnik korisnik = new Korisnik();
 			korisnik.setEmail(utr.email);
 			korisnik.setIme(utr.name);
 			korisnik.setLozinka(utr.password);
 			korisnik.setPrezime(utr.surname);
 			korisnik.setUloga(Uloga.valueOf(utr.role.toUpperCase()));
-			korisnik.setOrganizacija(organizacija);
+			korisnik.setOrganizacija(org);
 
-			if (korisnici.dodajKorisnika(korisnik)) {
-				/*
-				 * First handle organisation then user
-				 */
-				organizacije.getMapaOrganizacije().get(utr.organisationName).getListaKorisnika().add(utr.email);
-				organizacije.UpisiOrganizacije();
-				
-				korisnici.UpisiKorisnike();
-				System.out.println("Korisnik je uspesno upisan");
-				return true;
-			} 
-			return false;
+			korisnici.dodajKorisnika(korisnik);
+			korisnici.UpisiKorisnike();
+			
+			return true;
 		} catch (Exception e) {
 			System.out.println("Something went wrong in UserService/registerUser. returnniing false.");
 			System.out.println(e);

@@ -154,7 +154,6 @@ public class Overview {
 								System.out.println(korisnik.getOrganizacija().getIme());
 								help.add(vmto.ime);
 								
-								
 								vmsToReturn.add(vmto);
 							}
 						}
@@ -165,24 +164,25 @@ public class Overview {
 					return null;
 				}
 			}else { // korisnik i admin
-				System.out.println("Ovde trenutno ne ulazi.");
 				Korisnik korisnik = new Korisnik();
 				korisnik = korisnici.getMapaKorisnici().get(utgt.email);
 				if (korisnik.getOrganizacija().getListaResursa() == null) {
 					return null;
 				}else { //vracam listu masina
 					for (String vmName : korisnik.getOrganizacija().getListaResursa()) {
-						VirtuelnaMasina vm = virtuelneMasine.getMapaVirtuelnihMasina().get(vmName);
-						VMToOverview vmto = new VMToOverview();
-						vmto.ime = vm.getIme();
-						vmto.brojJezgara = vm.getBrojJezgara() + "";
-						vmto.diskovi = vm.getDiskovi();
-						vmto.gpu = vm.getGpu() + "";
-						vmto.ram = vm.getGpu() + "";
-						vmto.kategorjiaIme = vm.getKategorjia().getIme();
-						vmto.organisationName = korisnik.getOrganizacija().getIme();
-						
-						vmsToReturn.add(vmto); 
+						if (virtuelneMasine.getMapaVirtuelnihMasina().containsKey(vmName)) {
+							VirtuelnaMasina vm = virtuelneMasine.getMapaVirtuelnihMasina().get(vmName);
+							VMToOverview vmto = new VMToOverview();
+							vmto.ime = vm.getIme();
+							vmto.brojJezgara = vm.getBrojJezgara() + "";
+							vmto.diskovi = vm.getDiskovi();
+							vmto.gpu = vm.getGpu() + "";
+							vmto.ram = vm.getGpu() + "";
+							vmto.kategorjiaIme = vm.getKategorjia().getIme();
+							vmto.organisationName = korisnik.getOrganizacija().getIme();
+							
+							vmsToReturn.add(vmto);
+						}
 					}
 					
 					return vmsToReturn; 
@@ -217,6 +217,12 @@ public class Overview {
 	@GET
 	@Path("/getJustUsers/{param1}/{param2}")
 	@Produces(MediaType.APPLICATION_JSON)
+	/**
+	 * 
+	 * @param role
+	 * @param email
+	 * @return
+	 */
 	public List<Korisnik> getJustUsers(@PathParam("param1") String role, @PathParam("param2") String email){
 		
 		Korisnici k = new Korisnici();
@@ -230,14 +236,19 @@ public class Overview {
 				System.out.println("Nije ucitao ni jendog korisnika.");
 			}
 		}else if (role.equals("admin")) { //Vracamo samo korisnike iz njegove organizacije
+			k.UcitajKorisnike();
 			Korisnik korisnik = new Korisnik();
 			korisnik = k.getMapaKorisnici().get(email);
 			
 			List<Korisnik> listOfUsersByEmail = new ArrayList<Korisnik>();
 			try {
-				listOfUsersByEmail = getListOfUsersByEmail(korisnik.getOrganizacija().getListaKorisnika());
+				for (String korEmail : korisnik.getOrganizacija().getListaKorisnika()) {
+					listOfUsersByEmail.add(k.getMapaKorisnici().get(korEmail));
+				}
+				
 				return listOfUsersByEmail;
 			} catch (NullPointerException e) {
+				System.out.println("Ovde ne sme uci: overview/getJustUsers... ->  " + e);
 				return null;
 			}
 		}
@@ -247,6 +258,12 @@ public class Overview {
 	@GET
 	@Path("/getJustOrganisations/{param1}/{param2}")
 	@Produces(MediaType.APPLICATION_JSON)
+	/**
+	 * 
+	 * @param role
+	 * @param email
+	 * @return
+	 */
 	public List<Organizacija> getJustOrganisations(@PathParam("param1") String role, @PathParam("param2") String email){
 		Korisnici k = new Korisnici();
 		k.setPutanja();
@@ -269,11 +286,6 @@ public class Overview {
 			List<Organizacija> listOfOrganisationsByIdName = new ArrayList<Organizacija>();
 			try {
 				listOfOrganisationsByIdName = getListOfOrganisationsByIdName(email, korisnik);
-//				if (listOfOrganisationsByIdName.isEmpty()) {
-//					System.out.println("Lista organizacije za admina je prazna...");
-//				}else if (listOfOrganisationsByIdName.size() == 1) {
-//					System.out.println("Ima tacno jedna organizacija...");
-//				}
 				System.out.println("Ovo vracam: " + listOfOrganisationsByIdName.get(0).getIme());
 				return listOfOrganisationsByIdName;
 			} catch (NullPointerException e) {
@@ -294,25 +306,5 @@ public class Overview {
 		System.out.println("Velicina liste kkorisnika: " + listaOrg.size());
 		
 		return listaOrg;
-	}
-
-	/**
-	 * @param listaKorisnika
-	 * @return
-	 */
-	private List<Korisnik> getListOfUsersByEmail(List<String> listaKorisnika) {
-		Korisnici k = new Korisnici();
-		List<Korisnik> korList = new ArrayList<Korisnik>();
-		for (Korisnik kor1 : k.getListaKorisnici()) {
-			for (String kor2 : listaKorisnika) {
-				if (kor1.getEmail().equals(kor2)) {
-					korList.add(kor1);
-				}
-			}
-		}
-		if (korList.isEmpty()) {
-			return null;
-		}
-		return korList;
 	}
 }

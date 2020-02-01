@@ -22,11 +22,11 @@ Vue.component("pregled-korisnika" ,{
 		      <th scope="col">Name</th>
 		      <th scope="col">Surname</th>
 		      <th scope="col" v-if="this.role === 'superadmin'">Organisation</th>
-		      <th scope="col" v-if="this.role === 'superadmin'">Functions</th>
+		      <th scope="col">Functions</th>
 		    </tr>
 		  </thead>
 		  <tbody v-if="this.role === 'superadmin'">
-		  	<tr v-for="(u, index) in users" >
+		  	<tr v-for="(u, index) in users">
 				<th scope="row">{{ index+1 }}</th>
 				<td>{{ u.email }}</td>
 				<td>{{ u.ime }}</td>
@@ -41,7 +41,7 @@ Vue.component("pregled-korisnika" ,{
 		  </tbody>
 		  <!-- Isto sto i super admin samo bez org. v-if ne radi unutar v-for petlje.  -->
 		  <tbody v-if="this.role === 'admin'">
-		  	<tr v-for="(u, index) in users" >
+		  	<tr v-for="(u, index) in users">
 				<th scope="row">{{ index+1 }}</th>
 				<td>{{ u.email }}</td>
 				<td>{{ u.ime }}</td>
@@ -62,6 +62,8 @@ Vue.component("pregled-korisnika" ,{
 	`,
 	methods: {
 		loadUsers() {
+			console.log("Role: " + this.role);
+			console.log("Email: " + this.email);
 			var path = 'rest/overview/getJustUsers/' + this.role + '/' + this.email
 			
 			axios
@@ -71,8 +73,6 @@ Vue.component("pregled-korisnika" ,{
     		});
 		},
 		editUser: function() {
-			console.log("Editovanje korisnika");
-			
 			localStorage.setItem("oldEmail", event.srcElement.id);
 			
 			/*
@@ -94,7 +94,6 @@ Vue.component("pregled-korisnika" ,{
 			axios
     		.get(path2)
     		.then(response => {
-    			console.log("USAO BRTTTT");
     			if (response.data == true) {
 					console.log("Korisnik je uspesno obrisan");
 					this.loadUsers.call();
