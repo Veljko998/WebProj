@@ -7,7 +7,8 @@ Vue.component("pregled-diskova", {
                 role: 'noRule',
                 email: '',
                 disks: null,
-                diskToEdit: null
+                diskToEdit: null,
+                isKorisnik: true
         	}
     },
     template:`
@@ -52,15 +53,15 @@ Vue.component("pregled-diskova", {
 				<td>{{ d.kapacitet }}</td>
 				<td>{{ d.virtualnaMasina }}</td>
 				<td>
-					<button :id="d.ime" type="button" class="btn btn-sm btn-secondary" v-on:click="editDisk();">Edit</button>
-					<button :id="d.ime" type="button" class="btn btn-sm btn-danger" v-on:click="deleteDisk();">Delete</button>
+					<button v-if="isKorisnik == false" :id="d.ime" type="button" class="btn btn-sm btn-secondary" v-on:click="editDisk();">Edit</button>
+					<button v-if="isKorisnik == false" :id="d.ime" type="button" class="btn btn-sm btn-danger" v-on:click="deleteDisk();">Delete</button>
 					<button :id="d.ime" type="button" class="btn btn-sm btn-secondary" v-on:click="diskDetails();">Details</button>
 				</td>
 			</tr>
 		</tbody>
 	</table>
 	
-	<button v-if="this.role !== 'korisnik'" v-on:click="goToAddDiscPage();" type="button" class="btn btn-lg btn-primary">Add New Disk</button>
+	<button v-if="this.isKorisnik != true" v-on:click="goToAddDiscPage();" type="button" class="btn btn-lg btn-primary">Add New Disk</button>
 </div>
     `,
     methods: {
@@ -207,14 +208,8 @@ Vue.component("pregled-diskova", {
     		router.push({path: "/dodajDisk"});
     	},
     	loadDisks: function() {
-    		var role = localStorage.getItem("role");
-        	var email = localStorage.getItem("email");
-        	
-        	this.role = role;
-        	this.email = email;
-        	
         	axios
-    		.post('rest/overview/getAllDiscs', {"role": role, "email": email})
+    		.post('rest/overview/getAllDiscs', {"role": this.role, "email": this.email})
     		.then(response => {
     			
     			this.disks = response.data;
@@ -225,6 +220,14 @@ Vue.component("pregled-diskova", {
     	},
     },
     mounted () {  //created 
+    	this.role = localStorage.getItem("role");
+    	this.email = localStorage.getItem("email");
+    	console.log("Uloga: " + this.role);
+    	if (this.role == "korisnik") {
+			this.isKorisnik = true;
+		}else {
+			this.isKorisnik = false;
+		}
     	this.loadDisks();
     },
 });

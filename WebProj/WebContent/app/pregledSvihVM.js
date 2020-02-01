@@ -7,7 +7,8 @@ Vue.component("pregled-vm", {
                 role: 'noRule',
                 machines: null,
                 isSuperAdmin: false,
-                vmToEdit: null
+                vmToEdit: null,
+                isKorisnik: false
         	}
     },
     template:`
@@ -84,15 +85,15 @@ Vue.component("pregled-vm", {
 				<td>{{ m.gpu }}</td>
 				<td v-if="isSuperAdmin == true">{{ m.organisationName }}</td>
 				<td>
-					<button :id="m.ime" type="button" class="btn btn-sm btn-secondary" v-on:click="editVM();">Edit</button>
-					<button :id="m.ime" type="button" class="btn btn-sm btn-danger" v-on:click="deleteVM(); myFunction();">Delete</button>
+					<button v-if="isKorisnik == false" :id="m.ime" type="button" class="btn btn-sm btn-secondary" v-on:click="editVM();">Edit</button>
+					<button v-if="isKorisnik == false" :id="m.ime" type="button" class="btn btn-sm btn-danger" v-on:click="deleteVM(); myFunction();">Delete</button>
 					<button :id="m.ime" type="button" class="btn btn-sm btn-secondary" v-on:click="vmDetails();">Details</button>
 				</td>
 			</tr>
 		</tbody>
 	</table>
 	
-	<button type="button" class="btn btn-lg btn-primary" v-on:click="addNewVM();">Add VM</button>
+	<button v-if="this.isKorisnik != true" type="button" class="btn btn-lg btn-primary" v-on:click="addNewVM();">Add VM</button>
 </div>
     `,
     methods: {
@@ -322,6 +323,12 @@ Vue.component("pregled-vm", {
     mounted () {  //created 
     	this.role = localStorage.getItem("role");
     	this.email = localStorage.getItem("email");
+    	
+    	if (this.role == "korisnik") {
+			this.isKorisnik = true;
+		}else {
+			this.isKorisnik = false;
+		}
     	
     	if (this.role == "superadmin") {
 			this.isSuperAdmin = true;

@@ -13,7 +13,8 @@ Vue.component("dodaj-vm" ,{
 			canAddVM: false,
 			disks: [],
 			showDisk: false,
-			nis: []
+			nis: [],
+			isKorisnik: false
 		}
 	},
 	template: 
@@ -142,7 +143,6 @@ Vue.component("dodaj-vm" ,{
 			
 			if((this.VM.name !== '' && this.VM.name != undefined) && 
 			(this.VM.vmCategory !== '' && this.VM.vmCategory != undefined && this.VM.vmCategory != null && this.VM.vmCategory != 'Choose...')	
-//			(this.VM.vmOrganisationName !== '' && this.VM.vmOrganisationName != undefined && this.VM.vmOrganisationName !== 'Choose...')
 			){
 				if (this.role == "superadmin") {
 					console.log("Ovde treba da udjem samo ako sam superadmin ----- ORG NAME: " + this.VM.vmOrganisationName)
@@ -215,6 +215,7 @@ Vue.component("dodaj-vm" ,{
 	mounted () {  //created 
 		this.role = localStorage.getItem('role');
 		this.email = localStorage.getItem('email');
+		
 		this.loadCategories();
 		this.loadOrganisations();
 		

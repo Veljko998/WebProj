@@ -52,15 +52,14 @@ Vue.component("administrator-page", {
 		showPregledOrganizacije: function(){		
 			var role = localStorage.getItem('role');
 			var email = localStorage.getItem('email');
-			var path = 'rest/userService/test/' + email
-			axios
-    		.get(path)
-    		.then(response => {
-    		localStorage.setItem('organisationDetails', JSON.stringify(response.data));
-			router.push({path: "/detaljiOrganizacije"});
-    		});
+//			var path = 'rest/userService/test/' + email
+//			axios
+//    		.get(path)
+//    		.then(response => {
+//    		localStorage.setItem('organisationDetails', JSON.stringify(response.data));
+			router.push({path: "/pregledOrganizacija"});
+//    		});
 		}
-		
 	},
 		
 });

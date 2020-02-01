@@ -85,10 +85,15 @@ public class Overview {
 				if (korisnik.getOrganizacija().getListaResursa() == null || korisnik.getOrganizacija().getListaResursa().isEmpty()) {
 					return null;
 				}else {
-					vms = getListOfVirtualMachines(korisnik.getOrganizacija().getListaResursa()); //sve virtuelne masine korisnika koji salje zahtev
-					for (VirtuelnaMasina vm : vms) {
-						for (String diskName : vm.getDiskovi()) {
-							diskoviToReturn.add(diskovi.getMapaDiskovi().get(diskName));
+//					vms = getListOfVirtualMachines(korisnik.getOrganizacija().getListaResursa()); //sve virtuelne masine korisnika koji salje zahtev
+//					for (VirtuelnaMasina vm : vms) {
+//						for (String diskName : vm.getDiskovi()) {
+//							diskoviToReturn.add(diskovi.getMapaDiskovi().get(diskName));
+//						}
+//					}
+					for (String resurs : korisnik.getOrganizacija().getListaResursa()) {
+						if (diskovi.getMapaDiskovi().containsKey(resurs)) {
+							diskoviToReturn.add(diskovi.getDisk(resurs));
 						}
 					}
 					
