@@ -47,7 +47,13 @@ Vue.component("detalji-organizacije", {
     	 * Load Disk and Virtual Machine of disk.
     	 */
     	loadOrganisation: function() {
-    		this.Organizacija = JSON.parse(localStorage.getItem('organisationDetails'));
+    		if(localStorage.getItem('organisationDetails') === null){
+    			this.Organizacija = JSON.parse(localStorage.getItem('backupOrganisationDetails'));
+    		}
+    		else{
+    			this.Organizacija = JSON.parse(localStorage.getItem('organisationDetails'));
+    		}
+    		
     		
     		try{
     			var i;
