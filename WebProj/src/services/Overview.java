@@ -226,29 +226,29 @@ public class Overview {
 	 * 
 	 * @param role
 	 * @param email
-	 * @return
+	 * @return List of users
 	 */
 	public List<Korisnik> getJustUsers(@PathParam("param1") String role, @PathParam("param2") String email){
+		Korisnici korisnici = new Korisnici();
+		korisnici.setPutanja();
+		korisnici.UcitajKorisnike();
 		
-		Korisnici k = new Korisnici();
-		k.setPutanja();
-		
+		/*
+		 * get users except current user. 
+		 */
 		if (role.equals("superadmin")) {
-			  //set .json files path before reading from them.
-			if (k.UcitajKorisnike()) {
-				return k.getListaKorisnici();
-			}else {
-				System.out.println("Nije ucitao ni jendog korisnika.");
-			}
+			korisnici.getListaKorisnici().remove(korisnici.getMapaKorisnici().get(email));
+			return korisnici.getListaKorisnici();
 		}else if (role.equals("admin")) { //Vracamo samo korisnike iz njegove organizacije
-			k.UcitajKorisnike();
 			Korisnik korisnik = new Korisnik();
-			korisnik = k.getMapaKorisnici().get(email);
+			korisnik = korisnici.getMapaKorisnici().get(email);
 			
 			List<Korisnik> listOfUsersByEmail = new ArrayList<Korisnik>();
 			try {
 				for (String korEmail : korisnik.getOrganizacija().getListaKorisnika()) {
-					listOfUsersByEmail.add(k.getMapaKorisnici().get(korEmail));
+					if (!korEmail.equals(email)) {
+						listOfUsersByEmail.add(korisnici.getMapaKorisnici().get(korEmail));
+					}
 				}
 				
 				return listOfUsersByEmail;
