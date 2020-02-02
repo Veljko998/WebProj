@@ -17,49 +17,52 @@ Vue.component("pregled-diskova", {
 		<h2>{{ this.title }}</h2></br>
 	</div>
 
-
-	<div class="row">
-		<div class="col">
-			<label for="inputEmail4">Disc capacity: </label>
+    <div class="container-fluid">
+		<div class="row">
+			<div class="col">
+				<label for="inputEmail4">Disc capacity: </label>
+			</div>
 		</div>
-	</div>
-	<div class="row">
-		<div class="col col-md-2">
-			<input min="1" type="number" class="form-control" v-on:click="myFunction()" v-on:keyup="myFunction()" placeholder="From" id="inputCoreFrom">
+		<div class="row">
+			<div class="col col-md-2">
+				<input min="1" type="number" class="form-control" v-on:click="myFunction()" v-on:keyup="myFunction()" placeholder="From" id="inputCoreFrom">
+			</div>
+			<div class="col col-md-2">
+				<input min="1" type="number" class="form-control" v-on:click="myFunction()" v-on:keyup="myFunction()" placeholder="To" id="inputCoreTo">
+			</div>
 		</div>
-		<div class="col col-md-2">
-			<input min="1" type="number" class="form-control" v-on:click="myFunction()" v-on:keyup="myFunction()" placeholder="To" id="inputCoreTo">
-		</div>
+		
+		<br>
+	
+		<input type="text" id="myInputVM" v-on:keyup="myFunction()" placeholder="Search for names...">
 	</div>
 	
-	<br>
-
-	<input type="text" id="myInputVM" v-on:keyup="myFunction()" placeholder="Search for names...">
-	
-	<table class="table table-hover " id="myTable">
-		<thead>
-			<tr v-on:keyup="helper();">
-				<th scope="col">#</th>
-				<th scope="col">Name</th>
-				<th scope="col">Disk capacity</th>
-				<th scope="col">VM name</th>
-				<th scope="col">Functions</th>
-			</tr>
-		</thead>
-		<tbody>
-			<tr v-for="(d, index) in this.disks" v-on:keyup="helper();">
-				<th scope="row">{{ index+1 }}</th>
-				<td>{{ d.ime }}</td>
-				<td>{{ d.kapacitet }}</td>
-				<td>{{ d.virtualnaMasina }}</td>
-				<td>
-					<button v-if="isKorisnik == false" :id="d.ime" type="button" class="btn btn-sm btn-secondary" v-on:click="editDisk();">Edit</button>
-					<button v-if="isKorisnik == false" :id="d.ime" type="button" class="btn btn-sm btn-danger" v-on:click="deleteDisk();">Delete</button>
-					<button :id="d.ime" type="button" class="btn btn-sm btn-secondary" v-on:click="diskDetails();">Details</button>
-				</td>
-			</tr>
-		</tbody>
-	</table>
+	<div class="container-fluid scrollable">
+		<table class="table table-hover " id="myTable">
+			<thead>
+				<tr v-on:keyup="helper();">
+					<th scope="col">#</th>
+					<th scope="col">Name</th>
+					<th scope="col">Disk capacity</th>
+					<th scope="col">VM name</th>
+					<th scope="col">Functions</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr v-for="(d, index) in this.disks" v-on:keyup="helper();">
+					<th scope="row">{{ index+1 }}</th>
+					<td>{{ d.ime }}</td>
+					<td>{{ d.kapacitet }}</td>
+					<td>{{ d.virtualnaMasina }}</td>
+					<td>
+						<button v-if="isKorisnik == false" :id="d.ime" type="button" class="btn btn-sm btn-secondary" v-on:click="editDisk();">Edit</button>
+						<button v-if="isKorisnik == false" :id="d.ime" type="button" class="btn btn-sm btn-danger" v-on:click="deleteDisk();">Delete</button>
+						<button :id="d.ime" type="button" class="btn btn-sm btn-secondary" v-on:click="diskDetails();">Details</button>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
 	
 	<button v-if="this.isKorisnik != true" v-on:click="goToAddDiscPage();" type="button" class="btn btn-lg btn-primary">Add New Disk</button>
 </div>
@@ -112,18 +115,24 @@ Vue.component("pregled-diskova", {
     	deleteDisk: function(){
     		var diskId = event.srcElement.id;
     		
-    		axios
-    		.post('rest/discService/deleteDisk', {"name": diskId})
-    		.then(response => {
-    			var disk_deleted = response.data;
-    			
-    			if (disk_deleted == true) {
-					console.log("Disk is succesfully deleted.");
-					this.loadDisks();
-				}else {
-					console.log("Disk is not deleted.");
-				}
-    		});
+    		var txt;
+			if (confirm("Are you sure you want to delete disk?")) {
+				axios
+	    		.post('rest/discService/deleteDisk', {"name": diskId})
+	    		.then(response => {
+	    			var disk_deleted = response.data;
+	    			
+	    			if (disk_deleted == true) {
+						console.log("Disk is succesfully deleted.");
+						
+						this.loadDisks();
+					}else {
+						console.log("Disk is not deleted.");
+					}
+	    		});
+			} else {
+				
+			}
     		
     		//console.log('DELETE Disk with id: ' + diskId);
     	},
@@ -222,12 +231,13 @@ Vue.component("pregled-diskova", {
     mounted () {  //created 
     	this.role = localStorage.getItem("role");
     	this.email = localStorage.getItem("email");
-    	console.log("Uloga: " + this.role);
+    	
     	if (this.role == "korisnik") {
 			this.isKorisnik = true;
 		}else {
 			this.isKorisnik = false;
 		}
+    	
     	this.loadDisks();
     },
 });

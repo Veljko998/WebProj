@@ -12,79 +12,82 @@ Vue.component("pregled-kategorija", {
 		<h2>{{ this.title }}</h2></br>
 	</div>
 
-
-	<div class="row">
-		<div class="col">
-			<label for="inputEmail4">Number of cores: </label>
+    <div class="container-fluid">
+		<div class="row">
+			<div class="col">
+				<label for="inputEmail4">Number of cores: </label>
+			</div>
 		</div>
-	</div>
-	<div class="row">
-		<div class="col col-md-2">
-			<input min="1" type="number" class="form-control" placeholder="From" id="inputCoreFrom" v-on:click="myFunction()" v-on:keyup="myFunction()">
+		<div class="row">
+			<div class="col col-md-2">
+				<input min="1" type="number" class="form-control" placeholder="From" id="inputCoreFrom" v-on:click="myFunction()" v-on:keyup="myFunction()">
+			</div>
+			<div class="col col-md-2">
+				<input min="1" type="number" class="form-control" placeholder="To" id="inputCoreTo" v-on:click="myFunction()" v-on:keyup="myFunction()">
+			</div>
 		</div>
-		<div class="col col-md-2">
-			<input min="1" type="number" class="form-control" placeholder="To" id="inputCoreTo" v-on:click="myFunction()" v-on:keyup="myFunction()">
-		</div>
-	</div>
-
-	<div class="row">
-		<div class="col">
-			<label for="inputEmail4">RAM capacity: </label>
-		</div>
-	</div>
-	<div class="row">
-		<div class="col col-md-2">
-			<input min="1" type="number" class="form-control" placeholder="From" id="inputRamFrom" v-on:click="myFunction()" v-on:keyup="myFunction()">
-		</div>
-		<div class="col col-md-2">
-			<input min="1" type="number" class="form-control" placeholder="To" id="inputRamTo" v-on:click="myFunction()" v-on:keyup="myFunction()">
-		</div>
-	</div>
 	
-	<div class="row">
-		<div class="col">
-			<label for="inputEmail4">GPU capacity: </label>
+		<div class="row">
+			<div class="col">
+				<label for="inputEmail4">RAM capacity: </label>
+			</div>
 		</div>
-	</div>
-	<div class="row">
-		<div class="col col-md-2">
-			<input min="1" type="number" class="form-control" placeholder="From" id="inputGpuFrom" v-on:click="myFunction()" v-on:keyup="myFunction()">
+		<div class="row">
+			<div class="col col-md-2">
+				<input min="1" type="number" class="form-control" placeholder="From" id="inputRamFrom" v-on:click="myFunction()" v-on:keyup="myFunction()">
+			</div>
+			<div class="col col-md-2">
+				<input min="1" type="number" class="form-control" placeholder="To" id="inputRamTo" v-on:click="myFunction()" v-on:keyup="myFunction()">
+			</div>
 		</div>
-		<div class="col col-md-2">
-			<input min="1" type="number" class="form-control" placeholder="To" id="inputGpuTo" v-on:click="myFunction()" v-on:keyup="myFunction()">
+		
+		<div class="row">
+			<div class="col">
+				<label for="inputEmail4">GPU capacity: </label>
+			</div>
 		</div>
-	</div>
+		<div class="row">
+			<div class="col col-md-2">
+				<input min="1" type="number" class="form-control" placeholder="From" id="inputGpuFrom" v-on:click="myFunction()" v-on:keyup="myFunction()">
+			</div>
+			<div class="col col-md-2">
+				<input min="1" type="number" class="form-control" placeholder="To" id="inputGpuTo" v-on:click="myFunction()" v-on:keyup="myFunction()">
+			</div>
+		</div>
+		
+		<br>
 	
-	<br>
-
-	<input type="text" id="myInputVM" v-on:keyup="myFunction()" placeholder="Search for names...">
+		<input type="text" id="myInputVM" v-on:keyup="myFunction()" placeholder="Search for names...">
+    </div>
 	
-	<table class="table table-hover " id="myTable">
-		<thead>
-			<tr>
-				<th scope="col">#</th>
-				<th scope="col">Name</th>
-				<th scope="col">Core number</th>
-				<th scope="col">RAM</th>
-				<th scope="col">GPU</th>
-				<th scope="col">Functions</th>
-			</tr>
-		</thead>
-		<tbody>
-			<tr v-for="(c, index) in this.categories">
-				<th scope="row">{{ index+1 }}</th>
-				<td>{{ c.ime }}</td>
-				<td>{{ c.brojJezgara }}</td>
-				<td>{{ c.ramMemory }}</td>
-				<td>{{ c.gpu }}</td>
-				<td>
-					<button :id="c.ime" type="button" class="btn btn-sm btn-secondary" v-on:click="editCategory();">Edit</button>
-					<button :id="c.ime" type="button" class="btn btn-sm btn-danger" v-on:click="deleteCategory(); myFunction();">Delete</button>
-					<button :id="c.ime" type="button" class="btn btn-sm btn-secondary" v-on:click="categoryDetails();">Details</button>
-				</td>
-			</tr>
-		</tbody>
-	</table>
+	<div class="container-fluid scrollable">
+		<table class="table table-hover " id="myTable">
+			<thead>
+				<tr>
+					<th scope="col">#</th>
+					<th scope="col">Name</th>
+					<th scope="col">Core number</th>
+					<th scope="col">RAM</th>
+					<th scope="col">GPU</th>
+					<th scope="col">Functions</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr v-for="(c, index) in this.categories">
+					<th scope="row">{{ index+1 }}</th>
+					<td>{{ c.ime }}</td>
+					<td>{{ c.brojJezgara }}</td>
+					<td>{{ c.ramMemory }}</td>
+					<td>{{ c.gpu }}</td>
+					<td>
+						<button :id="c.ime" type="button" class="btn btn-sm btn-secondary" v-on:click="editCategory();">Edit</button>
+						<button :id="c.ime" type="button" class="btn btn-sm btn-danger" v-on:click="deleteCategory(); myFunction();">Delete</button>
+						<button :id="c.ime" type="button" class="btn btn-sm btn-secondary" v-on:click="categoryDetails();">Details</button>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
 	
 	<button type="button" class="btn btn-lg btn-primary" v-on:click="addNewCategory();">Add Category</button>
 </div>
@@ -127,21 +130,24 @@ Vue.component("pregled-kategorija", {
     		
     	},
     	deleteCategory: function(){
-    		//TODO:
     		var catName = event.srcElement.id;
-    		
-    		axios
-    		.post('rest/categoryService/deleteCategory', {"name": catName})
-    		.then(response => {
-    			var category_deleted = response.data;
-    			
-    			if (category_deleted == true) {
-					console.log("Category is succesfully deleted.");
-					this.loadCategories();
-				}else {
-					console.log("Category is not deleted.");
-				}
-    		});
+
+    		if (confirm("Are you sure you want to delete category?")) {
+    			axios
+        		.post('rest/categoryService/deleteCategory', {"name": catName})
+        		.then(response => {
+        			var category_deleted = response.data;
+        			
+        			if (category_deleted == true) {
+    					console.log("Category is succesfully deleted.");
+    					this.loadCategories();
+    				}else {
+    					console.log("Category is not deleted.");
+    				}
+        		});
+			} else {
+				txt = "You pressed Cancel!";
+			}
     	},
     	/*
     	 * Function for searching and filtering data.

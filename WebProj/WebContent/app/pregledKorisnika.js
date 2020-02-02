@@ -11,10 +11,17 @@ Vue.component("pregled-korisnika" ,{
 	template: 
 	`
 <div class="container-fluid">
-	<h2>Pregled korisnika.</h2>
+	<div class="col text-center">
+		<h2>{{ this.title }}</h2></br>
+	</div>
+	
+	<div class="container-fluid">
+		<br>
+		<input type="text" id="myInputVM" v-on:keyup="myFunction()" placeholder="Search for email, name or surname...">
+	</div>
 	
 	<div class="container-fluid scrollable">
-		<table class="table table-hover table-striped">
+		<table class="table table-hover table-striped" id="myTable">
 		  <thead>
 		    <tr>
 		      <th scope="col">#</th>
@@ -61,6 +68,49 @@ Vue.component("pregled-korisnika" ,{
 
 	`,
 	methods: {
+		myFunction: function(){
+    		var input, filter, table, tr, td, i, txtValue;
+    		var txtValue2, name, surname;
+    		
+    		
+        	input = document.getElementById("myInputVM");
+        	filter = input.value.toUpperCase();
+        	table = document.getElementById("myTable");
+        	tr = table.getElementsByTagName("tr");
+        	
+        	// Loop through all table rows, and hide those who don't match the search query
+        	for (i = 0; i < tr.length; i++){
+        		td = tr[i].getElementsByTagName("td")[0]; //by Email
+        		name = tr[i].getElementsByTagName("td")[1]; //by Name
+        		surname = tr[i].getElementsByTagName("td")[2]; //by surname
+        		
+        		if (td){
+        			txtValue = td.textContent || td.innerText;
+        			txtValue2 = name.textContent || name.innerText;
+        			txtValue3 = surname.textContent || surname.innerText;
+        			
+        			if (txtValue.toUpperCase().indexOf(filter) > -1){
+        					tr[i].style.display = "";
+        			}else{
+        				tr[i].style.display = "none";
+        				
+        				if (txtValue2.toUpperCase().indexOf(filter) > -1){
+	        				tr[i].style.display = "";
+	        			}else {
+	        				tr[i].style.display = "none";
+	        				
+	        				if (txtValue3.toUpperCase().indexOf(filter) > -1){
+		        				tr[i].style.display = "";
+		        			}else {
+		        				tr[i].style.display = "none";
+							}
+						}
+        			}
+        			
+        			
+        		}
+        	}
+    	},
 		loadUsers() {
 			console.log("Role: " + this.role);
 			console.log("Email: " + this.email);
@@ -89,16 +139,21 @@ Vue.component("pregled-korisnika" ,{
 		},
 		deleteUser: function() {
 			var path2 = "rest/userService/deleteUser/" + event.srcElement.id;
-			console.log(path2);
+
+			if (confirm("Are you sure you want to delete user?")) {
+				axios
+	    		.get(path2)
+	    		.then(response => {
+	    			if (response.data == true) {
+						console.log("Korisnik je uspesno obrisan");
+						this.loadUsers.call();
+					}
+	    		});
+			} else {
+				
+			}
 			
-			axios
-    		.get(path2)
-    		.then(response => {
-    			if (response.data == true) {
-					console.log("Korisnik je uspesno obrisan");
-					this.loadUsers.call();
-				}
-    		});
+			
 			
 //			axios
 //    		.post("rest/userService/deleteUser", {"name": event.srcElement.id})

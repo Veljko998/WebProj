@@ -5,7 +5,8 @@ Vue.component("detalji-vm", {
         		VM: null,
         		disks: [] ,// list of disk Objects
         		showTemplate: false,
-        		nesto: {}
+        		nesto: {},
+        		role: null
         	}
     },
     template:`
@@ -56,6 +57,8 @@ Vue.component("detalji-vm", {
     },
     mounted () {  //created 
     	this.showTemplate = false;
+    	this.role = localStorage.getItem("role");
+    	
     	this.loadVMD();
     },
 });

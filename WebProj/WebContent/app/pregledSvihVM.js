@@ -17,81 +17,84 @@ Vue.component("pregled-vm", {
 		<h2>{{ this.title }}</h2></br>
 	</div>
 
-
-	<div class="row">
-		<div class="col">
-			<label for="inputEmail4">Number of cores: </label>
+    <div class="container-fluid">
+		<div class="row">
+			<div class="col">
+				<label for="inputEmail4">Number of cores: </label>
+			</div>
 		</div>
-	</div>
-	<div class="row">
-		<div class="col col-md-2">
-			<input min="1" type="number" class="form-control" placeholder="From" id="inputCoreFrom" v-on:click="myFunction()" v-on:keyup="myFunction()">
+		<div class="row">
+			<div class="col col-md-2">
+				<input min="1" type="number" class="form-control" placeholder="From" id="inputCoreFrom" v-on:click="myFunction()" v-on:keyup="myFunction()">
+			</div>
+			<div class="col col-md-2">
+				<input min="1" type="number" class="form-control" placeholder="To" id="inputCoreTo" v-on:click="myFunction()" v-on:keyup="myFunction()">
+			</div>
 		</div>
-		<div class="col col-md-2">
-			<input min="1" type="number" class="form-control" placeholder="To" id="inputCoreTo" v-on:click="myFunction()" v-on:keyup="myFunction()">
+	
+		<div class="row">
+			<div class="col">
+				<label for="inputEmail4">RAM capacity: </label>
+			</div>
 		</div>
-	</div>
-
-	<div class="row">
-		<div class="col">
-			<label for="inputEmail4">RAM capacity: </label>
+		<div class="row">
+			<div class="col col-md-2">
+				<input min="1" type="number" class="form-control" placeholder="From" id="inputRamFrom" v-on:click="myFunction()" v-on:keyup="myFunction()">
+			</div>
+			<div class="col col-md-2">
+				<input min="1" type="number" class="form-control" placeholder="To" id="inputRamTo" v-on:click="myFunction()" v-on:keyup="myFunction()">
+			</div>
 		</div>
-	</div>
-	<div class="row">
-		<div class="col col-md-2">
-			<input min="1" type="number" class="form-control" placeholder="From" id="inputRamFrom" v-on:click="myFunction()" v-on:keyup="myFunction()">
+		
+		<div class="row">
+			<div class="col">
+				<label for="inputEmail4">GPU capacity: </label>
+			</div>
 		</div>
-		<div class="col col-md-2">
-			<input min="1" type="number" class="form-control" placeholder="To" id="inputRamTo" v-on:click="myFunction()" v-on:keyup="myFunction()">
+		<div class="row">
+			<div class="col col-md-2">
+				<input min="1" type="number" class="form-control" placeholder="From" id="inputGpuFrom" v-on:click="myFunction()" v-on:keyup="myFunction()">
+			</div>
+			<div class="col col-md-2">
+				<input min="1" type="number" class="form-control" placeholder="To" id="inputGpuTo" v-on:click="myFunction()" v-on:keyup="myFunction()">
+			</div>
 		</div>
+		
+		<br>
+	
+		<input type="text" id="myInputVM" v-on:keyup="myFunction()" placeholder="Search for names...">
 	</div>
 	
-	<div class="row">
-		<div class="col">
-			<label for="inputEmail4">GPU capacity: </label>
-		</div>
+	<div class="container-fluid scrollable">
+		<table class="table table-hover " id="myTable">
+			<thead>
+				<tr>
+					<th scope="col">#</th>
+					<th scope="col">Name</th>
+					<th scope="col">Core number</th>
+					<th scope="col">RAM</th>
+					<th scope="col">GPU</th>
+					<th scope="col" v-if="isSuperAdmin == true">Organisation name</th>
+					<th scope="col">Functions</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr v-for="(m, index) in this.machines">
+					<th scope="row">{{ index+1 }}</th>
+					<td>{{ m.ime }}</td>
+					<td>{{ m.brojJezgara }}</td>
+					<td>{{ m.ram }}</td>
+					<td>{{ m.gpu }}</td>
+					<td v-if="isSuperAdmin == true">{{ m.organisationName }}</td>
+					<td>
+						<button v-if="isKorisnik == false" :id="m.ime" type="button" class="btn btn-sm btn-secondary" v-on:click="editVM();">Edit</button>
+						<button v-if="isKorisnik == false" :id="m.ime" type="button" class="btn btn-sm btn-danger" v-on:click="deleteVM(); myFunction();">Delete</button>
+						<button :id="m.ime" type="button" class="btn btn-sm btn-secondary" v-on:click="vmDetails();">Details</button>
+					</td>
+				</tr>
+			</tbody>
+		</table>
 	</div>
-	<div class="row">
-		<div class="col col-md-2">
-			<input min="1" type="number" class="form-control" placeholder="From" id="inputGpuFrom" v-on:click="myFunction()" v-on:keyup="myFunction()">
-		</div>
-		<div class="col col-md-2">
-			<input min="1" type="number" class="form-control" placeholder="To" id="inputGpuTo" v-on:click="myFunction()" v-on:keyup="myFunction()">
-		</div>
-	</div>
-	
-	<br>
-
-	<input type="text" id="myInputVM" v-on:keyup="myFunction()" placeholder="Search for names...">
-	
-	<table class="table table-hover " id="myTable">
-		<thead>
-			<tr>
-				<th scope="col">#</th>
-				<th scope="col">Name</th>
-				<th scope="col">Core number</th>
-				<th scope="col">RAM</th>
-				<th scope="col">GPU</th>
-				<th scope="col" v-if="isSuperAdmin == true">Organisation name</th>
-				<th scope="col">Functions</th>
-			</tr>
-		</thead>
-		<tbody>
-			<tr v-for="(m, index) in this.machines">
-				<th scope="row">{{ index+1 }}</th>
-				<td>{{ m.ime }}</td>
-				<td>{{ m.brojJezgara }}</td>
-				<td>{{ m.ram }}</td>
-				<td>{{ m.gpu }}</td>
-				<td v-if="isSuperAdmin == true">{{ m.organisationName }}</td>
-				<td>
-					<button v-if="isKorisnik == false" :id="m.ime" type="button" class="btn btn-sm btn-secondary" v-on:click="editVM();">Edit</button>
-					<button v-if="isKorisnik == false" :id="m.ime" type="button" class="btn btn-sm btn-danger" v-on:click="deleteVM(); myFunction();">Delete</button>
-					<button :id="m.ime" type="button" class="btn btn-sm btn-secondary" v-on:click="vmDetails();">Details</button>
-				</td>
-			</tr>
-		</tbody>
-	</table>
 	
 	<button v-if="this.isKorisnik != true" type="button" class="btn btn-lg btn-primary" v-on:click="addNewVM();">Add VM</button>
 </div>
@@ -104,16 +107,8 @@ Vue.component("pregled-vm", {
     		.post('rest/VMService/getVMByName', {"name": event.srcElement.id})
     		.then(response => {
     			localStorage.setItem('storeObj3', JSON.stringify(response.data));
-//    			help = response.data;
     			
     			router.push({path: "/detaljiVM"});
-    			
-//    			axios
-//            	.post("rest/VMService/getVMByName" , {"name": help.virtualnaMasina})
-//            	.then(response => {
-//            		localStorage.setItem('storeObj4', JSON.stringify(response.data));
-//            		
-//            	});
     		});
     		
     	},
@@ -130,14 +125,13 @@ Vue.component("pregled-vm", {
     			 * Define everything what we will need in /izmenaVM 
     			 */
     			localStorage.setItem("imeVM", this.vmToEdit.ime);
-//    			localStorage.setItem("VM", this.vmToEdit.);
     			
     			
     			if (this.role == "admin" || this.role == "superadmin") {
     				router.push({path: "/izmenaVM"});
 				}else {
 					console.log("Ulazi mi u deteljan pregled VM koji nisam jos uradio.");
-//					router.push({path: "/detaljanPregledVM"});
+					router.push({path: "/detaljanPregledVM"});
 				}
     		});
     		
@@ -145,20 +139,22 @@ Vue.component("pregled-vm", {
     	deleteVM: function(){
     		var vmName = event.srcElement.id;
     		
-    		axios
-    		.post('rest/VMService/deleteVM', {"name": vmName})
-    		.then(response => {
-    			var disk_deleted = response.data;
-    			
-    			if (disk_deleted == true) {
-					console.log("VM is succesfully deleted.");
-					this.loadVMs();
-				}else {
-					console.log("VM is not deleted.");
-				}
-    		});
-    		
-    		//console.log('DELETE Disk with id: ' + vmName);
+    		if (confirm("Are you sure you want to delete VM?")) {
+    			axios
+        		.post('rest/VMService/deleteVM', {"name": vmName})
+        		.then(response => {
+        			var disk_deleted = response.data;
+        			
+        			if (disk_deleted == true) {
+    					console.log("VM is succesfully deleted.");
+    					this.loadVMs();
+    				}else {
+    					console.log("VM is not deleted.");
+    				}
+        		});
+			} else {
+				
+			}
     	},
     	myFunction: function() {
     		var input, table, tr, td, i;

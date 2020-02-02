@@ -109,20 +109,6 @@ Vue.component("izmena-diska", {
 				this.canAddDisc = false;
 			}
 		},
-//		discAlreadyExists: function(){
-////			this.canAddDisc = true;
-//			var path = "rest/discService/checkIfDiscExist/" + this.Disc.VMName;
-//			axios
-//			.get(path)
-//			.then(response => {
-//				console.log("Smem li menjati disk ->" + response.data);
-//				if (response.data == false) {
-//					console.log("Ne postoji sa datim nazivom pa mozemo ici dalje.")
-//					this.editDisc.call();
-//				}
-//			})
-//			
-//		},
 		//SAME AS addDisk()
 		editDisc: function(){
 			console.log("Dosli smo i dovde: " + this.canAddDisc );
