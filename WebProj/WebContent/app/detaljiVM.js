@@ -74,14 +74,10 @@ Vue.component("detalji-vm", {
     		
     	},
     	loadVMD: function() {
-    		this.VM = JSON.parse(localStorage.getItem('storeObj3'));
-    		console.log("BILO sta: " + this.VM.ime);
-//        	
-////        	this.VM = JSON.parse(localStorage.getItem('storeObj2'));
-//    		
+    		this.VM = JSON.parse(localStorage.getItem('storeObj3VM'));
+
     		var i;
     		for (i = 0; i < this.VM.diskovi.length; i++) {
-    		  console.log("idemo: hahah: " + this.VM.diskovi[i]);
     		  axios
     		  .post("rest/discService/getDiskByName", {"name": this.VM.diskovi[i]})
     		  .then(response => {
@@ -90,7 +86,7 @@ Vue.component("detalji-vm", {
     			  this.nesto = {};
     		  });
     		}
-    		localStorage.removeItem("storeObj3");
+
     		this.showTemplate = true;
     	}
     },

@@ -37,8 +37,6 @@ Vue.component("detalji-korisnika", {
     		this.role = localStorage.getItem("role");
     		this.User = JSON.parse(localStorage.getItem('storeObjUser'));
     		
-    		localStorage.removeItem("storeObjUser");
-    		
         	this.showTemplate = true;
     	}
     },

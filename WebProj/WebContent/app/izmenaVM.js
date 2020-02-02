@@ -6,7 +6,7 @@ Vue.component("izmena-vm", {
                 email: '',
                 disks: [],
                 showErrorEmptyField: false,
-    			showErrorVMExists: false,
+                showErrorVMExists: false,
     			currentVMName: "",
     			VM: {},
     			nis: [],
@@ -54,10 +54,10 @@ Vue.component("izmena-vm", {
 					</div>
 					
 					<p class="errorMessageRegisterVM" v-if="this.showErrorEmptyField == true">Sva polja moraju biti popunjena !!!</br></p>
-					<p class="errorMessageVMExists" v-if="this.showErrorVMExists == true">VM sa tim imenom vec postoji !!!</br></p>
+					<p class="showErrorVMExists" v-if="this.showErrorVMExists == true">VM sa tim imenom vec postoji !!!</br></p>
 					
 					<div class="form-group ">
-						<button type="button" class="btn btn-primary btn-lg btn-block login-button" v-on:click="emptyField(); VMAlreadyExists();">Edit VM</button>
+						<button type="button" class="btn btn-primary btn-lg btn-block login-button" v-on:click="emptyField();">Edit VM</button>
 					</div>
 				</div>
 			</div>
@@ -85,18 +85,19 @@ Vue.component("izmena-vm", {
 			(this.VM.category !== '' && this.VM.category != undefined && this.VM.category !== 'Choose...')){
 				this.showErrorEmptyField = false;
 				console.log("Sva polja koja trebaju biti popunjena su popunjena.");
+				this.canAddVM = true;
+				this.editVM.call();
 			}else{
 				console.log("Nisu sva polja popunjena bato.");
 				this.showErrorEmptyField = true;
 			}
 		},
 		VMAlreadyExists: function(){
-			this.canAddVM = true;
-			this.editVM.call();
+			
 		},
 		editVM: function(){
 			console.log("E sada editujemo masincugu: " + this.canAddVM );
-			if (this.canAddVM == true || this.canAddVM === true) {
+			if (this.canAddVM == true) {
 
 				axios
             	.post('rest/VMService/editVM', {"email": this.email, "role": this.role, "oldName": this.currentVMName, "name": this.VM.name, "category": this.VM.category, "disks": this.nis})
@@ -108,6 +109,7 @@ Vue.component("izmena-vm", {
             			router.push({path: "/pregledVM"}); // Bring user back to pregledVM
             		}else{
             			console.log("VM nije upisana.");
+            			this.showErrorVMExists = true;
             		}
             	});
 			}

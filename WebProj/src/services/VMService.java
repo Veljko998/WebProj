@@ -167,68 +167,78 @@ public class VMService {
 		organizacije.UcitajOrganizacije();
 		
 		if (!vme.oldName.equals(vme.name)) {
-			if (diskovi.getMapaDiskovi().containsKey(vme.name)) {
+			if (virtuelneMasine.getMapaVirtuelnihMasina().containsKey(vme.name)) {
 				System.out.println("Pokusavamo da promenimo masinu sa novim imenom koje je vec rezervisano kod diska. /editVM");
+				return false;
 			}
 		}
 		
-		try {
-			if (vme.role.equals("admin")) {
-				for (Korisnik korisnik : korisnici.getListaKorisnici()) {
-					if (korisnik.getIme().equals(vme.email)) {
-						korisnik.getOrganizacija().getListaResursa().remove(vme.oldName);
-						korisnik.getOrganizacija().getListaResursa().add(vme.name);
-						break;
-					}
-				}
-				korisnici.UpisiKorisnike();
-				
-			}else { //superadmin
-				for (Korisnik korisnik : korisnici.getListaKorisnici()) {
-					for (String vmName : korisnik.getOrganizacija().getListaResursa()) {
-						if (vmName.equals(vme.oldName)) {
-							korisnik.getOrganizacija().getListaResursa().remove(vme.oldName);
-							korisnik.getOrganizacija().getListaResursa().add(vme.name);
-						}
-					}
-				}
-				korisnici.UpisiKorisnike();
-			}
-			
+		/*
+		 * Pronadji masinu koju menjas
+		 * Uzmi njene stare diskove i stavi VM na koju pokazuju da je null.
+		 */
+		
+		for (String d : virtuelneMasine.getMapaVirtuelnihMasina().get(vme.oldName).getDiskovi()) {
 			for (Disk disk : diskovi.getListaDiskovi()) {
-				if (disk.getVirtualnaMasina().equals(vme.oldName)) {
-					disk.setVirtualnaMasina(vme.name);
+				if (disk.getIme().equals(d)) {
+					disk.setVirtualnaMasina(null);
+				}
+			}
+		}
+		
+		if (vme.role.equals("admin")) {
+			for (Korisnik korisnik : korisnici.getListaKorisnici()) {
+				if (korisnik.getIme().equals(vme.email)) {
+					korisnik.getOrganizacija().getListaResursa().remove(vme.oldName);
+					korisnik.getOrganizacija().getListaResursa().add(vme.name);
 					break;
 				}
 			}
-			diskovi.UpisiDiskove();
+			korisnici.UpisiKorisnike();
 			
-			for (VirtuelnaMasina virtuelnaMasina : virtuelneMasine.getListaVirtuelnihMasina()) {
-				if (virtuelnaMasina.getIme().equals(vme.oldName)) {
-					virtuelneMasine.getListaVirtuelnihMasina().remove(virtuelnaMasina);
-					
-					VM kategorija = kategorijeVM.getMapaKategorijeVM().get(vme.category);
-					
-					virtuelneMasine.getListaVirtuelnihMasina().add(new VirtuelnaMasina(vme.name, kategorija, (ArrayList<String>)vme.disks));
-				}
-			}
-			virtuelneMasine.UpisiVirtuelneMasine();
-			
-			for (Organizacija organizacija : organizacije.getListaOrganizacije()) {
-				for (String vmName : organizacija.getListaResursa()) {
+		}else { //superadmin
+			for (Korisnik korisnik : korisnici.getListaKorisnici()) {
+				for (String vmName : korisnik.getOrganizacija().getListaResursa()) {
 					if (vmName.equals(vme.oldName)) {
-						organizacija.getListaResursa().remove(vme.oldName);
-						organizacija.getListaResursa().add(vme.name);
+						korisnik.getOrganizacija().getListaResursa().remove(vme.oldName);
+						korisnik.getOrganizacija().getListaResursa().add(vme.name);
+//						 Collections.swap(list, 1, 2);
+						break;
 					}
 				}
 			}
-			organizacije.UpisiOrganizacije();
-			
-			return true;
-		} catch (Exception e) {
-			System.out.println("Ovde ne smemo da upadnemo. vmService/editVM. Poruka o gresci: " + e);
-			return false;
+			korisnici.UpisiKorisnike();
 		}
+		
+		for (Disk disk : diskovi.getListaDiskovi()) {
+			if (vme.disks.contains(disk.getIme())) {
+				disk.setVirtualnaMasina(vme.name);
+			}
+		}
+		diskovi.UpisiDiskove();
+		
+		for (VirtuelnaMasina virtuelnaMasina : virtuelneMasine.getListaVirtuelnihMasina()) {
+			if (virtuelnaMasina.getIme().equals(vme.oldName)) {
+				virtuelneMasine.getListaVirtuelnihMasina().remove(virtuelnaMasina);
+				VM kategorija = kategorijeVM.getMapaKategorijeVM().get(vme.category);
+				virtuelneMasine.getListaVirtuelnihMasina().add(new VirtuelnaMasina(vme.name, kategorija, (ArrayList<String>)vme.disks));
+				break;
+			}
+		}
+		virtuelneMasine.UpisiVirtuelneMasine();
+		
+		for (Organizacija organizacija : organizacije.getListaOrganizacije()) {
+			for (String vmName : organizacija.getListaResursa()) {
+				if (vmName.equals(vme.oldName)) {
+					organizacija.getListaResursa().remove(vme.oldName);
+					organizacija.getListaResursa().add(vme.name);
+					break;
+				}
+			}
+		}
+		organizacije.UpisiOrganizacije();
+		
+		return true;
 	}
 	
 	@POST
@@ -262,7 +272,9 @@ public class VMService {
 		
 		for (Disk disk : diskovi.getListaDiskovi()) {
 			if (disk.getVirtualnaMasina() == null) {
-				disks.add(disk.getIme());
+				if (!disks.contains(disk.getIme())) {
+					disks.add(disk.getIme());
+				}
 			}
 		}
 		
@@ -388,6 +400,12 @@ public class VMService {
 		korisnici.UpisiKorisnike();
 		
 		ArrayList<String> diskovi = (ArrayList<String>)vma.disks;
+		
+		for (Disk disk : ddd.getListaDiskovi()) {
+			if (diskovi.contains(disk.getIme())) {
+				disk.setVirtualnaMasina(vma.name);
+			}
+		}
 		
 		ArrayList<Tuple<Date, Date>> listaAktivnosti = new ArrayList<Tuple<Date,Date>>();
 

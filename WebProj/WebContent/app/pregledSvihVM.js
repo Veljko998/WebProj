@@ -106,7 +106,7 @@ Vue.component("pregled-vm", {
     		axios
     		.post('rest/VMService/getVMByName', {"name": event.srcElement.id})
     		.then(response => {
-    			localStorage.setItem('storeObj3', JSON.stringify(response.data));
+    			localStorage.setItem('storeObj3VM', JSON.stringify(response.data));
     			
     			router.push({path: "/detaljiVM"});
     		});

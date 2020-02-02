@@ -62,10 +62,7 @@ Vue.component("dodaj-organizaciju" ,{
 	methods: {
 		organisationExists: function(){
 			
-	    
-			
 		},
-		
 		checkData: function(){
 			if((this.Organisation.name !== '' && this.Organisation.name !== undefined)){
 					this.showErrorEmptyField = false;
@@ -81,7 +78,6 @@ Vue.component("dodaj-organizaciju" ,{
     		.then(response => {
     			this.showErrorOrganisationExists = response.data;
     			if(this.showErrorOrganisationExists === false && this.showErrorEmptyField === false){
-    				console.log("evo ovo moze");
     				this.changeData.call();
     			}
     		});
@@ -92,12 +88,11 @@ Vue.component("dodaj-organizaciju" ,{
 		changeData: function(){
 			
 			axios
-        	.post('rest/organisationService/addOrganisation', {"name": this.Organisation.name, "details": this.Organisation.details, "logo": null})
+        	.post('rest/organisationService/addOrganisation', {"name": this.Organisation.name, "details": this.Organisation.description, "logo": null})
         	.then(response => {
         		 this.showAddingSucceed = response.data;
         		 
         		 if(this.showAddingSucceed){
-         			console.log("Podaci su uspesno izmenjeni");
          			router.push({path: "/pregledOrganizacija"});
          		}
         		

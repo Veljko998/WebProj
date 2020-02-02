@@ -176,6 +176,10 @@ public class OrganisationService {
 			//ovde se namesta druga slika
 		}
 		
+		if (newOrg.details == null) {
+			newOrg.details = null;
+		}
+		
 		Organizacija org = new Organizacija(newOrg.name, newOrg.details, logo, listaKorisnika, listaResursa);
 				
 		organizacije.dodajOrganizaciju(org);
