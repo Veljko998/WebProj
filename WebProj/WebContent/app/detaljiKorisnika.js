@@ -20,9 +20,9 @@ Vue.component("detalji-korisnika", {
 			<li><label style="color:red">Role:&nbsp; </label>{{ this.User.uloga }}</li>
 			<li><label style="color:red">Organisation: </label>
 				<ul>
+					<img style="height: 100px; width: 100px; text-align: left;" v-bind:src="this.User.organizacija.logo"/>
 					<li><label style="color:red">Name:&nbsp; </label>{{ this.User.organizacija.ime }}</li>
 					<li><label style="color:red">Description:&nbsp; </label>{{ this.User.organizacija.opis }}</li>
-					<li><label style="color:red">Logo:&nbsp; </label>OVDE STAVITI LOGO - IVANA</li>
 				</ul>
 			</li>
 		</ul>

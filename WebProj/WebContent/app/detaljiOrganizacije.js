@@ -13,7 +13,7 @@ Vue.component("detalji-organizacije", {
 <div class="container-fluid" v-if="showTemplate">
 	<h1 align="center">{{ this.title }}</h1></br></br>
 	<h3>
-		<img v-if="" style="height: 150px; width: 150px; text-align: left;" v-bind:src="this.Organizacija.logo"/>
+		<img style="height: 150px; width: 150px; text-align: left;" v-bind:src="this.Organizacija.logo"/>
 		<ul>
 			<li><label style="color:red">Ime:&nbsp; </label>{{ this.Organizacija.ime }}</li>
 			<li><label style="color:red">Opis:&nbsp; </label>{{ this.Organizacija.opis }}</li>
