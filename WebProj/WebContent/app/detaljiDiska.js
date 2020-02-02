@@ -38,16 +38,16 @@ Vue.component("detalji-diska", {
     	 * Load Disk and Virtual Machine of disk.
     	 */
     	loadDVM: function() {
-    		this.Disk = JSON.parse(localStorage.getItem('storeObj'));
+    		this.Disk = JSON.parse(localStorage.getItem('storeObjDisk'));
         	
-        	this.VM = JSON.parse(localStorage.getItem('storeObj2'));
+        	this.VM = JSON.parse(localStorage.getItem('storeObjDisk2'));
         	
         	if (!this.VM) {
 				this.none = "None";
 			}
         	
-        	localStorage.removeItem("storeObj");
-        	localStorage.removeItem("storeObj2");
+//        	localStorage.removeItem("storeObj");
+//        	localStorage.removeItem("storeObj2");
         	
         	this.showTemplate = true;
     	}

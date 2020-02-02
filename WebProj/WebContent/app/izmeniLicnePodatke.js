@@ -139,7 +139,8 @@ Vue.component("izmeni-podatke" ,{
         		 this.showAddingSucceed = response.data;
         		 
         		 if(this.showAddingSucceed){
-         			console.log("Podaci su uspesno izmenjeni");
+         			alert("Data successfully edited");
+         			
          			localStorage.setItem('email', this.User.email);
          			if(this.role === 'admin'){
          				router.push({path: "/administrator"});
@@ -153,7 +154,6 @@ Vue.component("izmeni-podatke" ,{
          		}
         		
         	});
-			
 		}
 	},
 	mounted () {  

@@ -76,13 +76,13 @@ Vue.component("pregled-diskova", {
     		axios
     		.post('rest/discService/getDiskByName', {"name": event.srcElement.id})
     		.then(response => {
-    			localStorage.setItem('storeObj', JSON.stringify(response.data));
+    			localStorage.setItem('storeObjDisk', JSON.stringify(response.data));
     			help = response.data;
     			
     			axios
             	.post("rest/VMService/getVMByName" , {"name": help.virtualnaMasina})
             	.then(response => {
-            		localStorage.setItem('storeObj2', JSON.stringify(response.data));
+            		localStorage.setItem('storeObjDisk2', JSON.stringify(response.data));
             		
             		router.push({path: "/detaljiDiska"});
             	});

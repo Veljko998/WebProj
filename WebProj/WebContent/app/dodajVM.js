@@ -70,7 +70,6 @@ Vue.component("dodaj-vm" ,{
 					
 					<p class="errorMessageRegisterVM" v-if="this.showErrorEmptyField == true">Sva polja moraju biti popunjena !!!</br></p>
 					<p class="errorMessageVMExists" v-if="this.showErrorVMExists == true">VM sa tim imenom vec postoji !!!</br></p>
-					<p class="showErrorDiskNotExists" v-if="this.showErrorDiskNotExists == true">Nisi izabrao disk, niti ces ga izabrati, dok ih ne ubacis u listu diskova u organizacijama !!!</br></p>
 					
 					<div class="form-group ">
 						<button type="button" class="btn btn-primary btn-lg btn-block login-button" v-on:click="emptyField(); VMAlreadyExists();">Add new Virtual Machine</button>

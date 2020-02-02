@@ -5,6 +5,7 @@ package services;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.ws.rs.Consumes;
@@ -36,6 +37,95 @@ import model.kendo.VMToEdit;
  */
 @Path("/VMService")
 public class VMService {
+
+	@POST
+	@Path("/turnOn")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+	/**
+	 * Create new tuple when turn machine on.
+	 * 
+	 * @param vmName has attribute name.
+	 * @return
+	 */
+	public boolean turnOn(VMToDelete vmName) {
+		VirtuelneMasine virtuelneMasine = new VirtuelneMasine();
+		virtuelneMasine.setPutanja();
+		virtuelneMasine.UcitajVirtuelneMasine();
+		
+		Tuple<Date, Date> tuple = new Tuple<>();
+		
+		for (VirtuelnaMasina vm : virtuelneMasine.getListaVirtuelnihMasina()) {
+			if (vm.getIme().equals(vmName.name)) {
+				tuple.setFirst(new Date());
+				tuple.setSecond(null);
+				vm.getListaAktivnosti().add(tuple);
+				virtuelneMasine.UpisiVirtuelneMasine();
+				return true;
+			}
+		}
+		
+		System.out.println("Ovde ne treba da dodje: /turnOn");
+		return false;
+	}
+	
+	@POST
+	@Path("/turnOff")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+	/**
+	 * Just set current time in second attribute of tuple,
+	 * date of turning machine off.
+	 * 
+	 * @param vmtd has attribute name.
+	 * @return
+	 */
+	public boolean turnOff(VMToDelete vmName) {
+		VirtuelneMasine virtuelneMasine = new VirtuelneMasine();
+		virtuelneMasine.setPutanja();
+		virtuelneMasine.UcitajVirtuelneMasine();
+		
+		for (VirtuelnaMasina vm : virtuelneMasine.getListaVirtuelnihMasina()) {
+			System.out.println("hajmo oppp");
+			if (vm.getIme().equals(vmName.name)) {
+				System.out.println("Usao uopste ovde....");
+				vm.getListaAktivnosti().get(vm.getListaAktivnosti().size() - 1).setSecond(new Date());
+				virtuelneMasine.UpisiVirtuelneMasine();
+				return true;
+			}
+		}
+		
+		System.out.println("Ovde ne treba da dodje: /turnOff");
+		return false;
+	}
+	
+	@POST
+	@Path("/checkIsVMOnOff")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+	/**
+	 * 
+	 * @param vmtd has attribute name.
+	 * @return true if VM is on
+	 */
+	public boolean checkIsVMOnOff(VMToDelete vmName) {
+		VirtuelneMasine virtuelneMasine = new VirtuelneMasine();
+		virtuelneMasine.setPutanja();
+		virtuelneMasine.UcitajVirtuelneMasine();
+		
+		
+		VirtuelnaMasina virtuelnaMasina = virtuelneMasine.getMapaVirtuelnihMasina().get(vmName.name);
+		if (virtuelnaMasina.getListaAktivnosti().isEmpty()) {
+			System.out.println("Prazna je.");
+			return false;
+		}else {
+			// <date  null>  VM is on
+			// <date  date> VM is off
+			if (virtuelnaMasina.getListaAktivnosti().get(virtuelnaMasina.getListaAktivnosti().size() - 1).getSecond() == null) {
+				return true;
+			}return false;
+		}
+	}
 	
 	@POST
 	@Path("/editVM")
@@ -299,7 +389,7 @@ public class VMService {
 		
 		ArrayList<String> diskovi = (ArrayList<String>)vma.disks;
 		
-		ArrayList<Tuple<LocalDateTime, LocalDateTime>> listaAktivnosti = new ArrayList<Tuple<LocalDateTime,LocalDateTime>>();
+		ArrayList<Tuple<Date, Date>> listaAktivnosti = new ArrayList<Tuple<Date,Date>>();
 
 		VirtuelnaMasina vMasina = new VirtuelnaMasina(vma.name, kategorija, diskovi, kategorija.getBrojJezgara(), kategorija.getRamMemory(), kategorija.getGpu(), listaAktivnosti); 
 		

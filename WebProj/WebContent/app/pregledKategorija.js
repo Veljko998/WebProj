@@ -94,22 +94,15 @@ Vue.component("pregled-kategorija", {
     `,
     methods: {
     	categoryDetails: function() {
-//    		console.log("Usli smo u pregled Kategorija. Ako radi obrisati ovaj komentar.");
-//    		localStorage.setItem("imeKategorije", event.srcElement.id);
-//    		router.push({path: "/detaljiKategorije"});
-    		
-    		
     		axios
     		.post('rest/categoryService/getCategoryByName', {"name": event.srcElement.id})
     		.then(response => {
-    			localStorage.setItem('storeObj4', JSON.stringify(response.data));
+    			localStorage.setItem('storeObj4Cat', JSON.stringify(response.data));
     			
     			router.push({path: "/detaljiKategorije"});
     		});
     	},
     	editCategory: function(){
-    		//TODO: 
-    		console.log("You pressed edit button.")
     		var catName = event.srcElement.id;
    		
     		axios
@@ -142,7 +135,7 @@ Vue.component("pregled-kategorija", {
     					console.log("Category is succesfully deleted.");
     					this.loadCategories();
     				}else {
-    					console.log("Category is not deleted.");
+    					alert("This category is used in some VM.");
     				}
         		});
 			} else {

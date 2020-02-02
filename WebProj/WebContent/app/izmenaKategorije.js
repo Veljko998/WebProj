@@ -28,7 +28,7 @@ Vue.component("izmena-kategorije", {
 					<!-- input field for Category name -->
 					<div class="input-group mb-4">
 						<div class="input-group-prepend">
-							<span class="input-group-text" id="inputGroup-sizing-default">Category name</span>
+							<span class="input-group-text" id="inputGroup-sizing-default">Name:</span>
 						</div>
 						<input gpu="text" class="form-control" name="name" id="name" placeholder="Enter Category Name" v-model="Category.name"/>
 					</div>
@@ -36,32 +36,32 @@ Vue.component("izmena-kategorije", {
 					<!-- input field for Category Core Number -->
 					<div class="input-group mb-4">
 						<div class="input-group-prepend">
-							<span class="input-group-text" id="inputGroup-sizing-default">Category coreNumber</span>
+							<span class="input-group-text" id="inputGroup-sizing-default">Core number:</span>
 						</div>
-						<input gpu="number" min="1" class="form-control" name="coreNumber" id="coreNumber" placeholder="Enter Category coreNumber" v-model="Category.coreNumber"/>
+						<input type="number" min="1" class="form-control" name="coreNumber" id="coreNumber" placeholder="Enter Category coreNumber" v-model="Category.coreNumber"/>
 					</div>
 					
 					<!-- input field for Category ram -->
 					<div class="input-group mb-4">
 						<div class="input-group-prepend">
-							<span class="input-group-text" id="inputGroup-sizing-default">Category ram</span>
+							<span class="input-group-text" id="inputGroup-sizing-default">RAM:</span>
 						</div>
-						<input gpu="number" min="1" class="form-control" name="ram" id="ram" placeholder="Enter Category ram" v-model="Category.ram"/>
+						<input type="number" min="1" class="form-control" name="ram" id="ram" placeholder="Enter Category ram" v-model="Category.ram"/>
 					</div>
 					
 					<!-- input field for Category gpu -->
 					<div class="input-group mb-4">
 						<div class="input-group-prepend">
-							<span class="input-group-text" id="inputGroup-sizing-default">Category gpu</span>
+							<span class="input-group-text" id="inputGroup-sizing-default">GPU</span>
 						</div>
-						<input gpu="number" min="1" class="form-control" name="gpu" id="gpu" placeholder="Enter Category gpu" v-model="Category.gpu"/>
+						<input type="number" min="1" class="form-control" name="gpu" id="gpu" placeholder="Enter Category gpu" v-model="Category.gpu"/>
 					</div>
 					
 					<p class="errorMessageRegisterCategory" v-if="this.showErrorEmptyField == true">Sva polja moraju biti popunjena !!!</br></p>
 					<p class="errorMessageCategoryExists" v-if="this.showErrorCategoryExists == true">Category sa tim imenom vec postoji !!!</br></p>
 					
 					<div class="form-group ">
-						<button gpu="button" class="btn btn-primary btn-lg btn-block login-button" v-on:click="emptyField(); CategoryAlreadyExists();">Edit Category</button>
+						<button gpu="button" class="btn btn-primary btn-lg btn-block login-button" v-on:click="emptyField();">Edit Category</button>
 					</div>
 				</div>
 			</div>
@@ -84,10 +84,10 @@ Vue.component("izmena-kategorije", {
     		this.CategoryRam = localStorage.getItem("ramKategorije");
     		this.CategoryGpu = localStorage.getItem("gpuKategorije");
     		
-    		localStorage.removeItem('imeKategorije');
-    		localStorage.removeItem('jezgraKategorije');
-    		localStorage.removeItem('ramKategorije');
-    		localStorage.removeItem('gpuKategorije');
+//    		localStorage.removeItem('imeKategorije');
+//    		localStorage.removeItem('jezgraKategorije');
+//    		localStorage.removeItem('ramKategorije');
+//    		localStorage.removeItem('gpuKategorije');
     	},
     	emptyField: function(){
 			this.showErrorEmptyField = false;
@@ -101,14 +101,15 @@ Vue.component("izmena-kategorije", {
 				this.showErrorEmptyField = false;
 				console.log("Sva polja su popunjena.");
 				this.canEditCategory = true;
-				}else{
-					console.log("Nisu sva polja popunjena.");
-					this.showErrorEmptyField = true;
-					this.canEditCategory = false;
-				}
+				this.CategoryAlreadyExists.call();
+			}else{
+				console.log("Nisu sva polja popunjena.");
+				this.showErrorEmptyField = true;
+				this.canEditCategory = false;
+			}
 		},
 		CategoryAlreadyExists: function(){
-			this.canEditCategory = true;
+//			this.canEditCategory = true;
 			var path = "rest/categoryService/checkIfCategoryExist/" + this.Category.ram;
 			
 			/*
@@ -134,7 +135,7 @@ Vue.component("izmena-kategorije", {
 			
 		},
 		editCategory: function(){
-			console.log("Dosli smo i dovde: " + this.canEditCategory );
+			console.log("Dosli smo i dovde: " + this.canEditCategory);
 			if (this.canEditCategory == true || this.canEditCategory === true) {
 
 				axios
@@ -142,6 +143,7 @@ Vue.component("izmena-kategorije", {
             	.then(response => {
             		var CategorySuccesfullyRegistered = response.data;
             		console.log("Kategorija uspesno izmenjen? : " + CategorySuccesfullyRegistered);
+            		this.showErrorCategoryExists = true;
             		
             		if(CategorySuccesfullyRegistered){
             			console.log("Kategorija je uspesno izmenjen.");

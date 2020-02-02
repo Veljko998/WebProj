@@ -50,6 +50,13 @@ public class CategoryService {
 		kategorijeVM.setPutanja();
 		kategorijeVM.UcitajKategorijeVM();
 		
+		if (!cte.oldName.equals(cte.name)) {
+			if (kategorijeVM.getMapaKategorijeVM().containsKey(cte.name)) {
+				System.out.println("Vec postoji sa ovim nazivom. return false");
+				return false;
+			}
+		}
+		
 		VM vmCat = new VM(cte.name, Integer.parseInt(cte.coreNumber), Integer.parseInt(cte.ram));
 		
 		//handle with gpu if has not value.
@@ -145,12 +152,23 @@ public class CategoryService {
 	 * 
 	 * @return all categories
 	 */
-	public boolean deleteCategory(VMToDelete vm) {
+	public boolean deleteCategory(VMToDelete vmtd) {
 		KategorijeVM kategorijeVM = new KategorijeVM();
 		kategorijeVM.setPutanja();
 		kategorijeVM.UcitajKategorijeVM();
+		
+		VirtuelneMasine virtuelneMasine = new VirtuelneMasine();
+		virtuelneMasine.setPutanja();
+		virtuelneMasine.UcitajVirtuelneMasine();
+		
+		for (VirtuelnaMasina vm : virtuelneMasine.getListaVirtuelnihMasina()) {
+			if (vm.getKategorjia().getIme().equals(vmtd.name)) {
+				System.out.println("Ima dodeljene masine i ne moze da se brise...");
+				return false;
+			}
+		}
 
-		VM carForDelete = kategorijeVM.getMapaKategorijeVM().get(vm.name);
+		VM carForDelete = kategorijeVM.getMapaKategorijeVM().get(vmtd.name);
 		
 		kategorijeVM.getListaKategorijeVM().remove(carForDelete);
 		kategorijeVM.UpisiKategorijeVM();

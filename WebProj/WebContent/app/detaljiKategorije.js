@@ -21,14 +21,7 @@ Vue.component("detalji-kategorije", {
     `,
     methods: {
     	loadCategory: function() {
-    		this.Category = JSON.parse(localStorage.getItem('storeObj4'));
-    		console.log("Bilo sta: " + this.Category.ime)
-    		
-//    		axios
-//    		.post('rest/categoryService/getCategoryByName', {"name": categoryName})
-//    		.then(response => {
-//    			this.Category = response.data;
-//    		});
+    		this.Category = JSON.parse(localStorage.getItem('storeObj4Cat'));
     		
     		this.showTemplate = true;
     	}

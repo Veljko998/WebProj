@@ -6,7 +6,9 @@ Vue.component("detalji-vm", {
         		disks: [] ,// list of disk Objects
         		showTemplate: false,
         		nesto: {},
-        		role: null
+        		role: null,
+        		vmIsOn: false,
+        		doTxt: "Turn on"
         	}
     },
     template:`
@@ -19,6 +21,10 @@ Vue.component("detalji-vm", {
 			<li><label style="color:red">Core number:&nbsp; </label>{{ this.VM.brojJezgara }}</li>
 			<li><label style="color:red">RAM:&nbsp; </label>{{ this.VM.ram }}</li>
 			<li><label style="color:red">GPU:&nbsp; </label>{{ this.VM.gpu }}</li>
+			<li v-if="this.role != 'korisnik'">
+				<label style="color:red">Turn on/off:&nbsp; </label>
+				<button v-if="this.role != 'korisnik'" type="button" class="btn btn-sm btn-secondary" v-on:click="turnOnOffMachine();">{{this.doTxt}}</button>
+			</li>
 			<li><label style="color:red">Disks: </label>
 				<ul>
 					<li v-for="d in this.disks"><label style="color:red">Name:&nbsp; </label> {{ d.ime }}
@@ -34,6 +40,39 @@ Vue.component("detalji-vm", {
 </div>
     `,
     methods: {
+    	checkIsVMOnOff: function(){
+    		axios
+			.post("rest/VMService/checkIsVMOnOff", {"name": this.VM.ime})
+			.then(response => {
+				this.vmIsOn = response.data;
+				if (this.vmIsOn == false) {
+					this.doTxt = "Turn on";
+					console.log("Palimo masinu");
+				}else {
+					this.doTxt = "Turn off";
+					console.log("Gasimo masinu");
+				}
+			});
+    	},
+    	turnOnOffMachine: function(){
+    		if (this.vmIsOn == false) { //  If VM is off
+				axios
+				.post("rest/VMService/turnOn", {"name": this.VM.ime})
+				.then(response =>{
+					this.vmIsOn = true;
+					this.doTxt = "Turn off";
+				});
+			}else { //  If VM is on
+				axios
+				.post("rest/VMService/turnOff", {"name": this.VM.ime})
+				.then(response =>{
+					this.vmIsOn = false;
+					this.doTxt = "Turn on";
+				});
+			}
+    		
+    		
+    	},
     	loadVMD: function() {
     		this.VM = JSON.parse(localStorage.getItem('storeObj3'));
     		console.log("BILO sta: " + this.VM.ime);
@@ -60,6 +99,7 @@ Vue.component("detalji-vm", {
     	this.role = localStorage.getItem("role");
     	
     	this.loadVMD();
+    	this.checkIsVMOnOff();
     },
 });
 

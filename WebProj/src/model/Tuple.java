@@ -33,5 +33,9 @@ public class Tuple<FirstType, SecondType> {
 	public void setSecond(SecondType second) {
 		this.second = second;
 	}
-	
+
+	@Override
+	public String toString() {
+		return "Tuple [first=" + first + ", second=" + second + "]";
+	}
 }
