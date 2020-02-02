@@ -63,8 +63,13 @@ Vue.component("izmena-organizacije" ,{
 	`,
 	methods: {
 		loadOrganisation: function() {
-    		this.Organizacija = JSON.parse(localStorage.getItem('organisationDetails'));
-    		this.prethodnoIme = this.Organizacija.ime;
+			if(localStorage.getItem('organisationDetails') === null){
+    			this.Organizacija = JSON.parse(localStorage.getItem('backupOrganisationDetails'));
+    		}
+    		else{
+    			this.Organizacija = JSON.parse(localStorage.getItem('organisationDetails'));
+    		}
+    		localStorage.setItem('previousOrgName', JSON.stringify(this.Organizacija.ime));
         	localStorage.removeItem("organisationDetails");
         	this.showTemplate = true;
     	},
@@ -93,14 +98,22 @@ Vue.component("izmena-organizacije" ,{
 					
 				if(this.showErrorOrganisationExists === false && this.showErrorEmptyField === false){
 					console.log("evo ovo moze");
+					this.prethodnoIme = JSON.parse(localStorage.getItem('previousOrgName'));
 					axios
-		        	.post('rest/organisationService/editOrganisation', {"name": this.Organisation.name, "details": this.Organisation.details, "logo": null, "oldName": this.prethodnoIme})
+		        	.post('rest/organisationService/editOrganisation', {"name": this.Organizacija.ime, "details": this.Organizacija.opis, "logo": null, "oldName": this.prethodnoIme})
 		        	.then(response => {
 		        		 this.showAddingSucceed = response.data;
 		        		 
 		        		 if(this.showAddingSucceed){
 		         			console.log("Podaci su uspesno izmenjeni");
-		         			router.push({path: "/detaljiOrganizacija"});
+		         			localStorage.removeItem("previousOrgName");
+		         			localStorage.setItem('backupOrganisationDetails', JSON.stringify(this.Organizacija));
+		         			if(this.role === 'admin'){
+		         				router.push({path: "/detaljiOrganizacije"});
+		         			}
+		         			else{
+		         				router.push({path: "/pregledOrganizacija"});
+		         			}
 		         		}
 		        		
 		        	});

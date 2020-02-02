@@ -199,7 +199,6 @@ public class OrganisationService {
 			ote.details = null;
 		}
 		
-		//TODO: Ivana za logo...
 		if (ote.logo == null || ote.logo.equals("")) {
 			ote.logo = "logos/default.jpg";
 		}
@@ -210,11 +209,16 @@ public class OrganisationService {
 		
 		Korisnici korisnici = new Korisnici();
 		korisnici.setPutanja();
-		korisnici.UcitajKorisnike();
+		if(!korisnici.UcitajKorisnike()){
+			System.out.println("nije");
+			return false;
+		}
 		
-		Organizacija orgToAdd = new Organizacija(ote.name, ote.details, ote.logo, new ArrayList<String>(), new ArrayList<String>());
+		Organizacija oldOrg = new Organizacija();
+		oldOrg = organizacije.getMapaOrganizacije().get(ote.oldName);
+		String oldName = oldOrg.getIme();
 		
-		Organizacija oldOrg = organizacije.getMapaOrganizacije().get(ote.oldName);
+		Organizacija orgToAdd = new Organizacija(ote.name, ote.details, ote.logo, oldOrg.getListaKorisnika(), oldOrg.getListaResursa());
 		
 		organizacije.getListaOrganizacije().remove(oldOrg);
 		organizacije.getListaOrganizacije().add(orgToAdd);
@@ -223,13 +227,12 @@ public class OrganisationService {
 		organizacije.UpisiOrganizacije();
 		
 		for (Korisnik kor : korisnici.getListaKorisnici()) {
-			if (kor.getOrganizacija().getIme().equals(oldOrg.getIme())) {
+			if (kor.getOrganizacija().getIme().equals(oldName)) {
 				kor.setOrganizacija(orgToAdd);
 			}
 		}
 		
 		korisnici.UpisiKorisnike();
-		
 		return true;
 	}
 }
