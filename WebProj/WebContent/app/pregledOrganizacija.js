@@ -84,7 +84,6 @@ Vue.component("pregled-organizacija" ,{
 		},
 		
 		details: function() {
-    		
     		axios
     		.post('rest/organisationService/getOrganisation', {"name": event.srcElement.id})
     		.then(response => {
@@ -106,7 +105,14 @@ Vue.component("pregled-organizacija" ,{
     
 		axios
     		.get(path)
-    		.then(response => (this.organisations = response.data))
+    		.then(response => {
+    			this.organisations = response.data;
+    			
+    			//Sort 
+    			if (this.organisations != "") {
+    				this.organisations.sort((a, b) => a.ime.localeCompare(b.ime));
+				}
+    		});
 		
     },
 });

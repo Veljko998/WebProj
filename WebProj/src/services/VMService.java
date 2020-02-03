@@ -27,6 +27,7 @@ import model.Tuple;
 import model.VM;
 import model.VirtuelnaMasina;
 import model.VirtuelneMasine;
+import model.kendo.UserToGetData2;
 import model.kendo.VMToAdd;
 import model.kendo.VMToDelete;
 import model.kendo.VMToEdit;
@@ -166,6 +167,8 @@ public class VMService {
 		organizacije.setPutanja();
 		organizacije.UcitajOrganizacije();
 		
+		String orgName = korisnici.getKorisnik(vme.email).getOrganizacija().getIme();
+		
 		if (!vme.oldName.equals(vme.name)) {
 			if (virtuelneMasine.getMapaVirtuelnihMasina().containsKey(vme.name)) {
 				System.out.println("Pokusavamo da promenimo masinu sa novim imenom koje je vec rezervisano kod diska. /editVM");
@@ -186,29 +189,13 @@ public class VMService {
 			}
 		}
 		
-		if (vme.role.equals("admin")) {
-			for (Korisnik korisnik : korisnici.getListaKorisnici()) {
-				if (korisnik.getIme().equals(vme.email)) {
-					korisnik.getOrganizacija().getListaResursa().remove(vme.oldName);
-					korisnik.getOrganizacija().getListaResursa().add(vme.name);
-					break;
-				}
+		for (Korisnik kor : korisnici.getListaKorisnici()) {
+			if (kor.getOrganizacija().getIme().equals(orgName)) {
+				kor.getOrganizacija().getListaResursa().remove(vme.oldName);
+				kor.getOrganizacija().getListaResursa().add(vme.name);
 			}
-			korisnici.UpisiKorisnike();
-			
-		}else { //superadmin
-			for (Korisnik korisnik : korisnici.getListaKorisnici()) {
-				for (String vmName : korisnik.getOrganizacija().getListaResursa()) {
-					if (vmName.equals(vme.oldName)) {
-						korisnik.getOrganizacija().getListaResursa().remove(vme.oldName);
-						korisnik.getOrganizacija().getListaResursa().add(vme.name);
-//						 Collections.swap(list, 1, 2);
-						break;
-					}
-				}
-			}
-			korisnici.UpisiKorisnike();
 		}
+		korisnici.UpisiKorisnike();
 		
 		for (Disk disk : diskovi.getListaDiskovi()) {
 			if (vme.disks.contains(disk.getIme())) {
@@ -241,6 +228,50 @@ public class VMService {
 		return true;
 	}
 	
+	
+	@POST
+	@Path("/getDisksFromOrg")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+	/**
+	 * get all disks from current VM and all disks which has not VM if superadmin
+	 * get just free disks from User's organisation if admin or user
+	 * 
+	 * @param vme
+	 * @return
+	 */
+	public List<String> getDisksFromOrg(UserToGetData2 ugt) {
+		VirtuelneMasine virtuelneMasine = new VirtuelneMasine();
+		virtuelneMasine.setPutanja();
+		virtuelneMasine.UcitajVirtuelneMasine();
+		
+		Diskovi diskovi = new Diskovi();
+		diskovi.setPutanja();
+		diskovi.UcitajDiskove();
+		
+		Organizacije organizacije = new Organizacije();
+		organizacije.setPutanja();
+		organizacije.UcitajOrganizacije();
+		
+		List<String> disks = new ArrayList<String>();
+		
+		if (ugt.role.equals("superadmin")) {
+			for (Disk disk : diskovi.getListaDiskovi()) {
+				if (disk.getVirtualnaMasina() == null) {
+					disks.add(disk.getIme());
+				}
+			}return disks;
+		}else {
+			for (String resurs : organizacije.getMapaOrganizacije().get(ugt.orgName).getListaResursa()) {
+				if (diskovi.getMapaDiskovi().containsKey(resurs)) {
+					if (diskovi.getMapaDiskovi().get(resurs).getVirtualnaMasina() == null) {
+						disks.add(resurs);
+					}
+				}
+			}return disks;
+		}
+	}
+	
 	@POST
 	@Path("/getDisks")
 	@Produces(MediaType.APPLICATION_JSON)
@@ -265,7 +296,6 @@ public class VMService {
 		diskovi.UcitajDiskove();
 		
 		VirtuelnaMasina vm = virtuelneMasine.getVirtuelnaMasina(vme.name);
-		System.out.println(vm);
 		
 		List<String> disks = new ArrayList<String>();
 		disks.addAll(vm.getDiskovi());
@@ -318,6 +348,10 @@ public class VMService {
 		organizacije.setPutanja();
 		organizacije.UcitajOrganizacije();
 		
+		Diskovi diskovi = new Diskovi();
+		diskovi.setPutanja();
+		diskovi.UcitajDiskove();
+		
 		for (Organizacija organizacija : organizacije.getListaOrganizacije()) {
 			if (organizacija.getListaResursa().contains(vmtd.name)) {
 				organizacija.getListaResursa().remove(vmtd.name);
@@ -329,6 +363,12 @@ public class VMService {
 		VirtuelnaMasina vm = new VirtuelnaMasina();
 		
 		if ((vm = virtuelneMasine.getMapaVirtuelnihMasina().get(vmtd.name)) != null) {
+			for (Disk disk : diskovi.getListaDiskovi()) {
+				if (vm.getDiskovi().contains(disk.getIme())) {
+					disk.setVirtualnaMasina(null);
+				}
+			}diskovi.UpisiDiskove();
+			
 			virtuelneMasine.getListaVirtuelnihMasina().remove(vm);
 			if (virtuelneMasine.UpisiVirtuelneMasine()) {
 				System.out.println("Masina je uspesno obrisana.");
@@ -345,6 +385,7 @@ public class VMService {
 			}
 		}else {
 			System.out.println("Ovde ne sme da udje, nema smisla. //deleteVM");
+			return false;
 		}
 		
 		System.out.println("Masina nije uspesno obrisana. Ovde ne bi smeo da udje nikada.  /VMService/deleteVM");
@@ -406,6 +447,7 @@ public class VMService {
 				disk.setVirtualnaMasina(vma.name);
 			}
 		}
+		ddd.UpisiDiskove();
 		
 		ArrayList<Tuple<Date, Date>> listaAktivnosti = new ArrayList<Tuple<Date,Date>>();
 

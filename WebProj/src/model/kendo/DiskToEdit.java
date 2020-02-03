@@ -10,8 +10,8 @@ package model.kendo;
 public class DiskToEdit {
 	public String role;
 	public String email;
-	public String oldName;
 	
+	public String oldName;
 	public String name;
 	public String capacity;
 	public String VMName;

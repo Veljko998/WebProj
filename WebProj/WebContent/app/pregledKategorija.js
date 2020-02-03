@@ -294,11 +294,16 @@ Vue.component("pregled-kategorija", {
     		router.push({path: "/dodajKategoriju"});
     	},
     	loadCategories: function() {
-    		console.log("CITAMO KATEGORIJE.");
     		axios
     		.post('rest/categoryService/getAllCategories2')
     		.then(response => {
     			this.categories = response.data;
+    			
+    			//Sort 
+    			if (this.categories != "") {
+    				this.categories.sort((a, b) => a.ime.localeCompare(b.ime));
+				}
+    			
     			if (this.categories === '') {
     				console.log("Nema kategorija za ispis kod ovog korisnika.");
     			}

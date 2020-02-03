@@ -125,6 +125,7 @@ Vue.component("izmena-diska", {
             			router.push({path: "/pregledDiskova"}); // Bring user back to pregledDiskova
             		}else{
             			console.log("disk nije upisan.");
+            			this.showErrorDiscExists = true;
             		}
             	});
 			}

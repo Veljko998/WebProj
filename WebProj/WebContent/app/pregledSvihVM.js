@@ -305,11 +305,16 @@ Vue.component("pregled-vm", {
     		router.push({path: "/dodajVM"});
     	},
     	loadVMs: function() {
-    		console.log("CITAMO MASINE.");
     		axios
     		.post('rest/overview/getAllVM', {"role": this.role, "email": this.email})
     		.then(response => {
     			this.machines = response.data;
+    			
+    			//Sort 
+    			if (this.machines != "") {
+    				this.machines.sort((a, b) => a.ime.localeCompare(b.ime));
+				}
+    			
     			if (this.machines === '') {
     				console.log("Nema masina za ispis kod ovog korisnika.");
     			}

@@ -1,5 +1,7 @@
 package model;
 
+import java.util.Comparator;
+
 import javax.validation.constraints.NotNull;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;

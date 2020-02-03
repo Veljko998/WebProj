@@ -6,7 +6,7 @@ Vue.component("pregled-diskova", {
                 users: null,
                 role: 'noRule',
                 email: '',
-                disks: null,
+                disks: [],
                 diskToEdit: null,
                 isKorisnik: true
         	}
@@ -70,7 +70,6 @@ Vue.component("pregled-diskova", {
     methods: {
     	diskDetails: function() {
     		console.log("Usli smo u metodu detalji diska. Ako radi obrisati ovaj komentar.");
-//    		localStorage.setItem("imeDiska", event.srcElement.id);
     		var help = null;
     		
     		axios
@@ -103,14 +102,13 @@ Vue.component("pregled-diskova", {
     			localStorage.setItem("kapacitetDiska", this.diskToEdit.kapacitet);
     			localStorage.setItem("nazivVMDiska", this.diskToEdit.virtuelnaMasina);
     			
-    			if (this.role == "admin" || this.role == "superadmin") {
+//    			if (this.role == "admin" || this.role == "superadmin") {
     				router.push({path: "/izmenaDiska"});
-				}else {
-					console.log("Ulazi mi u deteljan pregled diska koji nisam jos uradio.");
-//					router.push({path: "/detaljanPregledDiska"});
-				}
+//				}else {
+//					console.log("Ulazi mi u deteljan pregled diska koji nisam jos uradio.");
+////					router.push({path: "/detaljanPregledDiska"});
+//				}
     		});
-    		
     	},
     	deleteDisk: function(){
     		var diskId = event.srcElement.id;
@@ -133,8 +131,6 @@ Vue.component("pregled-diskova", {
 			} else {
 				
 			}
-    		
-    		//console.log('DELETE Disk with id: ' + diskId);
     	},
     	getID: function(oObject){
     		var id = oObject.id;
@@ -220,8 +216,13 @@ Vue.component("pregled-diskova", {
         	axios
     		.post('rest/overview/getAllDiscs', {"role": this.role, "email": this.email})
     		.then(response => {
-    			
     			this.disks = response.data;
+    			
+    			//Sort 
+    			if (this.disks != "") {
+    				this.disks.sort((a, b) => a.ime.localeCompare(b.ime));
+				}
+    			
     			if (this.disks === '') {
     				console.log("Nema Diskova za ispis kod ovog korisnika.");
     			}

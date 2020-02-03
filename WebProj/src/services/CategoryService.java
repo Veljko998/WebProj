@@ -116,7 +116,7 @@ public class CategoryService {
 		
 		VM vm = new VM(cta.name, Integer.parseInt(cta.coreNumber), Integer.parseInt(cta.ram));
 		
-		if (cta.gpu != null) {
+		if (cta.gpu != null && !cta.gpu.equals("")) {
 			vm.setGpu(Integer.parseInt(cta.gpu));
 		}
 		

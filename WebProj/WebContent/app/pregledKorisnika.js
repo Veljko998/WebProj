@@ -4,8 +4,7 @@ Vue.component("pregled-korisnika" ,{
 			title: "Pregled korisnika",
 			users: null,
 			role: '',
-			email: '',
-			nista: true
+			email: ''
 		}
 	},
 	template: 
@@ -106,22 +105,9 @@ Vue.component("pregled-korisnika" ,{
 							}
 						}
         			}
-        			
-        			
         		}
         	}
     	},
-		loadUsers() {
-			console.log("Role: " + this.role);
-			console.log("Email: " + this.email);
-			var path = 'rest/overview/getJustUsers/' + this.role + '/' + this.email
-			
-			axios
-    		.get(path)
-    		.then(response => {
-    			this.users = response.data
-    		});
-		},
 		editUser: function() {
 			localStorage.setItem("oldEmail", event.srcElement.id);
 			
@@ -152,17 +138,6 @@ Vue.component("pregled-korisnika" ,{
 			} else {
 				
 			}
-			
-			
-			
-//			axios
-//    		.post("rest/userService/deleteUser", {"name": event.srcElement.id})
-//    		.then(response => {
-//    			if (response.data == true) {
-//					console.log("Korisnik je uspesno obrisan");
-//					this.loadUsers.call();
-//				}
-//    		});
 		},
 		userDetails: function() {
 			var path = "rest/userService/getUser/" + event.srcElement.id;
@@ -175,16 +150,28 @@ Vue.component("pregled-korisnika" ,{
 		},
 		changeRouter: function(){
 			router.push({path: '/dodajKorisnika'});
-		}
+		},
+		loadUsers() {
+			console.log("Role: " + this.role);
+			console.log("Email: " + this.email);
+			var path = 'rest/overview/getJustUsers/' + this.role + '/' + this.email
+			
+			axios
+    		.get(path)
+    		.then(response => {
+    			this.users = response.data
+
+    			//Sort 
+    			if (this.users != "") {
+    				this.users.sort((a, b) => a.ime.localeCompare(b.ime));
+				}
+    		});
+		},
 	},
 	mounted () {  //created 
 		this.role = localStorage.getItem('role');
 		this.email = localStorage.getItem('email');
-//		var path = 'rest/overview/getJustUsers/' + this.role + '/' + this.email
     
 		this.loadUsers();
-//		axios
-//    		.get(path)
-//    		.then(response => (this.users = response.data));
     },
 });

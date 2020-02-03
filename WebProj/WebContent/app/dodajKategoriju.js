@@ -32,15 +32,15 @@ Vue.component("dodaj-kategoriju" ,{
 					<!-- input field for Category Core Number -->
 					<div class="input-group mb-4">
 						<div class="input-group-prepend">
-							<span class="input-group-text" id="inputGroup-sizing-default">Category coreNumber</span>
+							<span class="input-group-text" id="inputGroup-sizing-default">Core number</span>
 						</div>
-						<input type="number" min="1" class="form-control" name="coreNumber" id="coreNumber" placeholder="Enter Category coreNumber" v-model="Category.coreNumber"/>
+						<input type="number" min="1" class="form-control" name="coreNumber" id="coreNumber" placeholder="Enter number of cores" v-model="Category.coreNumber"/>
 					</div>
 					
 					<!-- input field for Category ram -->
 					<div class="input-group mb-4">
 						<div class="input-group-prepend">
-							<span class="input-group-text" id="inputGroup-sizing-default">Category ram</span>
+							<span class="input-group-text" id="inputGroup-sizing-default">RAM</span>
 						</div>
 						<input type="number" min="1" class="form-control" name="ram" id="ram" placeholder="Enter Category ram" v-model="Category.ram"/>
 					</div>
@@ -48,7 +48,7 @@ Vue.component("dodaj-kategoriju" ,{
 					<!-- input field for Category gpu -->
 					<div class="input-group mb-4">
 						<div class="input-group-prepend">
-							<span class="input-group-text" id="inputGroup-sizing-default">Category gpu</span>
+							<span class="input-group-text" id="inputGroup-sizing-default">GPU</span>
 						</div>
 						<input type="number" min="1" class="form-control" name="gpu" id="gpu" placeholder="Enter Category gpu" v-model="Category.gpu"/>
 					</div>

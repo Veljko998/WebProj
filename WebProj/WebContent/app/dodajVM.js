@@ -86,11 +86,14 @@ Vue.component("dodaj-vm" ,{
 		 * superadmin get disks from chosen organisation. 
 		 */
 		loadDisks: function() {
-			if (this.VM.vmOrganisationName != "Choose...") {
+			if (this.VM.vmOrganisationName != "Choose..." && this.VM.vmOrganisationName != "" && this.VM.vmOrganisationName != undefined) {
 				axios
-				.post("rest/discService/getAllDisks", {"role": this.role, "email": this.email, "orgName": this.VM.vmOrganisationName})
+				.post("rest/VMService/getDisksFromOrg", {"role": this.role, "email": this.email, "orgName": this.VM.vmOrganisationName})
 				.then(response => {
 					this.disks = response.data;
+					if (this.disks != "") {
+						this.disks.sort((a, b) => a.localeCompare(b));
+					}
 					console.log("Velicina liste je: " + this.disks.length);
 					if (this.disks.length > 0) {
 						this.showErrorDiskNotExists = false;

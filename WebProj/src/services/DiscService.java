@@ -106,6 +106,13 @@ public class DiscService {
 			dte.VMName = null;
 		}
 		
+		if (!dte.oldName.equals(dte.name)) {
+			if (diskovi.getMapaDiskovi().containsKey(dte.name)) {
+				System.out.println("Vec postoji disk sa ovim nazivom. return false");
+				return false;
+			}
+		}
+		
 		Disk newDisk = new Disk(dte.name, TipDiska.valueOf(dte.type), Integer.parseInt(dte.capacity), dte.VMName);
 		
 		if (diskovi.getMapaDiskovi().get(dte.oldName).equals(newDisk)) {
