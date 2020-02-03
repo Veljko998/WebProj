@@ -16,7 +16,7 @@ Vue.component("pregled-organizacija" ,{
 	
 	<div class="container-fluid">
 		<br>
-		<input type="text" id="myInputVM" v-on:keyup="myFunction()" placeholder="Search for email, name or surname...">
+		<input type="text" id="myInputOrg" v-on:keyup="myFunction()" placeholder="Search for organisation name...">
 	</div>
 	
 	<div class="container-fluid scrollable">
@@ -52,7 +52,7 @@ Vue.component("pregled-organizacija" ,{
 		myFunction: function(){
     		var input, filter, table, tr, td, i, txtValue;
     		
-        	input = document.getElementById("myInputVM");
+        	input = document.getElementById("myInputOrg");
         	filter = input.value.toUpperCase();
         	table = document.getElementById("myTable");
         	tr = table.getElementsByTagName("tr");
