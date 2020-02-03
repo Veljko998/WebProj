@@ -27,8 +27,8 @@ public class KategorijeVM {
 	/*pronalazi apsolutnu putanju do fajla*/
 	public void setPutanja() {
 		//this.putanja = "C:\\Users\\Ivana\\git\\WebProj\\WebProj\\WebContent\\kategorijeVM.json";
-		this.putanja = "D:\\Semestar5\\Veb programiranje\\Projekat\\WebProj\\WebContent\\kategorijeVM.json";
-		/*
+		//this.putanja = "D:\\Semestar5\\Veb programiranje\\Projekat\\WebProj\\WebContent\\kategorijeVM.json";
+		
 		try {
 			String path = this.getClass().getClassLoader().getResource("").getPath();
 			String fullPath = URLDecoder.decode(path, "UTF-8");
@@ -40,7 +40,7 @@ public class KategorijeVM {
 		} catch (UnsupportedEncodingException e) {
 			e.printStackTrace();
 		}
-		*/
+		
 	}
 
 	public HashMap<String, VM> getMapaKategorijeVM() {

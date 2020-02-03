@@ -44,8 +44,8 @@ public class Korisnici {
 	/*pronalazi apsolutnu putanju do fajla*/
 	public void setPutanja() {
 		//this.putanja = "C:\\Users\\Ivana\\git\\WebProj\\WebProj\\WebContent\\korisnici.json";
-		this.putanja = "D:\\Semestar5\\Veb programiranje\\Projekat\\WebProj\\WebContent\\korisnici.json";
-		/*
+		//this.putanja = "D:\\Semestar5\\Veb programiranje\\Projekat\\WebProj\\WebContent\\korisnici.json";
+		
 		try {
 			String path = this.getClass().getClassLoader().getResource("").getPath();
 			String fullPath = URLDecoder.decode(path, "UTF-8");
@@ -57,7 +57,7 @@ public class Korisnici {
 		} catch (UnsupportedEncodingException e) {
 			e.printStackTrace();
 		}
-		*/
+		
 	}
 	
 	/*Vraca Korisnika preko zadatog id-a (email)*/
