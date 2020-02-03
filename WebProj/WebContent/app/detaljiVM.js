@@ -69,14 +69,14 @@ Vue.component("detalji-vm", {
 				.post("rest/VMService/turnOn", {"name": this.VM.ime})
 				.then(response =>{
 					this.vmIsOn = true;
-					this.doTxt = "Turn off";
+					this.doTxt = "Turn on";
 				});
 			}else { //  If VM is on
 				axios
 				.post("rest/VMService/turnOff", {"name": this.VM.ime})
 				.then(response =>{
 					this.vmIsOn = false;
-					this.doTxt = "Turn on";
+					this.doTxt = "Turn off";
 				});
 			}
     		this.loadActivity.call();
