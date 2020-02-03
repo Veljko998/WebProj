@@ -3,9 +3,10 @@
  */
 package services;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
+import java.util.Date;
 import java.util.List;
 
 import javax.ws.rs.Consumes;
@@ -22,6 +23,7 @@ import model.Korisnici;
 import model.Korisnik;
 import model.Organizacija;
 import model.Organizacije;
+import model.Tuple;
 import model.VirtuelnaMasina;
 import model.VirtuelneMasine;
 import model.enums.TipDiska;
@@ -29,6 +31,7 @@ import model.kendo.DiscToAdd;
 import model.kendo.DiskToDelete;
 import model.kendo.DiskToEdit;
 import model.kendo.UserToGetData2;
+import model.kendo.VMToDelete;
 
 /** 
  * @author Veljko
@@ -36,6 +39,45 @@ import model.kendo.UserToGetData2;
  */
 @Path("/discService")
 public class DiscService {
+	
+	@POST
+	@Path("/getActivities")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+	/**
+	 * Take just disks from users organisation if admin and if not connected on Vm
+	 * Else take disks from picked organisation if not connected on Vm
+	 * 
+	 * @param ugt - role, email, orgName
+	 * @return list of name of disks
+	 */
+	public List<Tuple<String, String>> getActivities(VMToDelete vmd) {
+		VirtuelneMasine virtuelneMasine = new VirtuelneMasine();
+		virtuelneMasine.setPutanja();
+		virtuelneMasine.UcitajVirtuelneMasine();
+		
+		List<Tuple<String, String>> tuple = new ArrayList<Tuple<String,String>>();
+		
+		DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss"); 
+		
+		for (Tuple<Date, Date> tup : virtuelneMasine.getMapaVirtuelnihMasina().get(vmd.name).getListaAktivnosti()) {
+			String dateOn = dateFormat.format(tup.getFirst());
+			String dateOff = null;
+			
+			if (tup.getSecond() != null) {
+				dateOff = dateFormat.format(tup.getSecond());
+			}
+			
+			Tuple<String, String> tupToAdd = new Tuple<>();
+			
+			tupToAdd.setFirst(dateOn);
+			tupToAdd.setSecond(dateOff);
+			tuple.add(tupToAdd);
+		}
+		if (tuple.isEmpty()) {
+			return null;
+		}return tuple;
+	}
 	
 	@POST
 	@Path("/getAllDisks")

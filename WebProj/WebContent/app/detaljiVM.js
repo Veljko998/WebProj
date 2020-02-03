@@ -38,8 +38,10 @@ Vue.component("detalji-vm", {
 			</li>
 			<li v-for="d in this.activity"><label style="color:red">Activity:&nbsp; </label>
 				<ul>
-					<li><label style="color:red">Date if turning on:&nbsp; </label>{{ d.first }}</li>
-					<li><label style="color:red">Date of turning off:&nbsp; </label>{{ d.second }}</li>
+					<li><label style="color:red">Date of turning on:&nbsp; </label>{{ d.first }}&nbsp;&nbsp;&nbsp;<button v-if="this.role != 'korisnik'" type="button" class="btn btn-sm btn-secondary">delete</button></li>
+					
+					<li><label style="color:red">Date of turning off:&nbsp; </label>{{ d.second }}&nbsp;&nbsp;<button v-if="this.role != 'korisnik'" type="button" class="btn btn-sm btn-secondary">delete</button></li>
+					
 				</ul>
 			</li>
 		</ul>
@@ -77,8 +79,7 @@ Vue.component("detalji-vm", {
 					this.doTxt = "Turn on";
 				});
 			}
-    		
-    		
+    		this.loadActivity.call();
     	},
     	loadVMD: function() {
     		this.VM = JSON.parse(localStorage.getItem('storeObj3VM'));
@@ -94,10 +95,16 @@ Vue.component("detalji-vm", {
     		  });
     		}
 
-    		this.showTemplate = true;
+//    		this.showTemplate = true;
     	},
     	loadActivity: function(){
-    		
+    		axios
+  		  .post("rest/discService/getActivities", {"name": this.VM.ime})
+  		  .then(response => {
+  			  this.activity = response.data;
+  			  this.showTemplate = true;
+  		  });
+    		console.log("Aktivnost:  "+this.activity);
     	},
     },
     mounted () {  //created 
