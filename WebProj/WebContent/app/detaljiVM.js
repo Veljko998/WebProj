@@ -4,6 +4,7 @@ Vue.component("detalji-vm", {
         		title: 'Virtual Machine Details',
         		VM: null,
         		disks: [] ,// list of disk Objects
+        		activity: [],
         		showTemplate: false,
         		nesto: {},
         		role: null,
@@ -33,6 +34,12 @@ Vue.component("detalji-vm", {
 							<li><label style="color:red">Capacity:&nbsp; </label>{{ d.kapacitet }}</li>
 						</ul>
 					</li>
+				</ul>
+			</li>
+			<li v-for="d in this.activity"><label style="color:red">Activity:&nbsp; </label>
+				<ul>
+					<li><label style="color:red">Date if turning on:&nbsp; </label>{{ d.first }}</li>
+					<li><label style="color:red">Date of turning off:&nbsp; </label>{{ d.second }}</li>
 				</ul>
 			</li>
 		</ul>
@@ -88,7 +95,10 @@ Vue.component("detalji-vm", {
     		}
 
     		this.showTemplate = true;
-    	}
+    	},
+    	loadActivity: function(){
+    		
+    	},
     },
     mounted () {  //created 
     	this.showTemplate = false;
@@ -96,6 +106,7 @@ Vue.component("detalji-vm", {
     	
     	this.loadVMD();
     	this.checkIsVMOnOff();
+    	this.loadActivity();
     },
 });
 

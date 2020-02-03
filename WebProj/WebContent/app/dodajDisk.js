@@ -8,7 +8,8 @@ Vue.component("dodaj-disk" ,{
 			Disc: {},
 			showErrorEmptyField: false,
 			showErrorDiscExists: false,
-			canAddDisc: false
+			canAddDisc: false,
+			diskOldName: null
 		}
 	},
 	template: 
@@ -92,11 +93,13 @@ Vue.component("dodaj-disk" ,{
 		},
 		discAlreadyExists: function(){
 			if (this.showErrorEmptyField == false) {
+				this.diskOldName = localStorage.getItem("imeDiska");
 				
-				var path = "rest/discService/checkIfDiscExist/" + this.Disc.name;
+//				var path = "rest/discService/checkIfDiscExist/" + this.Disc.name;
+				var path2 = "rest/discService/checkIfDiscExist/" + this.Disc.name + "/" + this.diskOldName;
 				
 				axios
-				.get(path)
+				.get(path2)
 				.then(response => {
 					if (response.data == false || response.data == 'false') {
 						this.canAddDisc = true;
@@ -107,7 +110,7 @@ Vue.component("dodaj-disk" ,{
 			}
 		},
 		addDisc: function(){
-			console.log("Dosli smo i dovde: " +this.canAddDisc );
+			console.log("Dosli smo i dovde: " + this.canAddDisc );
 			if (this.canAddDisc == true || this.canAddDisc === true) {
 
 				console.log(this.Disc.name);

@@ -16,8 +16,6 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
-import org.graalvm.compiler.hotspot.nodes.VMErrorNode;
-
 import model.Disk;
 import model.Diskovi;
 import model.Korisnici;
@@ -100,6 +98,8 @@ public class DiscService {
 		korisnici.setPutanja();
 		korisnici.UcitajKorisnike();
 		
+		Disk oldDisk = diskovi.getDisk(dte.oldName);
+		
 		if (dte.VMName == null) {
 
 		}else if (dte.VMName.equalsIgnoreCase("Choose...")) {
@@ -123,11 +123,15 @@ public class DiscService {
 		/*
 		 * Ako imaju ista imena onda nema potrebe da menjam unutar masina i organizacija
 		 */
-		if (!dte.oldName.equals(dte.name)) {
-			if (!dte.oldName.equals(dte.name)) {
-				for (VirtuelnaMasina vm : virtuelneMasine.getListaVirtuelnihMasina()) {
-					if (vm.getDiskovi().contains(dte.oldName)) {
+//		if (!dte.oldName.equals(dte.name)) {
+			for (VirtuelnaMasina vm : virtuelneMasine.getListaVirtuelnihMasina()) {
+				if (oldDisk.getVirtualnaMasina() != null) {
+					if (oldDisk.getVirtualnaMasina().equals(vm.getIme())) {
 						vm.getDiskovi().remove(dte.oldName);
+					}
+				}
+				if (dte.VMName != null) {
+					if (dte.VMName.equals(vm.getIme())) {
 						vm.getDiskovi().add(dte.name);
 					}
 				}
@@ -156,7 +160,7 @@ public class DiscService {
 			}
 			
 			korisnici.UpisiKorisnike();
-		}
+//		}
 		
 		diskovi.getListaDiskovi().remove(diskovi.getMapaDiskovi().get(dte.oldName));
 		diskovi.getListaDiskovi().add(newDisk);
@@ -268,6 +272,38 @@ public class DiscService {
 	 * @return true if there is disc with name discName
 	 */
 	public boolean checkIfDiscExist(@PathParam("param1") String discName){
+		Diskovi diskovi = new Diskovi();
+		diskovi.setPutanja();
+		diskovi.UcitajDiskove();
+		
+		VirtuelneMasine masine = new VirtuelneMasine();
+		masine.setPutanja();
+		masine.UcitajVirtuelneMasine();
+		
+		if (masine.getMapaVirtuelnihMasina().containsKey(discName)) {
+			System.out.println("Pokusavamo da dodamo disk a vec postoji masina sa tim nazivom.");
+			return true;
+		}
+		
+		if (diskovi.getMapaDiskovi().containsKey(discName)) {
+			System.out.println("Postoji disk sa nazivom: " + discName);
+			return true;
+		} return false;
+	}
+	
+	@GET
+	@Path("/checkIfDiscExist/{param1}/{param2}")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+	/**
+	 * @param discName
+	 * @return true if there is disc with name discName
+	 */
+	public boolean checkIfDiscExist(@PathParam("param1") String discName, @PathParam("param2") String oldName){
+		if (discName.equals(oldName)) {
+			return false;
+		}
+		
 		Diskovi diskovi = new Diskovi();
 		diskovi.setPutanja();
 		diskovi.UcitajDiskove();
